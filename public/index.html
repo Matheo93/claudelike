@@ -414,6 +414,7 @@
                 // PHASE 2: Génération du rapport
                 generateBtn.textContent = '⏳ Phase 2/4 - Génération...';
                 addMessage('🔧 PHASE 2: Génération du rapport professionnel...', 'assistant');
+                addMessage('⏰ Cette phase peut prendre jusqu\'à 5-10 minutes pour une analyse approfondie', 'assistant');
 
                 const phase2Response = await fetch('/api/generate-report-structure', {
                     method: 'POST',

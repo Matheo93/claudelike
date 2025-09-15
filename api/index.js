@@ -40,13 +40,13 @@ async function retryAPICall(apiFunction, maxRetries = 5) {
       console.error(`Tentative ${attempt + 1} échouée:`, error.message);
 
       if (error.status === 529 || error.message?.includes('overloaded')) {
-        const waitTime = Math.min(1000 * Math.pow(2, attempt), 10000);
+        const waitTime = Math.min(2000 * Math.pow(2, attempt), 30000);
         console.log(`API surchargée, attente de ${waitTime}ms avant retry...`);
         await new Promise(resolve => setTimeout(resolve, waitTime));
       } else if (attempt === maxRetries - 1) {
         throw error;
       } else {
-        const waitTime = 1000 * (attempt + 1);
+        const waitTime = 2000 * (attempt + 1);
         await new Promise(resolve => setTimeout(resolve, waitTime));
       }
     }
