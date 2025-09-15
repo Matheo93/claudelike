@@ -83,23 +83,54 @@ app.post('/api/analyze-pdf', async (req, res) => {
       return res.status(400).json({ error: 'Contenu PDF manquant' });
     }
 
-    const domainAnalysisPrompt = `Analyse ce contenu PDF et identifie le domaine principal. Fournis une analyse structurée détaillée.
+    const domainAnalysisPrompt = `Tu es un expert analyste de documents techniques. Tu dois faire une ANALYSE ULTRA-DÉTAILLÉE de ce contenu PDF.
 
-CONTENU À ANALYSER:
-${pdfContent.substring(0, 3000)}...
+CONTENU COMPLET DU PDF:
+${pdfContent}
 
-Réponds avec une analyse JSON structurée incluant:
-1. domain: le domaine principal (cybersecurite/finance/technique/commercial/rh/juridique/medical/educatif/autre)
-2. title: un titre descriptif du document
-3. summary: un résumé en 2-3 phrases
-4. key_topics: liste des 5 sujets principaux
-5. context: contexte et importance du document
-6. target_audience: public cible`;
+INSTRUCTIONS CRITIQUES - ANALYSE APPROFONDIE:
+
+1. LIS TOUT LE CONTENU avec attention maximale
+2. EXTRAIS tous les détails spécifiques, exemples, formules, diagrammes mentionnés
+3. IDENTIFIE les concepts précis, les chiffres exacts, les noms propres
+4. CAPTURE la structure pédagogique et les exemples concrets
+5. NOTE tous les acronymes, références bibliographiques, cours/institutions
+
+RÉSULTAT ATTENDU - ANALYSE STRUCTURÉE:
+
+**DOMAINE:** [cybersecurite/finance/technique/commercial/rh/juridique/medical/educatif/autre]
+
+**TITRE PRÉCIS:** [Titre exact basé sur le contenu réel]
+
+**INSTITUTION/COURS:** [Si applicable: nom université, numéro cours, professeur]
+
+**STRUCTURE DÉTAILLÉE:**
+- Sections principales avec leurs sous-parties
+- Concepts clés avec définitions exactes
+- Formules et exemples numériques précis
+- Diagrammes et schémas décrits
+
+**EXEMPLES CONCRETS EXTRAITS:**
+- Tous les exemples pratiques avec chiffres exacts
+- Études de cas mentionnées
+- Exercices ou problèmes proposés
+
+**VOCABULAIRE SPÉCIALISÉ:**
+- Termes techniques spécifiques au domaine
+- Acronymes et abréviations utilisées
+- Références à d'autres travaux/auteurs
+
+**CONTEXTE PÉDAGOGIQUE:**
+- Type de document (cours, manuel, recherche, etc.)
+- Niveau d'étude visé
+- Objectifs d'apprentissage
+
+IMPÉRATIF: Ton analyse doit être si détaillée qu'un expert du domaine puisse reconnaître EXACTEMENT ce document spécifique parmi des milliers d'autres !`;
 
     const response = await retryAPICall(async () => {
       return await anthropic.messages.create({
         model: 'claude-opus-4-1-20250805',
-        max_tokens: 2000,
+        max_tokens: 6000,
         messages: [{ role: 'user', content: domainAnalysisPrompt }]
       });
     });
@@ -164,10 +195,12 @@ app.post('/api/generate-report-structure', async (req, res) => {
 
     const template = reportTemplates[reportType];
 
-    const reportPrompt = `Crée un rapport HTML ULTRA-PROFESSIONNEL de type "${template.title}" avec de nombreux éléments visuels basé sur cette analyse:
+    const reportPrompt = `Crée un rapport HTML ULTRA-PROFESSIONNEL de type "${template.title}" avec de nombreux éléments visuels basé sur cette analyse DÉTAILLÉE:
 
-ANALYSE:
+ANALYSE APPROFONDIE DU DOCUMENT:
 ${analysis}
+
+DIRECTIVE SPÉCIALE: Utilise TOUS les détails spécifiques de l'analyse ci-dessus - exemples numériques exacts, formules précises, noms propres, institutions, références. Le rapport doit refléter EXACTEMENT le contenu analysé, pas des généralités.
 
 TYPE DE RAPPORT: ${template.focus.toUpperCase()}
 SECTIONS REQUISES: ${template.sections.join(', ')}
