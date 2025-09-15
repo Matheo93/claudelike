@@ -1,0 +1,3378 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Rapport d'Intervention AD - Société Anonyme</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+    <style>
+        @page {
+            size: A4;
+            margin: 15mm;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 11pt;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+
+        /* Header styles */
+        header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 50%, #2980b9 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .document-info {
+            text-align: right;
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        header h1 {
+            font-size: 42px;
+            font-weight: 300;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        header h2 {
+            font-size: 18px;
+            font-weight: 400;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .meta-info {
+            display: flex;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+        }
+
+        .meta-info div {
+            flex: 1;
+        }
+
+        .meta-info p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+        /* Table of contents */
+        .toc {
+            padding: 40px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .toc h2 {
+            color: #2c3e50;
+            font-size: 24px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .toc ul {
+            list-style: none;
+        }
+
+        .toc > ul {
+            padding-left: 0;
+        }
+
+        .toc ul ul {
+            padding-left: 20px;
+            margin-top: 5px;
+        }
+
+        .toc li {
+            margin: 8px 0;
+        }
+
+        .toc a {
+            color: #2c3e50;
+            text-decoration: none;
+            padding: 5px 0;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .toc a:hover {
+            color: #3498db;
+            padding-left: 10px;
+        }
+
+        /* Content sections */
+        section {
+            padding: 40px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 32px;
+            margin-bottom: 25px;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 15px;
+        }
+
+        h2 {
+            color: #34495e;
+            font-size: 24px;
+            margin-top: 35px;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            color: #34495e;
+            font-size: 18px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        h4 {
+            color: #34495e;
+            font-size: 16px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        /* Lists */
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th {
+            background: linear-gradient(135deg, #34495e, #2c3e50);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        tr:hover {
+            background-color: #e3f2fd;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Status indicators */
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-indicator.red {
+            background-color: #e74c3c;
+        }
+
+        .status-indicator.orange {
+            background-color: #f39c12;
+        }
+
+        .status-indicator.green {
+            background-color: #27ae60;
+        }
+
+        /* Risk levels */
+        .risk-critical {
+            background-color: #ffebee;
+            color: #c62828;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .risk-high {
+            background-color: #fff3e0;
+            color: #ef6c00;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .risk-medium {
+            background-color: #fff8e1;
+            color: #f57f17;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .risk-low {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        /* Alert boxes */
+        .alert {
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+            border-left: 5px solid;
+        }
+
+        .alert-critical {
+            background-color: #ffebee;
+            border-left-color: #e74c3c;
+            color: #c62828;
+        }
+
+        .alert-success {
+            background-color: #e8f5e9;
+            border-left-color: #27ae60;
+            color: #2e7d32;
+        }
+
+        .alert-info {
+            background-color: #e3f2fd;
+            border-left-color: #2196f3;
+            color: #1565c0;
+        }
+
+        .alert-warning {
+            background-color: #fff8e1;
+            border-left-color: #ff9800;
+            color: #ef6c00;
+        }
+
+        /* Solution boxes */
+        .solution {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #3498db;
+        }
+
+        .success {
+            background: #e8f5e9;
+            border: 1px solid #c8e6c9;
+            border-left-color: #4caf50;
+        }
+
+        .recommendation {
+            background: #e3f2fd;
+            border: 1px solid #bbdefb;
+            border-left-color: #2196f3;
+        }
+
+        .warning {
+            background: #fff8e1;
+            border: 1px solid #ffe0b2;
+            border-left-color: #ff9800;
+        }
+
+        /* Code blocks */
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            margin: 20px 0;
+            overflow-x: auto;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Stats boxes */
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .stats-box {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e9ecef;
+            flex: 1;
+            min-width: 200px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stats-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .stats-number {
+            font-size: 48px;
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+
+        .stats-label {
+            font-size: 14px;
+            color: #7f8c8d;
+            font-weight: 600;
+        }
+
+        /* Page breaks */
+        .page-break {
+            page-break-before: always;
+        }
+
+        /* Footer */
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            font-size: 12px;
+        }
+
+        .footer p {
+            margin: 5px 0;
+            opacity: 0.8;
+        }
+
+        /* Signature */
+        .signature {
+            text-align: right;
+            padding: 40px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .signature-box {
+            display: inline-block;
+            text-align: center;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+
+        /* Custom visualizations */
+        .custom-visual {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .visual-title {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-size: 16px;
+        }
+
+        /* Network topology styles */
+        .topology-container {
+            position: relative;
+            height: 400px;
+            margin: 20px auto;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .server-node {
+            position: absolute;
+            background: #3498db;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .server-node:hover {
+            background: #2980b9;
+            transform: scale(1.05);
+        }
+
+        .dc-node {
+            background: #e74c3c;
+        }
+
+        .dc-node:hover {
+            background: #c0392b;
+        }
+
+        .connection-line {
+            position: absolute;
+            height: 2px;
+            background: #95a5a6;
+            transform-origin: left center;
+        }
+
+        /* Badge styles */
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .badge-critical {
+            background-color: #e74c3c;
+        }
+
+        .badge-high {
+            background-color: #f39c12;
+        }
+
+        .badge-medium {
+            background-color: #3498db;
+        }
+
+        .badge-low {
+            background-color: #27ae60;
+        }
+
+        /* Responsive design */
+        @media print {
+            .page-break {
+                page-break-before: always;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 0;
+                box-shadow: none;
+            }
+
+            header, section {
+                padding: 20px;
+            }
+
+            .meta-info {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .stats-container {
+                flex-direction: column;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            header h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Page de garde -->
+        <header>
+            <div class="logo-area">
+                <div class="logo">My Trust Partner</div>
+                <div class="document-info">
+                    <p>Rapport d'intervention n° MTP-SEC-2025-0089</p>
+                    <p>Date : 18 juin 2025</p>
+                    <p>Classification : CONFIDENTIEL</p>
+                </div>
+            </div>
+            <h1>RAPPORT D'INTERVENTION DE SÉCURISATION</h1>
+            <h2>Audit et sécurisation de l'infrastructure Active Directory</h2>
+
+            <div class="meta-info">
+                <div>
+                    <p><strong>Client :</strong> Société Anonyme</p>
+                    <p><strong>Secteur d'activité :</strong> Services informatiques</p>
+                    <p><strong>Taille de l'organisation :</strong> 30 collaborateurs</p>
+                </div>
+                <div>
+                    <p><strong>Consultant principal :</strong> Ben Cohen</p>
+                    <p><strong>Consultants associés :</strong> Johan Buenavida</p>
+                    <p><strong>Date d'intervention :</strong> Du 10/06/2025 au 17/06/2025</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Table des matières -->
+        <div class="toc" id="toc">
+            <h2>Table des matières</h2>
+            <ul>
+                <li><a href="#introduction">1. Introduction</a>
+                    <ul>
+                        <li><a href="#contexte">1.1 Contexte de l'intervention</a></li>
+                        <li><a href="#objectifs">1.2 Objectifs et périmètre</a></li>
+                        <li><a href="#methodologie">1.3 Méthodologie</a></li>
+                    </ul>
+                </li>
+                <li><a href="#etat-des-lieux">2. État des lieux et analyse des vulnérabilités</a>
+                    <ul>
+                        <li><a href="#topologie">2.1 Topologie de l'infrastructure Active Directory</a></li>
+                        <li><a href="#vulnerabilites">2.2 Vulnérabilités identifiées</a></li>
+                        <li><a href="#analyse-risques">2.3 Analyse des risques</a></li>
+                        <li><a href="#matrice-risques">2.4 Matrice d'évaluation des risques</a></li>
+                    </ul>
+                </li>
+                <li><a href="#solutions">3. Solutions techniques mises en œuvre</a>
+                    <ul>
+                        <li><a href="#architecture">3.1 Restructuration de l'architecture AD</a></li>
+                        <li><a href="#hardening-dc">3.2 Durcissement des contrôleurs de domaine</a></li>
+                        <li><a href="#strategie-mot-passe">3.3 Stratégie de gestion des mots de passe</a></li>
+                        <li><a href="#gestion-privileges">3.4 Gestion des privilèges et droits d'accès</a></li>
+                        <li><a href="#monitoring">3.5 Mise en place du monitoring et de l'audit</a></li>
+                    </ul>
+                </li>
+                <li><a href="#mesures-securite">4. Mesures de sécurité complémentaires</a>
+                    <ul>
+                        <li><a href="#backup">4.1 Stratégie de sauvegarde et de restauration</a></li>
+                        <li><a href="#sensibilisation">4.2 Formation et sensibilisation</a></li>
+                        <li><a href="#procedures">4.3 Documentation et procédures</a></li>
+                    </ul>
+                </li>
+                <li><a href="#tests-validation">5. Tests de validation</a>
+                    <ul>
+                        <li><a href="#penetration-test">5.1 Tests de pénétration post-intervention</a></li>
+                        <li><a href="#audit-conformite">5.2 Audit de conformité</a></li>
+                        <li><a href="#resultats">5.3 Résultats et corrections</a></li>
+                    </ul>
+                </li>
+                <li><a href="#conclusion">6. Conclusion et recommandations</a>
+                    <ul>
+                        <li><a href="#synthese">6.1 Synthèse des actions réalisées</a></li>
+                        <li><a href="#recommandations">6.2 Recommandations à court et moyen terme</a></li>
+                        <li><a href="#surveillance">6.3 Plan de surveillance continue</a></li>
+                    </ul>
+                </li>
+                <li><a href="#annexes">7. Annexes</a>
+                    <ul>
+                        <li><a href="#annexe-gpo">Annexe A : Détails des GPO implémentées</a></li>
+                        <li><a href="#annexe-scripts">Annexe B : Scripts de durcissement</a></li>
+                        <li><a href="#annexe-checklist">Annexe C : Checklist de sécurité</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div class="page-break"></div>
+
+        <!-- 1. Introduction -->
+        <section id="introduction">
+            <h1>1. Introduction</h1>
+
+            <section id="contexte">
+                <h2>1.1 Contexte de l'intervention</h2>
+                <p>Société Anonyme, entreprise spécialisée dans les solutions technologiques et comptant 30 collaborateurs, a sollicité nos services pour réaliser un audit de sécurité complet de son infrastructure Active Directory et mettre en place les mesures de sécurisation appropriées.</p>
+                
+                <p>L'infrastructure Active Directory de l'entreprise, mise en place en 2020 lors de sa création, n'avait jamais fait l'objet d'une révision sécuritaire approfondie. La croissance rapide de l'entreprise et l'évolution des menaces cybersécurité ont motivé cette démarche proactive de sécurisation.</p>
+
+                <p>Cette mission s'inscrit dans le cadre d'une amélioration globale de la posture de sécurité de l'entreprise, en préparation d'une certification ISO 27001 et pour répondre aux exigences croissantes de sécurité de ses clients du secteur financier.</p>
+            </section>
+
+            <section id="objectifs">
+                <h2>1.2 Objectifs et périmètre</h2>
+                <p>L'objectif principal de cette intervention est de sécuriser l'infrastructure Active Directory de Société Anonyme pour la protéger contre les menaces contemporaines tout en préservant les performances et la facilité d'utilisation pour les collaborateurs.</p>
+
+                <p>Les objectifs spécifiques de l'intervention sont :</p>
+                <ul>
+                    <li>Analyser l'architecture Active Directory existante et identifier les vulnérabilités</li>
+                    <li>Optimiser la topologie AD selon les meilleures pratiques de sécurité</li>
+                    <li>Renforcer la sécurité des contrôleurs de domaine</li>
+                    <li>Mettre en place une gestion des privilèges robuste et segmentée</li>
+                    <li>Implémenter des mécanismes de surveillance et d'audit avancés</li>
+                    <li>Développer une stratégie de sauvegarde et de récupération résiliente</li>
+                    <li>Former les équipes techniques aux bonnes pratiques de sécurité AD</li>
+                    <li>Établir un plan de maintenance et de surveillance continue</li>
+                </ul>
+
+                <p>Le périmètre de l'intervention comprend :</p>
+                <ul>
+                    <li>2 contrôleurs de domaine (site principal et site de sauvegarde)</li>
+                    <li>Le domaine unique tecnnova.local</li>
+                    <li>Les services intégrés (DNS, DHCP)</li>
+                    <li>30 postes de travail Windows 10/11</li>
+                    <li>8 serveurs membres (applications, fichiers, bases de données)</li>
+                    <li>Les stratégies de groupe (GPO) et leur application</li>
+                    <li>Les mécanismes d'authentification et de contrôle d'accès</li>
+                </ul>
+            </section>
+
+            <section id="methodologie">
+                <h2>1.3 Méthodologie</h2>
+                <p>La méthodologie appliquée pour cette intervention repose sur les frameworks reconnus en matière de sécurité Active Directory et les recommandations des organismes de référence.</p>
+
+                <p>Le déroulement de l'intervention a suivi les phases suivantes :</p>
+                <ol>
+                    <li><strong>Phase préparatoire (5-9 juin 2025)</strong> : Collecte d'informations, planification et préparation des outils</li>
+                    <li><strong>Phase d'audit (10-11 juin 2025)</strong> : Analyse approfondie de l'infrastructure et identification des vulnérabilités</li>
+                    <li><strong>Phase de conception (12 juin 2025)</strong> : Élaboration des solutions techniques et validation</li>
+                    <li><strong>Phase d'implémentation (13-15 juin 2025)</strong> : Mise en œuvre des mesures de sécurisation</li>
+                    <li><strong>Phase de test (16 juin 2025)</strong> : Vérification de l'efficacité des mesures</li>
+                    <li><strong>Phase de documentation (17 juin 2025)</strong> : Transfert de compétences et finalisation</li>
+                </ol>
+
+                <p>Les outils utilisés pour cette intervention :</p>
+                <ul>
+                    <li>PingCastle pour l'évaluation globale de la sécurité AD</li>
+                    <li>BloodHound pour l'analyse des chemins d'attaque</li>
+                    <li>Microsoft LAPS pour la gestion des mots de passe administrateurs locaux</li>
+                    <li>Microsoft Security Compliance Toolkit pour le durcissement</li>
+                    <li>PowerShell DSC pour l'automatisation des configurations</li>
+                    <li>Nessus pour les scans de vulnérabilités</li>
+                    <li>Wireshark pour l'analyse réseau</li>
+                </ul>
+            </section>
+        </section>
+
+        <div class="page-break"></div>
+
+        <!-- 2. État des lieux et analyse des vulnérabilités -->
+        <section id="etat-des-lieux">
+            <h1>2. État des lieux et analyse des vulnérabilités</h1>
+
+            <section id="topologie">
+                <h2>2.1 Topologie de l'infrastructure Active Directory</h2>
+                <p>L'infrastructure Active Directory de Société Anonyme présente la topologie suivante :</p>
+
+                <div class="custom-visual">
+                    <div class="visual-title">Architecture Active Directory - Société Anonyme</div>
+                    <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 10px; padding: 20px; overflow: hidden;">
+                        <svg width="800" height="400" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Définition des gradients et styles -->
+                            <defs>
+                                <linearGradient id="dcGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#3498db;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#2980b9;stop-opacity:1" />
+                                </linearGradient>
+                                <linearGradient id="srvGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#95a5a6;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#7f8c8d;stop-opacity:1" />
+                                </linearGradient>
+                                <linearGradient id="clientGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#27ae60;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#229954;stop-opacity:1" />
+                                </linearGradient>
+                                <linearGradient id="networkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#95a5a6;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#7f8c8d;stop-opacity:1" />
+                                </linearGradient>
+                                <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                                    <feDropShadow dx="2" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,0.3)"/>
+                                </filter>
+                            </defs>
+
+                            <!-- Connexions (lignes) - tracées en premier pour être en arrière-plan -->
+                            <!-- Réplication AD entre DC01 et DC02 -->
+                            <line x1="150" y1="60" x2="650" y2="60" stroke="#e74c3c" stroke-width="3"/>
+                            <text x="400" y="50" text-anchor="middle" font-size="10" fill="#e74c3c" font-weight="bold">Réplication AD</text>
+                            
+                            <!-- DC01 vers Hub Central -->
+                            <line x1="150" y1="90" x2="400" y2="180" stroke="#95a5a6" stroke-width="2"/>
+                            
+                            <!-- DC02 vers Hub Central -->
+                            <line x1="650" y1="90" x2="400" y2="180" stroke="#95a5a6" stroke-width="2"/>
+                            
+                            <!-- Serveurs vers Hub Central -->
+                            <line x1="100" y1="150" x2="370" y2="180" stroke="#95a5a6" stroke-width="2"/>
+                            <line x1="250" y1="150" x2="390" y2="180" stroke="#95a5a6" stroke-width="2"/>
+                            <line x1="550" y1="150" x2="410" y2="180" stroke="#95a5a6" stroke-width="2"/>
+                            <line x1="700" y1="150" x2="430" y2="180" stroke="#95a5a6" stroke-width="2"/>
+                            
+                            <!-- Hub Central vers Postes -->
+                            <line x1="370" y1="210" x2="200" y2="320" stroke="#95a5a6" stroke-width="2"/>
+                            <line x1="430" y1="210" x2="600" y2="320" stroke="#95a5a6" stroke-width="2"/>
+
+                            <!-- Nœuds du réseau -->
+                            <!-- Contrôleurs de domaine -->
+                            <rect x="80" y="30" width="140" height="60" rx="8" fill="url(#dcGrad)" filter="url(#shadow)"/>
+                            <text x="150" y="50" text-anchor="middle" font-size="12" font-weight="bold" fill="white">DC01-PRIMARY</text>
+                            <text x="150" y="65" text-anchor="middle" font-size="10" fill="white">(Site Principal)</text>
+                            
+                            <rect x="580" y="30" width="140" height="60" rx="8" fill="url(#dcGrad)" filter="url(#shadow)"/>
+                            <text x="650" y="50" text-anchor="middle" font-size="12" font-weight="bold" fill="white">DC02-BACKUP</text>
+                            <text x="650" y="65" text-anchor="middle" font-size="10" fill="white">(Site Sauvegarde)</text>
+
+                            <!-- Hub/Switch Central -->
+                            <rect x="350" y="160" width="100" height="50" rx="8" fill="url(#networkGrad)" filter="url(#shadow)"/>
+                            <text x="400" y="180" text-anchor="middle" font-size="10" font-weight="bold" fill="white">RÉSEAU</text>
+                            <text x="400" y="195" text-anchor="middle" font-size="10" fill="white">CENTRAL</text>
+
+                            <!-- Serveurs membres -->
+                            <rect x="30" y="120" width="140" height="60" rx="8" fill="url(#srvGrad)" filter="url(#shadow)"/>
+                            <text x="100" y="140" text-anchor="middle" font-size="12" font-weight="bold" fill="white">SRV-FS01</text>
+                            <text x="100" y="155" text-anchor="middle" font-size="10" fill="white">(Fichiers)</text>
+
+                            <rect x="180" y="120" width="140" height="60" rx="8" fill="url(#srvGrad)" filter="url(#shadow)"/>
+                            <text x="250" y="140" text-anchor="middle" font-size="12" font-weight="bold" fill="white">SRV-DB01</text>
+                            <text x="250" y="155" text-anchor="middle" font-size="10" fill="white">(Base de données)</text>
+
+                            <rect x="480" y="120" width="140" height="60" rx="8" fill="url(#srvGrad)" filter="url(#shadow)"/>
+                            <text x="550" y="140" text-anchor="middle" font-size="12" font-weight="bold" fill="white">SRV-APP01</text>
+                            <text x="550" y="155" text-anchor="middle" font-size="10" fill="white">(Applications)</text>
+
+                            <rect x="630" y="120" width="140" height="60" rx="8" fill="url(#srvGrad)" filter="url(#shadow)"/>
+                            <text x="700" y="140" text-anchor="middle" font-size="12" font-weight="bold" fill="white">SRV-WEB01</text>
+                            <text x="700" y="155" text-anchor="middle" font-size="10" fill="white">(Web/IIS)</text>
+
+                            <!-- Postes de travail -->
+                            <rect x="130" y="290" width="140" height="60" rx="8" fill="url(#clientGrad)" filter="url(#shadow)"/>
+                            <text x="200" y="310" text-anchor="middle" font-size="12" font-weight="bold" fill="white">Postes Bureau</text>
+                            <text x="200" y="325" text-anchor="middle" font-size="10" fill="white">(20 postes)</text>
+
+                            <rect x="530" y="290" width="140" height="60" rx="8" fill="url(#clientGrad)" filter="url(#shadow)"/>
+                            <text x="600" y="310" text-anchor="middle" font-size="12" font-weight="bold" fill="white">Postes Mobiles</text>
+                            <text x="600" y="325" text-anchor="middle" font-size="10" fill="white">(10 portables)</text>
+
+                            <!-- Légende -->
+                            <g transform="translate(20,360)">
+                                <text x="0" y="0" font-size="11" font-weight="bold" fill="#666">Légende :</text>
+                                <line x1="0" y1="15" x2="20" y2="15" stroke="#e74c3c" stroke-width="3"/>
+                                <text x="25" y="19" font-size="10" fill="#666">Réplication AD</text>
+                                <line x1="120" y1="15" x2="140" y2="15" stroke="#95a5a6" stroke-width="2"/>
+                                <text x="145" y="19" font-size="10" fill="#666">Connexions réseau</text>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+
+                <p>L'architecture comprend :</p>
+                <ul>
+                    <li>Un domaine unique (domaine.local) avec niveau fonctionnel Windows Server 2019</li>
+                    <li>2 contrôleurs de domaine :
+                        <ul>
+                            <li>DC01-PRIMARY : Contrôleur principal hébergeant tous les rôles FSMO</li>
+                            <li>DC02-BACKUP : Contrôleur secondaire pour la redondance</li>
+                        </ul>
+                    </li>
+                    <li>8 serveurs membres répartis par fonction :
+                        <ul>
+                            <li>SRV-FS01 : Serveur de fichiers avec partages réseau</li>
+                            <li>SRV-DB01 : Serveur de base de données SQL Server 2019</li>
+                            <li>SRV-APP01 : Serveur d'applications métiers</li>
+                            <li>SRV-WEB01 : Serveur web IIS avec applications internes</li>
+                            <li>SRV-PRINT01 : Serveur d'impression</li>
+                            <li>SRV-BACKUP01 : Serveur de sauvegarde</li>
+                            <li>SRV-MONITORING : Serveur de supervision</li>
+                            <li>SRV-EXCHANGE : Serveur de messagerie Exchange</li>
+                        </ul>
+                    </li>
+                    <li>30 postes de travail (20 fixes, 10 portables) sous Windows 10/11</li>
+                    <li>Services intégrés :
+                        <ul>
+                            <li>Service DNS intégré à l'AD sur les deux contrôleurs</li>
+                            <li>Service DHCP sur DC01-PRIMARY</li>
+                            <li>Pas d'infrastructure PKI déployée</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <div class="alert alert-warning">
+                    <strong>⚠ Points d'attention identifiés :</strong><br>
+                    Concentration de tous les rôles FSMO sur un seul contrôleur, absence de segmentation réseau dédiée pour les contrôleurs de domaine, et manque de redondance pour certains services critiques.
+                </div>
+
+                <!-- Vue détaillée de la forêt Active Directory -->
+                <div class="custom-visual">
+                    <style>
+                        .forest-container {
+                            position: relative;
+                            height: 500px;
+                            margin: 0 auto;
+                            background-color: white;
+                            border-radius: 5px;
+                            padding: 20px;
+                            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                            overflow: hidden;
+                        }
+
+                        .forest,
+                        .domain,
+                        .domain-child {
+                            box-sizing: border-box;
+                        }
+
+                        .forest {
+                            position: relative;
+                            border: 2px solid #34495e;
+                            border-radius: 8px;
+                            padding: 15px;
+                            margin-bottom: 10px;
+                            background-color: #ecf0f1;
+                        }
+
+                        .forest-label {
+                            position: absolute;
+                            top: -10px;
+                            left: 20px;
+                            background-color: #34495e;
+                            color: white;
+                            padding: 2px 10px;
+                            border-radius: 4px;
+                            font-weight: bold;
+                            font-size: 14px;
+                        }
+
+                        .domain {
+                            border: 2px solid #3498db;
+                            border-radius: 6px;
+                            padding: 10px;
+                            margin: 15px 0;
+                            background-color: #e1f0fa;
+                            position: relative;
+                        }
+
+                        .domain-label {
+                            position: absolute;
+                            top: -10px;
+                            left: 15px;
+                            background-color: #3498db;
+                            color: white;
+                            padding: 2px 8px;
+                            border-radius: 3px;
+                            font-weight: bold;
+                            font-size: 12px;
+                        }
+
+                        .site {
+                            box-sizing: border-box;
+                            width: 45%;
+                            vertical-align: top;
+                            display: inline-block;
+                            margin: 10px 5px;
+                            height: auto;
+                            overflow: visible;
+                            border: 1px dashed #7f8c8d;
+                            border-radius: 5px;
+                            padding: 8px;
+                            background-color: rgba(255, 255, 255, 0.7);
+                            position: relative;
+                        }
+
+                        .site-label {
+                            position: absolute;
+                            top: -8px;
+                            left: 10px;
+                            background-color: #7f8c8d;
+                            color: white;
+                            padding: 1px 6px;
+                            border-radius: 3px;
+                            font-size: 11px;
+                        }
+
+                        .dc {
+                            background-color: white;
+                            border: 1px solid #95a5a6;
+                            border-radius: 4px;
+                            padding: 8px;
+                            margin: 5px 0;
+                            font-size: 12px;
+                            position: relative;
+                        }
+
+                        .dc-icon {
+                            background-color: #3498db;
+                            color: white;
+                            width: 20px;
+                            height: 20px;
+                            border-radius: 50%;
+                            display: inline-block;
+                            text-align: center;
+                            line-height: 20px;
+                            margin-right: 5px;
+                            font-size: 12px;
+                            font-weight: bold;
+                        }
+
+                        .fsmo {
+                            display: inline-block;
+                            background-color: #e74c3c;
+                            color: white;
+                            padding: 1px 4px;
+                            border-radius: 3px;
+                            font-size: 9px;
+                            margin-left: 5px;
+                        }
+
+                        .legend {
+                            margin-top: 15px;
+                            padding: 10px;
+                            border-top: 1px solid #ddd;
+                            font-size: 12px;
+                        }
+
+                        .legend-item {
+                            display: inline-block;
+                            margin-right: 15px;
+                        }
+                    </style>
+                    <div class="forest-container">
+                        <div class="forest">
+                            <div class="forest-label">Forêt domaine.local</div>
+
+                            <div class="domain">
+                                <div class="domain-label">Domaine racine domaine.local</div>
+
+                                <div class="site">
+                                    <div class="site-label">Site Principal</div>
+                                    <div class="dc">
+                                        <span class="dc-icon">DC</span> DC01-PRIMARY
+                                        <span class="fsmo">FSMO</span>
+                                    </div>
+                                </div>
+
+                                <div class="site">
+                                    <div class="site-label">Site Sauvegarde</div>
+                                    <div class="dc">
+                                        <span class="dc-icon">DC</span> DC02-BACKUP
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="legend">
+                            <div class="legend-item"><span class="dc-icon">DC</span> Contrôleur de domaine</div>
+                            <div class="legend-item"><span class="fsmo">FSMO</span> Détenteur des rôles FSMO</div>
+                        </div>
+                    </div>
+                    <p style="text-align: center; font-weight: bold; margin-top: 10px;">Figure 2 : Structure de la forêt Active Directory</p>
+                </div>
+            </section>
+
+            <section id="vulnerabilites">
+                <h2>2.2 Vulnérabilités identifiées</h2>
+                <p>L'audit de sécurité a révélé plusieurs vulnérabilités dans l'infrastructure Active Directory :</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Vulnérabilité</th>
+                            <th>Catégorie</th>
+                            <th>Niveau de risque</th>
+                            <th>Impact</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>V-001</td>
+                            <td>Comptes avec privilèges Domain Admin excessifs (12 comptes)</td>
+                            <td>Gestion des privilèges</td>
+                            <td class="risk-high">Élevé</td>
+                            <td>Compromission totale du domaine</td>
+                        </tr>
+                        <tr>
+                            <td>V-002</td>
+                            <td>Stratégie de mots de passe faible (8 caractères minimum)</td>
+                            <td>Authentification</td>
+                            <td class="risk-high">Élevé</td>
+                            <td>Compromission par force brute</td>
+                        </tr>
+                        <tr>
+                            <td>V-003</td>
+                            <td>Contrôleurs de domaine non durcis (configurations par défaut)</td>
+                            <td>Configuration système</td>
+                            <td class="risk-high">Élevé</td>
+                            <td>Exploitation de vulnérabilités système</td>
+                        </tr>
+                        <tr>
+                            <td>V-004</td>
+                            <td>Délégation Kerberos non contrainte sur 3 comptes de service</td>
+                            <td>Configuration AD</td>
+                            <td class="risk-high">Élevé</td>
+                            <td>Escalade de privilèges</td>
+                        </tr>
+                        <tr>
+                            <td>V-005</td>
+                            <td>LDAP signing non activé</td>
+                            <td>Protocoles réseau</td>
+                            <td class="risk-medium">Moyen</td>
+                            <td>Attaques man-in-the-middle</td>
+                        </tr>
+                        <tr>
+                            <td>V-006</td>
+                            <td>SMBv1 encore activé sur plusieurs systèmes</td>
+                            <td>Protocoles réseau</td>
+                            <td class="risk-high">Élevé</td>
+                            <td>Ransomware et propagation latérale</td>
+                        </tr>
+                        <tr>
+                            <td>V-007</td>
+                            <td>Absence de monitoring des événements de sécurité AD</td>
+                            <td>Surveillance</td>
+                            <td class="risk-medium">Moyen</td>
+                            <td>Détection tardive des attaques</td>
+                        </tr>
+                        <tr>
+                            <td>V-008</td>
+                            <td>Comptes de service avec mots de passe statiques</td>
+                            <td>Gestion des identités</td>
+                            <td class="risk-medium">Moyen</td>
+                            <td>Compromission de services</td>
+                        </tr>
+                        <tr>
+                            <td>V-009</td>
+                            <td>Pas de gestion des mots de passe administrateurs locaux</td>
+                            <td>Gestion des accès</td>
+                            <td class="risk-high">Élevé</td>
+                            <td>Mouvement latéral dans le réseau</td>
+                        </tr>
+                        <tr>
+                            <td>V-010</td>
+                            <td>GPO avec permissions trop permissives</td>
+                            <td>Configuration AD</td>
+                            <td class="risk-medium">Moyen</td>
+                            <td>Modification non autorisée des politiques</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="stats-container">
+                    <div class="stats-box">
+                        <div class="stats-number" style="color: #e74c3c;">5</div>
+                        <div class="stats-label">Vulnérabilités Critiques</div>
+                    </div>
+                    <div class="stats-box">
+                        <div class="stats-number" style="color: #f39c12;">5</div>
+                        <div class="stats-label">Vulnérabilités Moyennes</div>
+                    </div>
+                    <div class="stats-box">
+                        <div class="stats-number" style="color: #3498db;">30</div>
+                        <div class="stats-label">Utilisateurs Concernés</div>
+                    </div>
+                    <div class="stats-box">
+                        <div class="stats-number" style="color: #27ae60;">8</div>
+                        <div class="stats-label">Jours d'Intervention</div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="analyse-risques">
+                <h2>2.3 Analyse des risques</h2>
+                <p>L'analyse des risques révèle plusieurs scénarios d'attaque potentiels :</p>
+
+                <div class="alert alert-critical">
+                    <h3>Scénarios d'attaque identifiés</h3>
+                    <ol>
+                        <li><strong>Compromission initiale via phishing</strong> → Récupération des identifiants → Mouvement latéral → Escalade de privilèges</li>
+                        <li><strong>Exploitation de vulnérabilités système</strong> → Accès aux contrôleurs de domaine → Compromission totale</li>
+                        <li><strong>Attaque par force brute</strong> → Compromission de comptes privilégiés → Persistance dans le réseau</li>
+                        <li><strong>Exploitation des délégations Kerberos</strong> → Usurpation d'identité → Accès aux ressources sensibles</li>
+                    </ol>
+                </div>
+
+                <p>L'impact potentiel de ces risques inclut :</p>
+                <ul>
+                    <li><strong>Confidentialité :</strong> Accès non autorisé aux données client et propriété intellectuelle</li>
+                    <li><strong>Intégrité :</strong> Modification ou suppression de données critiques</li>
+                    <li><strong>Disponibilité :</strong> Interruption des services informatiques et paralysie des activités</li>
+                    <li><strong>Réputation :</strong> Perte de confiance des clients et impact sur l'activité commerciale</li>
+                    <li><strong>Conformité :</strong> Non-respect des exigences réglementaires et contractuelles</li>
+                    <li><strong>Financier :</strong> Coûts de remédiation, amendes et perte de chiffre d'affaires</li>
+                </ul>
+            </section>
+
+            <!-- Matrice d'évaluation des risques -->
+            <section id="matrice-risques">
+                <h2>2.4 Matrice d'évaluation des risques</h2>
+                <p>Positionnement des vulnérabilités identifiées selon leur impact et leur probabilité d'exploitation :</p>
+
+                <div class="custom-visual">
+                    <style>
+                        .risk-matrix-container {
+                            margin: 20px auto;
+                            max-width: 800px;
+                        }
+
+                        .risk-matrix {
+                            display: grid;
+                            grid-template-columns: 80px repeat(3, 1fr);
+                            grid-template-rows: 40px repeat(4, 150px);
+                            gap: 2px;
+                            background-color: #ecf0f1;
+                            border: 2px solid #95a5a6;
+                        }
+
+                        .risk-matrix-header {
+                            background-color: #34495e;
+                            color: white;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-weight: bold;
+                            font-size: 13px;
+                        }
+
+                        .risk-matrix-header.vertical {
+                            writing-mode: vertical-rl;
+                            text-orientation: mixed;
+                        }
+
+                        .risk-cell {
+                            background-color: white;
+                            position: relative;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            text-align: center;
+                            padding: 10px;
+                        }
+
+                        .risk-low { background-color: #e8f5e9; }
+                        .risk-medium { background-color: #fff8e1; }
+                        .risk-high { background-color: #ffebee; }
+
+                        .risk-dot {
+                            position: absolute;
+                            width: 25px;
+                            height: 25px;
+                            border-radius: 50%;
+                            background-color: #e74c3c;
+                            color: white;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 11px;
+                            font-weight: bold;
+                            cursor: pointer;
+                            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                        }
+
+                        .risk-legend {
+                            display: flex;
+                            justify-content: center;
+                            gap: 30px;
+                            margin-top: 20px;
+                            font-size: 12px;
+                        }
+
+                        .risk-legend-item {
+                            display: flex;
+                            align-items: center;
+                            gap: 8px;
+                        }
+
+                        .color-box {
+                            width: 20px;
+                            height: 15px;
+                            border-radius: 3px;
+                        }
+                    </style>
+                    
+                    <div class="risk-matrix-container">
+                        <div class="risk-matrix">
+                            <!-- Headers -->
+                            <div class="risk-matrix-header"></div>
+                            <div class="risk-matrix-header">Faible</div>
+                            <div class="risk-matrix-header">Moyen</div>
+                            <div class="risk-matrix-header">Élevé</div>
+
+                            <!-- Vertical Headers -->
+                            <div class="risk-matrix-header vertical">Impact</div>
+
+                            <!-- Low Impact Row -->
+                            <div class="risk-cell risk-low">
+                                <span style="font-size: 12px; color: #777;">Faible impact<br>Faible probabilité</span>
+                                <div class="risk-dot" style="top: 50%; left: 50%;" title="V-009: Comptes inactifs">9</div>
+                            </div>
+                            <div class="risk-cell risk-low">
+                                <span style="font-size: 12px; color: #777;">Faible impact<br>Probabilité moyenne</span>
+                                <div class="risk-dot" style="top: 40%; left: 30%;" title="V-006: LDAP non sécurisé">6</div>
+                                <div class="risk-dot" style="top: 60%; left: 70%;" title="V-013: Permissions sur OUs">13</div>
+                            </div>
+                            <div class="risk-cell risk-medium">
+                                <span style="font-size: 12px; color: #777;">Faible impact<br>Probabilité élevée</span>
+                                <div class="risk-dot" style="top: 50%; left: 50%;" title="V-015: DC virtualisés">15</div>
+                            </div>
+
+                            <!-- Medium Impact Row -->
+                            <div class="risk-matrix-header vertical">Probabilité</div>
+                            <div class="risk-cell risk-low">
+                                <span style="font-size: 12px; color: #777;">Impact moyen<br>Faible probabilité</span>
+                            </div>
+                            <div class="risk-cell risk-medium">
+                                <span style="font-size: 12px; color: #777;">Impact moyen<br>Probabilité moyenne</span>
+                                <div class="risk-dot" style="top: 30%; left: 60%;" title="V-008: Absence de monitoring">8</div>
+                                <div class="risk-dot" style="top: 70%; left: 40%;" title="V-010: AdminSDHolder">10</div>
+                                <div class="risk-dot" style="top: 50%; left: 80%;" title="V-014: Segmentation privilèges">14</div>
+                            </div>
+                            <div class="risk-cell risk-high">
+                                <span style="font-size: 12px; color: #777;">Impact moyen<br>Probabilité élevée</span>
+                                <div class="risk-dot" style="top: 40%; left: 60%;" title="V-003: Absence durcissement DC">3</div>
+                                <div class="risk-dot" style="top: 75%; left: 40%;" title="V-007: SMBv1 activé">7</div>
+                            </div>
+
+                            <!-- High Impact Row -->
+                            <div class="risk-matrix-header vertical">Élevé</div>
+                            <div class="risk-cell risk-medium">
+                                <span style="font-size: 12px; color: #777;">Impact élevé<br>Faible probabilité</span>
+                            </div>
+                            <div class="risk-cell risk-high">
+                                <span style="font-size: 12px; color: #777;">Impact élevé<br>Probabilité moyenne</span>
+                                <div class="risk-dot" style="top: 30px; left: 60px;" title="V-004: Délégation non contrainte">4</div>
+                                <div class="risk-dot" style="top: 60px; left: 40px;" title="V-005: Kerberos non sécurisé">5</div>
+                                <div class="risk-dot" style="top: 30px; left: 20px;" title="V-012: Absence de sauvegarde">12</div>
+                            </div>
+                            <div class="risk-cell risk-high">
+                                <span style="font-size: 12px; color: #777;">Impact élevé<br>Probabilité élevée</span>
+                                <div class="risk-dot" style="top: 40px; left: 40px;" title="V-001: Privilèges excessifs">1</div>
+                                <div class="risk-dot" style="top: 60px; left: 80px;" title="V-002: Stratégie MDP faible">2</div>
+                                <div class="risk-dot" style="top: 80px; left: 30px;" title="V-011: MDP en clair dans GPP">11</div>
+                            </div>
+                        </div>
+
+                        <div class="risk-legend">
+                            <div class="risk-legend-item">
+                                <div class="color-box" style="background-color: #e8f5e9;"></div>
+                                <span>Risque faible</span>
+                            </div>
+                            <div class="risk-legend-item">
+                                <div class="color-box" style="background-color: #fff8e1;"></div>
+                                <span>Risque moyen</span>
+                            </div>
+                            <div class="risk-legend-item">
+                                <div class="color-box" style="background-color: #ffebee;"></div>
+                                <span>Risque élevé</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <div class="page-break"></div>
+
+        <!-- 3. Solutions techniques mises en œuvre -->
+        <section id="solutions">
+            <h1>3. Solutions techniques mises en œuvre</h1>
+
+            <section id="architecture">
+                <h2>3.1 Restructuration de l'architecture AD</h2>
+                
+                <div class="solution">
+                    <h3>Optimisation de la topologie Active Directory</h3>
+                    <ul>
+                        <li>Redistribution des rôles FSMO pour améliorer la résilience :
+                            <ul>
+                                <li>Schema Master et Domain Naming Master : DC01-PRIMARY</li>
+                                <li>PDC Emulator et Infrastructure Master : DC02-BACKUP</li>
+                                <li>RID Master : DC01-PRIMARY</li>
+                            </ul>
+                        </li>
+                        <li>Configuration de la réplication Active Directory optimisée</li>
+                        <li>Mise en place de sites AD pour optimiser l'authentification</li>
+                        <li>Création d'une segmentation logique des ressources</li>
+                    </ul>
+                </div>
+
+                <div class="solution">
+                    <h3>Restructuration des unités d'organisation (OU)</h3>
+                    <p>Création d'une structure d'OUs claire et sécurisée :</p>
+                    <ul>
+                        <li><strong>OU=Entreprise</strong> (racine)
+                            <ul>
+                                <li><strong>OU=Administration</strong> - Comptes et groupes administratifs</li>
+                                <li><strong>OU=Utilisateurs</strong>
+                                    <ul>
+                                        <li>OU=Direction (5 comptes)</li>
+                                        <li>OU=Technique (15 comptes)</li>
+                                        <li>OU=Commercial (7 comptes)</li>
+                                        <li>OU=Support (3 comptes)</li>
+                                    </ul>
+                                </li>
+                                <li><strong>OU=Serveurs</strong>
+                                    <ul>
+                                        <li>OU=Infrastructure (DC, DNS, DHCP)</li>
+                                        <li>OU=Applications (SRV-APP, SRV-WEB)</li>
+                                        <li>OU=Données (SRV-SQL, SRV-FILE)</li>
+                                    </ul>
+                                </li>
+                                <li><strong>OU=PostesDeTravail</strong>
+                                    <ul>
+                                        <li>OU=Bureau (postes fixes)</li>
+                                        <li>OU=Portable (ordinateurs portables)</li>
+                                    </ul>
+                                </li>
+                                <li><strong>OU=Groupes</strong> - Tous les groupes de sécurité</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="hardening-dc">
+                <h2>3.2 Durcissement des contrôleurs de domaine</h2>
+                
+                <div class="solution">
+                    <h3>Renforcement de la configuration système</h3>
+                    <ul>
+                        <li>Application des dernières mises à jour de sécurité Windows</li>
+                        <li>Configuration des paramètres de sécurité selon les bonnes pratiques</li>
+                        <li>Désactivation des services non nécessaires</li>
+                        <li>Configuration de la journalisation avancée</li>
+                        <li>Durcissement des permissions du système de fichiers</li>
+                        <li>Installation et configuration de Windows Defender ATP</li>
+                    </ul>
+                </div>
+
+                <div class="solution">
+                    <h3>Sécurisation des protocoles réseau</h3>
+                    <ul>
+                        <li>Désactivation complète de SMBv1</li>
+                        <li>Activation de LDAP signing et LDAP channel binding</li>
+                        <li>Renforcement de Kerberos :
+                            <ul>
+                                <li>Suppression du support RC4</li>
+                                <li>Activation de la pré-authentification obligatoire</li>
+                                <li>Configuration des délégations contraintes uniquement</li>
+                            </ul>
+                        </li>
+                        <li>Désactivation des protocoles cryptographiques obsolètes</li>
+                        <li>Configuration sécurisée du DNS avec DNSSEC</li>
+                    </ul>
+                </div>
+
+                <div class="code-block">
+# Script de durcissement des contrôleurs de domaine
+# Désactivation de SMBv1
+Set-SmbServerConfiguration -EnableSMB1Protocol $false -Force
+Set-SmbClientConfiguration -EnableSMB1Protocol $false -Force
+
+# Configuration LDAP signing
+Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Services\NTDS\Parameters" -Name "LDAPServerIntegrity" -Value 2
+
+# Renforcement Kerberos - Désactivation RC4
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Kerberos\Parameters" -Name "SupportedEncryptionTypes" -Value 0x7ffffff8
+
+# Configuration de l'audit avancé
+auditpol /set /subcategory:"Directory Service Changes" /success:enable /failure:enable
+auditpol /set /subcategory:"Directory Service Access" /success:enable /failure:enable
+                </div>
+
+                <div class="alert alert-success">
+                    <strong>✅ Résultat du durcissement :</strong><br>
+                    Score de sécurité amélioré de 45% à 92%, toutes les vulnérabilités critiques de configuration ont été corrigées.
+                </div>
+            </section>
+
+            <section id="strategie-mot-passe">
+                <h2>3.3 Stratégie de gestion des mots de passe</h2>
+                
+                <div class="solution">
+                    <h3>Nouvelles politiques de mots de passe</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Type de compte</th>
+                                <th>Longueur min.</th>
+                                <th>Complexité</th>
+                                <th>Durée de vie</th>
+                                <th>Historique</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Utilisateurs standards</td>
+                                <td>12 caractères</td>
+                                <td>Obligatoire</td>
+                                <td>90 jours</td>
+                                <td>12 mots de passe</td>
+                            </tr>
+                            <tr>
+                                <td>Administrateurs</td>
+                                <td>16 caractères</td>
+                                <td>Renforcée</td>
+                                <td>60 jours</td>
+                                <td>24 mots de passe</td>
+                            </tr>
+                            <tr>
+                                <td>Comptes de service</td>
+                                <td>24 caractères</td>
+                                <td>Maximale</td>
+                                <td>180 jours</td>
+                                <td>24 mots de passe</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="solution">
+                    <h3>Déploiement de Microsoft LAPS</h3>
+                    <ul>
+                        <li>Installation de LAPS sur tous les postes de travail et serveurs</li>
+                        <li>Extension du schéma Active Directory pour LAPS</li>
+                        <li>Configuration des permissions de lecture pour les administrateurs</li>
+                        <li>Rotation automatique des mots de passe tous les 30 jours</li>
+                        <li>Journalisation des accès aux mots de passe LAPS</li>
+                    </ul>
+                </div>
+
+                <div class="solution">
+                    <h3>Authentification multi-facteurs (MFA)</h3>
+                    <ul>
+                        <li>Déploiement de Microsoft Authenticator pour les administrateurs</li>
+                        <li>Configuration MFA obligatoire pour tous les accès administratifs</li>
+                        <li>Mise en place de l'accès conditionnel basé sur les risques</li>
+                        <li>Formation des utilisateurs à l'utilisation du MFA</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="gestion-privileges">
+                <h2>3.4 Gestion des privilèges et droits d'accès</h2>
+                
+                <div class="solution">
+                    <h3>Réduction des privilèges administratifs</h3>
+                    <ul>
+                        <li>Audit complet des 12 comptes Domain Admin existants</li>
+                        <li>Suppression de 8 comptes avec privilèges non justifiés</li>
+                        <li>Conservation de 4 comptes Domain Admin légitimes</li>
+                        <li>Création de groupes administratifs spécialisés :
+                            <ul>
+                                <li><strong>DOM_Admins_Serveurs</strong> - Administration des serveurs membres</li>
+                                <li><strong>DOM_Admins_PostesTravail</strong> - Gestion des postes utilisateurs</li>
+                                <li><strong>DOM_Admins_Exchange</strong> - Administration de la messagerie</li>
+                                <li><strong>DOM_Admins_SQL</strong> - Administration des bases de données</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="solution">
+                    <h3>Mise en place du modèle de sécurité administratif</h3>
+                    <p>Implémentation d'une approche à deux niveaux adaptée à la taille de l'organisation :</p>
+                    <ul>
+                        <li><strong>Niveau 0 (Infrastructure critique) :</strong>
+                            <ul>
+                                <li>Contrôleurs de domaine</li>
+                                <li>Services d'identité (DNS intégré)</li>
+                                <li>Comptes : 2 administrateurs de domaine + 1 compte de service</li>
+                            </ul>
+                        </li>
+                        <li><strong>Niveau 1 (Infrastructure applicative) :</strong>
+                            <ul>
+                                <li>Serveurs membres et applications</li>
+                                <li>Postes de travail et services utilisateur</li>
+                                <li>Comptes : 4 administrateurs spécialisés</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="solution">
+                    <h3>Délégation contrôlée des droits</h3>
+                    <ul>
+                        <li>Configuration des permissions personnalisées sur les OUs</li>
+                        <li>Délégation de la gestion des utilisateurs aux responsables RH</li>
+                        <li>Délégation de la réinitialisation des mots de passe au support IT</li>
+                        <li>Restrictions strictes sur les modifications des groupes privilégiés</li>
+                    </ul>
+                </div>
+
+                <!-- Diagramme du modèle de sécurité à trois niveaux -->
+                <div class="custom-visual">
+                    <style>
+                        .tiering-container-compact {
+                            margin: 30px auto;
+                            max-width: 900px;
+                            background: white;
+                            border-radius: 8px;
+                            padding: 25px;
+                            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                        }
+
+                        .tiering-title-compact {
+                            text-align: center;
+                            font-size: 18px;
+                            font-weight: bold;
+                            margin-bottom: 30px;
+                            color: #2c3e50;
+                        }
+
+                        .tier-model {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 20px;
+                        }
+
+                        .tier-box {
+                            border-radius: 8px;
+                            padding: 20px;
+                            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                        }
+
+                        .tier-0-box { background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; }
+                        .tier-1-box { background: linear-gradient(135deg, #f39c12, #e67e22); color: white; }
+                        .tier-2-box { background: linear-gradient(135deg, #2ecc71, #27ae60); color: white; }
+
+                        .tier-header {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            margin-bottom: 15px;
+                        }
+
+                        .tier-title {
+                            font-size: 16px;
+                            font-weight: bold;
+                        }
+
+                        .tier-criticality {
+                            padding: 4px 12px;
+                            border-radius: 15px;
+                            font-size: 12px;
+                            font-weight: bold;
+                        }
+
+                        .criticality-high { background: rgba(255,255,255,0.2); }
+                        .criticality-medium { background: rgba(255,255,255,0.2); }
+                        .criticality-standard { background: rgba(255,255,255,0.2); }
+
+                        .tier-content {
+                            display: flex;
+                            gap: 20px;
+                        }
+
+                        .tier-column {
+                            flex: 1;
+                        }
+
+                        .column-title {
+                            font-size: 14px;
+                            font-weight: bold;
+                            margin-bottom: 10px;
+                            opacity: 0.9;
+                        }
+
+                        .tier-item {
+                            background: rgba(255,255,255,0.1);
+                            padding: 8px 12px;
+                            margin: 5px 0;
+                            border-radius: 4px;
+                            font-size: 13px;
+                        }
+
+                        .tier-arrows {
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            height: 30px;
+                        }
+
+                        .tier-arrow {
+                            width: 0;
+                            height: 0;
+                            border-left: 15px solid transparent;
+                            border-right: 15px solid transparent;
+                            border-top: 20px solid #95a5a6;
+                            margin: 0 10px;
+                        }
+
+                        .tier-legend {
+                            display: flex;
+                            justify-content: center;
+                            gap: 30px;
+                            margin-top: 25px;
+                            font-size: 14px;
+                        }
+
+                        .legend-item {
+                            display: flex;
+                            align-items: center;
+                            gap: 8px;
+                        }
+
+                        .legend-color {
+                            width: 20px;
+                            height: 15px;
+                            border-radius: 3px;
+                        }
+                    </style>
+
+                    <div class="tiering-container-compact">
+                        <div class="tiering-title-compact">Architecture du modèle de sécurité à deux niveaux</div>
+
+                        <div class="tier-model">
+                            <!-- Tier 0 -->
+                            <div class="tier-box tier-0-box">
+                                <div class="tier-header">
+                                    <div class="tier-title">Tier 0 - Infrastructure d'identité</div>
+                                    <div class="tier-criticality criticality-high">Criticité élevée</div>
+                                </div>
+                                <div class="tier-content">
+                                    <div class="tier-column">
+                                        <div class="column-title">Ressources</div>
+                                        <div class="tier-item">DC01-PRIMARY</div>
+                                        <div class="tier-item">DC02-BACKUP</div>
+                                        <div class="tier-item">Services DNS intégrés</div>
+                                    </div>
+                                    <div class="tier-column">
+                                        <div class="column-title">Privilèges</div>
+                                        <div class="tier-item">Domain Admins (4)</div>
+                                        <div class="tier-item">Enterprise Admins (2)</div>
+                                        <div class="tier-item">Schema Admins (1)</div>
+                                    </div>
+                                    <div class="tier-column">
+                                        <div class="column-title">Protection</div>
+                                        <div class="tier-item">Protected Users</div>
+                                        <div class="tier-item">Comptes dédiés uniquement</div>
+                                        <div class="tier-item">Audit renforcé</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Flèches de Tier 0 à Tier 1 -->
+                            <div class="tier-arrows">
+                                <div class="tier-arrow"></div>
+                                <div class="tier-arrow"></div>
+                            </div>
+
+                            <!-- Tier 1 -->
+                            <div class="tier-box tier-1-box">
+                                <div class="tier-header">
+                                    <div class="tier-title">Tier 1 - Infrastructure applicative</div>
+                                    <div class="tier-criticality criticality-medium">Criticité moyenne</div>
+                                </div>
+                                <div class="tier-content">
+                                    <div class="tier-column">
+                                        <div class="column-title">Ressources</div>
+                                        <div class="tier-item">Serveurs membres (8)</div>
+                                        <div class="tier-item">Postes de travail (30)</div>
+                                        <div class="tier-item">Services applicatifs</div>
+                                    </div>
+                                    <div class="tier-column">
+                                        <div class="column-title">Privilèges</div>
+                                        <div class="tier-item">DOM_Admins_Serveurs</div>
+                                        <div class="tier-item">DOM_Admins_PostesTravail</div>
+                                        <div class="tier-item">DOM_Admins_Exchange</div>
+                                        <div class="tier-item">DOM_Admins_SQL</div>
+                                    </div>
+                                    <div class="tier-column">
+                                        <div class="column-title">Protection</div>
+                                        <div class="tier-item">LAPS sur postes</div>
+                                        <div class="tier-item">Délégation contrôlée</div>
+                                        <div class="tier-item">Groupes spécialisés</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Légende -->
+                        <div class="tier-legend">
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: linear-gradient(135deg, #e74c3c, #c0392b);"></div>
+                                <span>Tier 0 - Sécurité maximale</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: linear-gradient(135deg, #f39c12, #e67e22);"></div>
+                                <span>Tier 1 - Sécurité élevée</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="monitoring">
+                <h2>3.5 Mise en place du monitoring et de l'audit</h2>
+                
+                <div class="solution">
+                    <h3>Configuration de l'audit Active Directory</h3>
+                    <ul>
+                        <li>Activation de l'audit avancé sur les contrôleurs de domaine</li>
+                        <li>Surveillance des événements critiques :
+                            <ul>
+                                <li>Modifications des groupes privilégiés</li>
+                                <li>Créations/suppressions de comptes</li>
+                                <li>Modifications des GPO</li>
+                                <li>Authentifications échouées répétées</li>
+                                <li>Accès aux ressources sensibles</li>
+                            </ul>
+                        </li>
+                        <li>Configuration de la taille et de la rétention des journaux</li>
+                        <li>Centralisation des logs vers SRV-MONITORING</li>
+                    </ul>
+                </div>
+
+                <div class="solution">
+                    <h3>Mise en place d'alertes automatiques</h3>
+                    <ul>
+                        <li>Alertes par email pour les événements critiques</li>
+                        <li>Dashboard de supervision en temps réel</li>
+                        <li>Rapports hebdomadaires automatisés</li>
+                        <li>Seuils d'alerte configurables</li>
+                    </ul>
+                </div>
+
+                <div class="code-block">
+# Configuration de l'audit avancé - Script PowerShell
+# Audit des changements de groupes privilégiés
+auditpol /set /subcategory:"Security Group Management" /success:enable /failure:enable
+
+# Audit des modifications d'objets AD
+auditpol /set /subcategory:"Directory Service Changes" /success:enable /failure:enable
+
+# Audit des authentifications
+auditpol /set /subcategory:"Logon" /success:enable /failure:enable
+auditpol /set /subcategory:"Account Lockout" /success:enable /failure:enable
+
+# Configuration de la taille des journaux
+wevtutil sl Security /ms:1048576000
+wevtutil sl System /ms:1048576000
+                </div>
+            </section>
+        </section>
+
+        <div class="page-break"></div>
+
+        <!-- 4. Mesures de sécurité complémentaires -->
+        <section id="mesures-securite">
+            <h1>4. Mesures de sécurité complémentaires</h1>
+
+            <section id="backup">
+                <h2>4.1 Stratégie de sauvegarde et de restauration</h2>
+                
+                <div class="solution">
+                    <h3>Sauvegarde des contrôleurs de domaine</h3>
+                    <ul>
+                        <li>Sauvegarde quotidienne de l'état système des DC (System State backup)</li>
+                        <li>Sauvegarde complète hebdomadaire des machines virtuelles</li>
+                        <li>Réplication des sauvegardes vers le site de sauvegarde</li>
+                        <li>Test mensuel de restauration sur environnement de test</li>
+                        <li>Documentation des procédures de restauration d'urgence</li>
+                    </ul>
+                </div>
+
+                <div class="solution">
+                    <h3>Plan de reprise d'activité (PRA)</h3>
+                    <ul>
+                        <li>Procédures de restauration d'objets AD supprimés</li>
+                        <li>Procédures de récupération après compromission</li>
+                        <li>Plan de basculement vers le site de sauvegarde</li>
+                        <li>RTO (Recovery Time Objective) : 4 heures</li>
+                        <li>RPO (Recovery Point Objective) : 24 heures</li>
+                    </ul>
+                </div>
+
+                <!-- Dashboard de surveillance Active Directory -->
+                <div class="custom-visual">
+                    <style>
+                        .dashboard-container-compact {
+                            margin: 30px auto;
+                            max-width: 1000px;
+                            background: white;
+                            border-radius: 8px;
+                            padding: 20px;
+                            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                        }
+
+                        .dashboard-header-compact {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            margin-bottom: 25px;
+                            padding-bottom: 15px;
+                            border-bottom: 2px solid #ecf0f1;
+                        }
+
+                        .dashboard-title-compact {
+                            font-size: 20px;
+                            font-weight: bold;
+                            color: #2c3e50;
+                        }
+
+                        .dashboard-period-compact {
+                            background: #3498db;
+                            color: white;
+                            padding: 5px 15px;
+                            border-radius: 15px;
+                            font-size: 12px;
+                        }
+
+                        .dashboard-content-compact {
+                            display: grid;
+                            grid-template-columns: repeat(4, 1fr);
+                            grid-template-rows: repeat(3, auto);
+                            gap: 15px;
+                        }
+
+                        .dashboard-card-compact {
+                            background: #f8f9fa;
+                            border-radius: 8px;
+                            padding: 15px;
+                            border: 1px solid #dee2e6;
+                        }
+
+                        .card-header-compact {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            margin-bottom: 10px;
+                        }
+
+                        .card-title-compact {
+                            font-size: 13px;
+                            color: #6c757d;
+                            font-weight: 600;
+                        }
+
+                        .card-icon-compact {
+                            width: 25px;
+                            height: 25px;
+                            border-radius: 50%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            color: white;
+                            font-weight: bold;
+                            font-size: 12px;
+                        }
+
+                        .critical-icon { background: #e74c3c; }
+                        .info-icon { background: #3498db; }
+                        .warning-icon { background: #f39c12; }
+                        .success-icon { background: #2ecc71; }
+
+                        .metric-value-compact {
+                            font-size: 24px;
+                            font-weight: bold;
+                            color: #2c3e50;
+                            margin: 5px 0;
+                        }
+
+                        .metric-label-compact {
+                            font-size: 12px;
+                            color: #6c757d;
+                        }
+
+                        .metric-trend-compact {
+                            font-size: 11px;
+                            margin-top: 5px;
+                        }
+
+                        .trend-up { color: #e74c3c; }
+                        .trend-down { color: #2ecc71; }
+
+                        .card-chart {
+                            grid-column: span 2;
+                            grid-row: span 2;
+                        }
+
+                        .chart-bars {
+                            display: flex;
+                            align-items: end;
+                            justify-content: space-around;
+                            height: 100px;
+                            margin: 15px 0;
+                        }
+
+                        .chart-bar {
+                            width: 12px;
+                            background: linear-gradient(to top, #3498db, #2980b9);
+                            border-radius: 2px;
+                            min-height: 5px;
+                        }
+
+                        .days-row {
+                            display: flex;
+                            justify-content: space-around;
+                            font-size: 10px;
+                            color: #6c757d;
+                        }
+
+                        .card-alerts {
+                            grid-column: span 2;
+                            grid-row: span 2;
+                        }
+
+                        .alerts-list {
+                            max-height: 150px;
+                            overflow-y: auto;
+                        }
+
+                        .alert-item {
+                            display: flex;
+                            align-items: center;
+                            padding: 8px;
+                            margin: 5px 0;
+                            border-radius: 4px;
+                            font-size: 12px;
+                        }
+
+                        .alert-critical { background: rgba(231, 76, 60, 0.1); }
+                        .alert-warning { background: rgba(243, 156, 18, 0.1); }
+                        .alert-info { background: rgba(52, 152, 219, 0.1); }
+
+                        .alert-icon {
+                            width: 8px;
+                            height: 8px;
+                            border-radius: 50%;
+                            margin-right: 8px;
+                        }
+
+                        .alert-critical .alert-icon { background: #e74c3c; }
+                        .alert-warning .alert-icon { background: #f39c12; }
+                        .alert-info .alert-icon { background: #3498db; }
+
+                        .alert-content {
+                            flex: 1;
+                        }
+
+                        .alert-time {
+                            font-size: 10px;
+                            color: #6c757d;
+                        }
+
+                        .pie-compact {
+                            width: 40px;
+                            height: 40px;
+                            border-radius: 50%;
+                            background: conic-gradient(#e74c3c 0% 15%, #f39c12 15% 30%, #3498db 30% 65%, #2ecc71 65% 100%);
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            position: relative;
+                        }
+
+                        .pie-center {
+                            width: 30px;
+                            height: 30px;
+                            background: white;
+                            border-radius: 50%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 8px;
+                            font-weight: bold;
+                        }
+                    </style>
+                    
+                    <div class="dashboard-container-compact">
+                        <div class="dashboard-header-compact">
+                            <div class="dashboard-title-compact">Tableau de bord de surveillance Active Directory</div>
+                            <div class="dashboard-period-compact">Dernières 24 heures</div>
+                        </div>
+
+                        <div class="dashboard-content-compact">
+                            <!-- Carte des alertes actives -->
+                            <div class="dashboard-card-compact card-metric">
+                                <div class="card-header-compact">
+                                    <div class="card-title-compact">Alertes</div>
+                                    <div class="card-icon-compact critical-icon">!</div>
+                                </div>
+                                <div class="metric-value-compact">3</div>
+                                <div class="metric-label-compact">Alertes à traiter</div>
+                                <div class="metric-trend-compact trend-down">
+                                    <span>-85% vs avant</span>
+                                </div>
+                            </div>
+
+                            <!-- Carte des tentatives d'authentification -->
+                            <div class="dashboard-card-compact card-metric">
+                                <div class="card-header-compact">
+                                    <div class="card-title-compact">Authentifications</div>
+                                    <div class="card-icon-compact info-icon">A</div>
+                                </div>
+                                <div class="metric-value-compact">1,458</div>
+                                <div class="metric-label-compact">Tentatives (24h)</div>
+                                <div class="metric-trend-compact">
+                                    <span>Normal (±5%)</span>
+                                </div>
+                            </div>
+
+                            <!-- Carte des modifications AD -->
+                            <div class="dashboard-card-compact card-metric">
+                                <div class="card-header-compact">
+                                    <div class="card-title-compact">Modifications</div>
+                                    <div class="card-icon-compact warning-icon">M</div>
+                                </div>
+                                <div class="metric-value-compact">12</div>
+                                <div class="metric-label-compact">Changements (24h)</div>
+                                <div class="metric-trend-compact">
+                                    <span>Contrôlé</span>
+                                </div>
+                            </div>
+
+                            <!-- Carte du score de santé -->
+                            <div class="dashboard-card-compact card-metric">
+                                <div class="card-header-compact">
+                                    <div class="card-title-compact">Santé AD</div>
+                                    <div class="card-icon-compact success-icon">H</div>
+                                </div>
+                                <div class="metric-value-compact">94%</div>
+                                <div class="metric-label-compact">Score global</div>
+                                <div class="metric-trend-compact trend-up">
+                                    <span>+47% vs avant</span>
+                                </div>
+                            </div>
+
+                            <!-- Graphique des alertes -->
+                            <div class="dashboard-card-compact card-chart">
+                                <div class="card-header-compact">
+                                    <div class="card-title-compact">Évolution des alertes (7 jours)</div>
+                                </div>
+                                <div class="chart-bars">
+                                    <div class="chart-bar" style="height: 30%"></div>
+                                    <div class="chart-bar" style="height: 80%"></div>
+                                    <div class="chart-bar" style="height: 60%"></div>
+                                    <div class="chart-bar" style="height: 43%"></div>
+                                    <div class="chart-bar" style="height: 25%"></div>
+                                    <div class="chart-bar" style="height: 15%"></div>
+                                    <div class="chart-bar" style="height: 10%"></div>
+                                </div>
+                                <div class="days-row">
+                                    <span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span>
+                                </div>
+                            </div>
+
+                            <!-- Dernières alertes -->
+                            <div class="dashboard-card-compact card-alerts">
+                                <div class="card-header-compact">
+                                    <div class="card-title-compact">Alertes récentes</div>
+                                </div>
+                                <div class="alerts-list">
+                                    <div class="alert-item alert-info">
+                                        <div class="alert-icon"></div>
+                                        <div class="alert-content">
+                                            <div>Modification GPO "SEC-DC-Hardening"</div>
+                                            <div class="alert-time">2h18 · admin.systeme</div>
+                                        </div>
+                                    </div>
+                                    <div class="alert-item alert-warning">
+                                        <div class="alert-icon"></div>
+                                        <div class="alert-content">
+                                            <div>Tentative connexion compte service</div>
+                                            <div class="alert-time">4h42 · svc_backup</div>
+                                        </div>
+                                    </div>
+                                    <div class="alert-item alert-info">
+                                        <div class="alert-icon"></div>
+                                        <div class="alert-content">
+                                            <div>Sauvegarde DC terminée avec succès</div>
+                                            <div class="alert-time">6h00 · Système</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style="margin-top: 15px; display: flex; align-items: center; justify-content: space-between;">
+                                    <div class="pie-compact">
+                                        <div class="pie-center">47<br><span style="font-size: 6px;">alertes</span></div>
+                                    </div>
+                                    <div style="font-size: 9px;">
+                                        <div><span style="color: #e74c3c;">●</span> Critique: 6%</div>
+                                        <div><span style="color: #f39c12;">●</span> Haute: 19%</div>
+                                        <div><span style="color: #3498db;">●</span> Moyenne: 38%</div>
+                                        <div><span style="color: #2ecc71;">●</span> Faible: 37%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="sensibilisation">
+                <h2>4.2 Formation et sensibilisation</h2>
+                
+                <div class="solution">
+                    <h3>Formation des administrateurs</h3>
+                    <ul>
+                        <li>Formation de 2 jours sur la sécurité Active Directory</li>
+                        <li>Atelier pratique sur la gestion des incidents de sécurité</li>
+                        <li>Formation sur les nouveaux outils déployés (LAPS, monitoring)</li>
+                        <li>Certification des compétences acquises</li>
+                    </ul>
+                </div>
+
+                <div class="solution">
+                    <h3>Sensibilisation des utilisateurs</h3>
+                    <ul>
+                        <li>Session de formation sur les mots de passe sécurisés</li>
+                        <li>Formation à l'utilisation du MFA</li>
+                        <li>Sensibilisation aux techniques d'ingénierie sociale</li>
+                        <li>Guide des bonnes pratiques distribué</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="procedures">
+                <h2>4.3 Documentation et procédures</h2>
+                
+                <div class="solution">
+                    <h3>Documentation technique créée</h3>
+                    <ul>
+                        <li>Architecture détaillée de l'infrastructure AD</li>
+                        <li>Inventaire complet des GPO avec leurs paramètres</li>
+                        <li>Procédures d'administration courantes</li>
+                        <li>Procédures de gestion des incidents</li>
+                        <li>Guide de maintenance préventive</li>
+                        <li>Plans de sauvegarde et de restauration</li>
+                    </ul>
+                </div>
+
+                <div class="solution">
+                    <h3>Procédures opérationnelles</h3>
+                    <ul>
+                        <li>Gestion du cycle de vie des comptes utilisateur</li>
+                        <li>Processus d'attribution et de révocation des privilèges</li>
+                        <li>Procédure de mise à jour des contrôleurs de domaine</li>
+                        <li>Gestion des modifications des GPO</li>
+                        <li>Procédures de réponse aux alertes de sécurité</li>
+                    </ul>
+                </div>
+            </section>
+        </section>
+
+        <div class="page-break"></div>
+
+        <!-- 5. Tests de validation -->
+        <section id="tests-validation">
+            <h1>5. Tests de validation</h1>
+
+            <section id="penetration-test">
+                <h2>5.1 Tests de pénétration post-intervention</h2>
+                
+                <div class="solution">
+                    <h3>Méthodologie des tests</h3>
+                    <ul>
+                        <li>Tests de pénétration en boîte grise depuis l'intérieur du réseau</li>
+                        <li>Simulation d'attaques courantes contre Active Directory :
+                            <ul>
+                                <li>Kerberoasting</li>
+                                <li>AS-REP Roasting</li>
+                                <li>Pass-the-Hash</li>
+                                <li>Golden Ticket</li>
+                                <li>DCSync</li>
+                            </ul>
+                        </li>
+                        <li>Utilisation d'outils spécialisés (Mimikatz, Rubeus, Impacket)</li>
+                        <li>Tests de mouvement latéral et d'escalade de privilèges</li>
+                    </ul>
+                </div>
+
+                <div class="solution">
+                    <h3>Résultats des tests</h3>
+                    <div class="stats-container">
+                        <div class="stats-box">
+                            <div class="stats-number" style="color: #27ae60;">0</div>
+                            <div class="stats-label">Vulnérabilités Critiques</div>
+                        </div>
+                        <div class="stats-box">
+                            <div class="stats-number" style="color: #f39c12;">2</div>
+                            <div class="stats-label">Vulnérabilités Mineures</div>
+                        </div>
+                        <div class="stats-box">
+                            <div class="stats-number" style="color: #3498db;">95%</div>
+                            <div class="stats-label">Amélioration Sécurité</div>
+                        </div>
+                        <div class="stats-box">
+                            <div class="stats-number" style="color: #27ae60;">100%</div>
+                            <div class="stats-label">Attaques Bloquées</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-success">
+                    <strong>✅ Résultat global des tests :</strong><br>
+                    Toutes les vulnérabilités critiques ont été corrigées. Les tentatives d'attaque ont été bloquées ou détectées efficacement par les nouvelles mesures de sécurité.
+                </div>
+
+                <!-- Rapport de pentest interactif -->
+                <div class="custom-visual">
+                    <style>
+                        .pentest-container {
+                            position: relative;
+                            height: 650px;
+                            background-color: white;
+                            border-radius: 5px;
+                            padding: 0;
+                            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                            overflow: hidden;
+                            display: flex;
+                            flex-direction: column;
+                        }
+
+                        .pentest-header {
+                            background-color: #34495e;
+                            color: white;
+                            padding: 15px 20px;
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                        }
+
+                        .pentest-title {
+                            font-size: 18px;
+                            font-weight: bold;
+                        }
+
+                        .pentest-info {
+                            font-size: 12px;
+                            display: flex;
+                            align-items: center;
+                            gap: 15px;
+                        }
+
+                        .pentest-body {
+                            flex-grow: 1;
+                            display: flex;
+                        }
+
+                        .pentest-nav {
+                            width: 200px;
+                            background-color: #f5f5f5;
+                            border-right: 1px solid #ddd;
+                            padding: 15px 0;
+                            font-size: 13px;
+                        }
+
+                        .nav-section {
+                            padding: 0 15px;
+                            margin-bottom: 5px;
+                            color: #777;
+                            font-weight: bold;
+                            font-size: 11px;
+                            text-transform: uppercase;
+                        }
+
+                        .nav-item {
+                            padding: 8px 15px 8px 20px;
+                            cursor: pointer;
+                            transition: background-color 0.2s;
+                            position: relative;
+                        }
+
+                        .nav-item.active {
+                            background-color: #e1f0fa;
+                            color: #2980b9;
+                            font-weight: bold;
+                        }
+
+                        .nav-item.active::before {
+                            content: '';
+                            position: absolute;
+                            left: 0;
+                            top: 0;
+                            bottom: 0;
+                            width: 3px;
+                            background-color: #2980b9;
+                        }
+
+                        .pentest-content {
+                            flex-grow: 1;
+                            padding: 20px;
+                            overflow: auto;
+                        }
+
+                        .content-title {
+                            font-size: 20px;
+                            font-weight: bold;
+                            color: #2c3e50;
+                            margin-bottom: 20px;
+                            padding-bottom: 10px;
+                            border-bottom: 1px solid #eee;
+                        }
+
+                        .finding-card {
+                            border: 1px solid #ddd;
+                            border-radius: 5px;
+                            margin-bottom: 15px;
+                            overflow: hidden;
+                        }
+
+                        .finding-header {
+                            padding: 10px 15px;
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            border-bottom: 1px solid #eee;
+                        }
+
+                        .finding-title {
+                            font-weight: bold;
+                            display: flex;
+                            align-items: center;
+                            gap: 10px;
+                        }
+
+                        .finding-severity {
+                            border-radius: 15px;
+                            padding: 3px 10px;
+                            font-size: 11px;
+                            color: white;
+                        }
+
+                        .severity-none {
+                            background-color: #2ecc71;
+                        }
+
+                        .finding-body {
+                            padding: 15px;
+                            font-size: 13px;
+                        }
+
+                        .exec-summary {
+                            background-color: #f9f9f9;
+                            border: 1px solid #ddd;
+                            border-radius: 5px;
+                            padding: 15px;
+                            margin-bottom: 20px;
+                        }
+
+                        .summary-stats {
+                            display: flex;
+                            justify-content: space-around;
+                            margin: 15px 0;
+                            text-align: center;
+                        }
+
+                        .stat-box {
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                        }
+
+                        .stat-value {
+                            font-size: 24px;
+                            font-weight: bold;
+                        }
+
+                        .stat-fixed {
+                            color: #2ecc71;
+                        }
+
+                        .stat-label {
+                            font-size: 12px;
+                            color: #777;
+                        }
+
+                        .test-verdict {
+                            background-color: rgba(46, 204, 113, 0.1);
+                            border-left: 4px solid #2ecc71;
+                            padding: 10px 15px;
+                            margin-top: 15px;
+                        }
+
+                        .verdict-title {
+                            font-weight: bold;
+                            color: #2ecc71;
+                            margin-bottom: 5px;
+                        }
+
+                        .resistance-table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin: 15px 0;
+                            font-size: 13px;
+                        }
+
+                        .resistance-table thead {
+                            background-color: #f5f5f5;
+                        }
+
+                        .resistance-table th,
+                        .resistance-table td {
+                            padding: 10px;
+                            text-align: left;
+                            border: 1px solid #ddd;
+                        }
+
+                        .status-vulnerable {
+                            color: #e74c3c;
+                            font-weight: bold;
+                        }
+
+                        .status-protected {
+                            color: #2ecc71;
+                            font-weight: bold;
+                        }
+                    </style>
+                    
+                    <div class="pentest-container">
+                        <div class="pentest-header">
+                            <div class="pentest-title">Rapport de test de pénétration post-intervention</div>
+                            <div class="pentest-info">
+                                <span>📅 Mars 2025</span>
+                                <span>🔍 Réf: PENTEST-POST-2025</span>
+                            </div>
+                        </div>
+
+                        <div class="pentest-body">
+                            <div class="pentest-nav">
+                                <div class="nav-section">Rapport</div>
+                                <div class="nav-item active">Résumé exécutif</div>
+                                <div class="nav-item">Méthodologie</div>
+
+                                <div class="nav-section">Tests</div>
+                                <div class="nav-item">Kerberoasting</div>
+                                <div class="nav-item">Pass-the-Hash</div>
+                                <div class="nav-item">Golden Ticket</div>
+                                <div class="nav-item">Escalade privilèges</div>
+
+                                <div class="nav-section">Résultats</div>
+                                <div class="nav-item">Vulnérabilités (0)</div>
+                                <div class="nav-item">Protections</div>
+                            </div>
+
+                            <div class="pentest-content">
+                                <div class="content-title">Résumé exécutif</div>
+
+                                <div class="exec-summary">
+                                    <div style="font-weight: bold; margin-bottom: 10px;">Résultats du test post-implémentation</div>
+                                    <p>Ce test de pénétration a été réalisé après la mise en place des mesures de sécurisation. L'objectif était d'évaluer l'efficacité des protections et d'identifier d'éventuelles vulnérabilités résiduelles.</p>
+
+                                    <div class="summary-stats">
+                                        <div class="stat-box">
+                                            <div class="stat-value" style="color: #2ecc71;">0</div>
+                                            <div class="stat-label">Critiques</div>
+                                        </div>
+                                        <div class="stat-box">
+                                            <div class="stat-value" style="color: #2ecc71;">0</div>
+                                            <div class="stat-label">Élevées</div>
+                                        </div>
+                                        <div class="stat-box">
+                                            <div class="stat-value" style="color: #f39c12;">2</div>
+                                            <div class="stat-label">Moyennes</div>
+                                        </div>
+                                        <div class="stat-box">
+                                            <div class="stat-value stat-fixed">15</div>
+                                            <div class="stat-label">Corrigées</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="test-verdict">
+                                        <div class="verdict-title">Verdict global</div>
+                                        <p>Les mesures de sécurisation ont considérablement renforcé l'infrastructure. Aucune vulnérabilité critique n'a été identifiée et les chemins d'attaque ont été efficacement bloqués.</p>
+                                    </div>
+                                </div>
+
+                                <div style="font-size: 16px; font-weight: bold; margin: 20px 0;">Résistance aux attaques</div>
+
+                                <table class="resistance-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Type d'attaque</th>
+                                            <th>Avant sécurisation</th>
+                                            <th>Après sécurisation</th>
+                                            <th>Amélioration</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Kerberoasting</td>
+                                            <td><span class="status-vulnerable">Vulnérable</span></td>
+                                            <td><span class="status-protected">Protégé</span></td>
+                                            <td>Comptes protégés + mots de passe renforcés</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Pass-the-Hash</td>
+                                            <td><span class="status-vulnerable">Vulnérable</span></td>
+                                            <td><span class="status-protected">Protégé</span></td>
+                                            <td>LAPS + Credential Guard</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Golden Ticket</td>
+                                            <td><span class="status-vulnerable">Vulnérable</span></td>
+                                            <td><span class="status-protected">Protégé</span></td>
+                                            <td>Monitoring KRBTGT + rotation</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Délégation non contrainte</td>
+                                            <td><span class="status-vulnerable">Vulnérable</span></td>
+                                            <td><span class="status-protected">Protégé</span></td>
+                                            <td>Configuration corrigée</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Escalade privilèges</td>
+                                            <td><span class="status-vulnerable">Vulnérable</span></td>
+                                            <td><span class="status-protected">Protégé</span></td>
+                                            <td>Modèle de tiering implémenté</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <div class="finding-card">
+                                    <div class="finding-header">
+                                        <div class="finding-title">
+                                            <span>Toutes les vulnérabilités critiques ont été corrigées</span>
+                                            <span class="finding-severity severity-none">Aucune</span>
+                                        </div>
+                                    </div>
+                                    <div class="finding-body">
+                                        <p>L'infrastructure Active Directory présente maintenant un niveau de sécurité optimal avec :</p>
+                                        <ul>
+                                            <li>✅ Toutes les vulnérabilités critiques éliminées</li>
+                                            <li>✅ Détection et blocage efficaces des tentatives d'attaque</li>
+                                            <li>✅ Monitoring avancé des activités suspectes</li>
+                                            <li>✅ Segmentation des privilèges administratifs</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p style="text-align: center; font-weight: bold; margin-top: 10px;">Figure 3 : Interface du rapport de test de pénétration post-intervention</p>
+                </div>
+            </section>
+
+            <section id="audit-conformite">
+                <h2>5.2 Audit de conformité</h2>
+                
+                <div class="solution">
+                    <h3>Standards évalués</h3>
+                    <ul>
+                        <li>Microsoft Security Baseline pour Active Directory</li>
+                        <li>CIS Controls pour Windows Server</li>
+                        <li>NIST Cybersecurity Framework</li>
+                        <li>Recommandations ANSSI (adaptation PME)</li>
+                    </ul>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Standard</th>
+                            <th>Avant intervention</th>
+                            <th>Après intervention</th>
+                            <th>Amélioration</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Microsoft Security Baseline</td>
+                            <td class="risk-critical">42%</td>
+                            <td class="risk-low">91%</td>
+                            <td><span class="badge badge-high">+49%</span></td>
+                        </tr>
+                        <tr>
+                            <td>CIS Controls</td>
+                            <td class="risk-critical">38%</td>
+                            <td class="risk-low">87%</td>
+                            <td><span class="badge badge-high">+49%</span></td>
+                        </tr>
+                        <tr>
+                            <td>Score PingCastle</td>
+                            <td class="risk-critical">D (72 points)</td>
+                            <td class="risk-low">A (15 points)</td>
+                            <td><span class="badge badge-high">Amélioration significative</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="resultats">
+                <h2>5.3 Résultats et corrections</h2>
+                
+                <div class="solution">
+                    <h3>Vulnérabilités résiduelles</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Description</th>
+                                <th>Risque</th>
+                                <th>Statut</th>
+                                <th>Action prévue</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>R-001</td>
+                                <td>Une application ancienne nécessite encore NTLM</td>
+                                <td class="risk-low">Faible</td>
+                                <td>Accepté</td>
+                                <td>Migration prévue en 2026</td>
+                            </tr>
+                            <tr>
+                                <td>R-002</td>
+                                <td>Certificats SSL auto-signés sur SRV-WEB01</td>
+                                <td class="risk-low">Faible</td>
+                                <td>Planifié</td>
+                                <td>Déploiement PKI prévu Q3 2025</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Radar de maturité sécurité -->
+                <div class="custom-visual">
+                    <style>
+                        .maturity-container {
+                            position: relative;
+                            height: 550px;
+                            background-color: white;
+                            border-radius: 5px;
+                            padding: 30px;
+                            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                        }
+
+                        .maturity-title {
+                            text-align: center;
+                            font-size: 18px;
+                            font-weight: bold;
+                            margin-bottom: 30px;
+                            color: #2c3e50;
+                        }
+
+                        .radar-chart {
+                            position: relative;
+                            width: 450px;
+                            height: 450px;
+                            margin: 0 auto;
+                            overflow: visible;
+                        }
+
+                        .radar-circle {
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%, -50%);
+                            border: 1px solid #ddd;
+                            border-radius: 50%;
+                            pointer-events: none;
+                        }
+
+                        .circle-1 { width: 90px; height: 90px; }
+                        .circle-2 { width: 180px; height: 180px; }
+                        .circle-3 { width: 270px; height: 270px; }
+                        .circle-4 { width: 360px; height: 360px; }
+                        .circle-5 { width: 450px; height: 450px; background-color: #f9f9f9; z-index: -1; }
+
+                        .radar-axis {
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            width: 225px;
+                            height: 1px;
+                            background-color: #ddd;
+                            transform-origin: left center;
+                        }
+
+                        .axis-1 { transform: translateY(-50%) rotate(0deg); }
+                        .axis-2 { transform: translateY(-50%) rotate(45deg); }
+                        .axis-3 { transform: translateY(-50%) rotate(90deg); }
+                        .axis-4 { transform: translateY(-50%) rotate(135deg); }
+                        .axis-5 { transform: translateY(-50%) rotate(180deg); }
+                        .axis-6 { transform: translateY(-50%) rotate(225deg); }
+                        .axis-7 { transform: translateY(-50%) rotate(270deg); }
+                        .axis-8 { transform: translateY(-50%) rotate(315deg); }
+
+                        .radar-label {
+                            position: absolute;
+                            font-size: 12px;
+                            color: #34495e;
+                            font-weight: bold;
+                            text-align: center;
+                            width: 100px;
+                            z-index: 10;
+                            pointer-events: all;
+                        }
+
+                        .label-1 { top: 5px; left: 50%; transform: translateX(-50%); }
+                        .label-2 { top: 75px; right: 40px; }
+                        .label-3 { top: 50%; right: -5px; transform: translateY(-50%); }
+                        .label-4 { bottom: 75px; right: 40px; }
+                        .label-5 { bottom: 5px; left: 50%; transform: translateX(-50%); }
+                        .label-6 { bottom: 75px; left: 40px; }
+                        .label-7 { top: 50%; left: -5px; transform: translateY(-50%); }
+                        .label-8 { top: 75px; left: 40px; }
+
+                        .radar-scale {
+                            position: absolute;
+                            font-size: 10px;
+                            color: #95a5a6;
+                        }
+
+                        .scale-min { top: 50%; left: 50%; transform: translate(-50%, -50%); }
+                        .scale-mid { top: 50%; left: 50%; transform: translate(-160px, -50%); }
+                        .scale-max { top: 50%; left: 0; transform: translateY(-50%); }
+
+                        .radar-polygon {
+                            position: absolute;
+                            top: 0; left: 0; width: 100%; height: 100%;
+                            clip-path: polygon(50% 20%, 70% 30%, 75% 50%, 65% 70%, 50% 75%, 35% 70%, 25% 50%, 30% 30%);
+                            background-color: rgba(231, 76, 60, 0.2);
+                            border: 2px solid rgba(231, 76, 60, 0.6);
+                            z-index: 5;
+                        }
+
+                        .radar-polygon-after {
+                            position: absolute;
+                            top: 0; left: 0; width: 100%; height: 100%;
+                            clip-path: polygon(50% 5%, 85% 15%, 90% 50%, 85% 85%, 50% 90%, 15% 85%, 10% 50%, 15% 15%);
+                            background-color: rgba(46, 204, 113, 0.2);
+                            border: 2px solid rgba(46, 204, 113, 0.6);
+                            z-index: 4;
+                        }
+
+                        .radar-legend {
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            gap: 20px;
+                            margin-top: 20px;
+                        }
+
+                        .legend-item {
+                            display: flex;
+                            align-items: center;
+                            gap: 5px;
+                            font-size: 13px;
+                        }
+
+                        .legend-color {
+                            width: 15px;
+                            height: 15px;
+                            border-radius: 3px;
+                        }
+                    </style>
+                    
+                    <div class="maturity-container">
+                        <div class="maturity-title">Évolution de la maturité sécurité avant/après intervention</div>
+
+                        <div class="radar-chart">
+                            <div class="radar-circle circle-1"></div>
+                            <div class="radar-circle circle-2"></div>
+                            <div class="radar-circle circle-3"></div>
+                            <div class="radar-circle circle-4"></div>
+                            <div class="radar-circle circle-5"></div>
+
+                            <div class="radar-axis axis-1"></div>
+                            <div class="radar-axis axis-2"></div>
+                            <div class="radar-axis axis-3"></div>
+                            <div class="radar-axis axis-4"></div>
+                            <div class="radar-axis axis-5"></div>
+                            <div class="radar-axis axis-6"></div>
+                            <div class="radar-axis axis-7"></div>
+                            <div class="radar-axis axis-8"></div>
+
+                            <div class="radar-scale scale-min">0</div>
+                            <div class="radar-scale scale-mid">50</div>
+                            <div class="radar-scale scale-max">100</div>
+
+                            <div class="radar-label label-1">Gouvernance</div>
+                            <div class="radar-label label-2">Gestion des accès</div>
+                            <div class="radar-label label-3">Architecture</div>
+                            <div class="radar-label label-4">Sécurité protocoles</div>
+                            <div class="radar-label label-5">Audit & surveillance</div>
+                            <div class="radar-label label-6">Durcissement</div>
+                            <div class="radar-label label-7">Résilience</div>
+                            <div class="radar-label label-8">Formation</div>
+
+                            <div class="radar-polygon"></div>
+                            <div class="radar-polygon-after"></div>
+                        </div>
+
+                        <div class="radar-legend">
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: rgba(231, 76, 60, 0.2); border: 2px solid rgba(231, 76, 60, 0.6);"></div>
+                                <span>Niveau de maturité avant intervention</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: rgba(46, 204, 113, 0.2); border: 2px solid rgba(46, 204, 113, 0.6);"></div>
+                                <span>Niveau de maturité après intervention</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p style="text-align: center; font-weight: bold; margin-top: 35px;">Figure 4 : Évolution de la maturité sécurité</p>
+                </div>
+
+                <!-- Évaluation conformité ANSSI -->
+                <div class="custom-visual">
+                    <style>
+                        .anssi-container {
+                            position: relative;
+                            height: auto;
+                            min-height: 500px;
+                            background-color: white;
+                            border-radius: 5px;
+                            padding: 30px;
+                            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                            margin-bottom: 30px;
+                        }
+
+                        .anssi-title {
+                            text-align: center;
+                            font-size: 18px;
+                            font-weight: bold;
+                            margin-bottom: 30px;
+                            color: #2c3e50;
+                        }
+
+                        .anssi-content {
+                            display: flex;
+                            gap: 30px;
+                        }
+
+                        .checklist-container {
+                            flex: 1;
+                            border: 1px solid #e0e0e0;
+                            border-radius: 5px;
+                            padding: 20px;
+                        }
+
+                        .checklist-title {
+                            font-size: 16px;
+                            font-weight: bold;
+                            color: #34495e;
+                            margin-bottom: 20px;
+                            padding-bottom: 10px;
+                            border-bottom: 1px solid #eee;
+                        }
+
+                        .checklist-item {
+                            padding: 12px;
+                            border-radius: 5px;
+                            margin-bottom: 10px;
+                            display: flex;
+                            align-items: center;
+                            border-left: 3px solid;
+                        }
+
+                        .checklist-before { border-left-color: #e74c3c; background-color: rgba(231, 76, 60, 0.05); }
+                        .checklist-after { border-left-color: #2ecc71; background-color: rgba(46, 204, 113, 0.05); }
+
+                        .status-icon {
+                            width: 20px; height: 20px; border-radius: 50%; margin-right: 12px;
+                            display: flex; align-items: center; justify-content: center;
+                            font-weight: bold; color: white; font-size: 10px;
+                        }
+
+                        .icon-red { background-color: #e74c3c; }
+                        .icon-green { background-color: #2ecc71; }
+
+                        .status-label {
+                            width: 35px; text-align: center; font-weight: bold; color: white;
+                            padding: 3px; border-radius: 3px; font-size: 11px; margin-left: auto;
+                        }
+
+                        .status-red { background-color: #e74c3c; }
+                        .status-green { background-color: #2ecc71; }
+
+                        .checklist-content { flex: 1; font-size: 13px; }
+
+                        .charts-container { flex: 1; }
+
+                        .chart-box {
+                            border: 1px solid #e0e0e0; border-radius: 5px; padding: 20px;
+                            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+                        }
+
+                        .chart-title {
+                            font-size: 16px; font-weight: bold; color: #34495e; margin-bottom: 15px; text-align: center;
+                        }
+
+                        .progress-circles {
+                            display: flex; justify-content: space-around; align-items: center; margin-top: 20px;
+                        }
+
+                        .progress-circle {
+                            position: relative; width: 100px; height: 100px;
+                            display: flex; flex-direction: column; align-items: center;
+                        }
+
+                        .circle-label {
+                            margin-top: 15px; font-size: 12px; font-weight: bold; color: #34495e;
+                            text-align: center;
+                        }
+
+                        .circle-track {
+                            width: 100px; height: 100px; border-radius: 50%; background-color: #ecf0f1;
+                            position: absolute; top: 0; left: 0;
+                        }
+
+                        .circle-inner {
+                            width: 80px; height: 80px; border-radius: 50%; background-color: white;
+                            position: absolute; top: 10px; left: 10px; display: flex;
+                            align-items: center; justify-content: center; font-size: 18px; font-weight: bold;
+                        }
+
+                        .before-value { color: #e74c3c; }
+                        .after-value { color: #2ecc71; }
+                    </style>
+                    
+                    <div class="anssi-container">
+                        <div class="anssi-title">Évaluation de la conformité aux recommandations ANSSI</div>
+
+                        <div class="anssi-content">
+                            <div class="checklist-container">
+                                <div class="checklist-title">Conformité aux recommandations principales</div>
+
+                                <div class="checklist-item checklist-before">
+                                    <div class="status-icon icon-red">R1</div>
+                                    <div class="checklist-content">Mise à jour des systèmes</div>
+                                    <div class="status-label status-red">45%</div>
+                                </div>
+                                <div class="checklist-item checklist-after">
+                                    <div class="status-icon icon-green">R1</div>
+                                    <div class="checklist-content">Mise à jour des systèmes</div>
+                                    <div class="status-label status-green">100%</div>
+                                </div>
+
+                                <div class="checklist-item checklist-before">
+                                    <div class="status-icon icon-red">R2</div>
+                                    <div class="checklist-content">Authentification forte</div>
+                                    <div class="status-label status-red">20%</div>
+                                </div>
+                                <div class="checklist-item checklist-after">
+                                    <div class="status-icon icon-green">R2</div>
+                                    <div class="checklist-content">Authentification forte</div>
+                                    <div class="status-label status-green">90%</div>
+                                </div>
+
+                                <div class="checklist-item checklist-before">
+                                    <div class="status-icon icon-red">R3</div>
+                                    <div class="checklist-content">Gestion des privilèges</div>
+                                    <div class="status-label status-red">25%</div>
+                                </div>
+                                <div class="checklist-item checklist-after">
+                                    <div class="status-icon icon-green">R3</div>
+                                    <div class="checklist-content">Gestion des privilèges</div>
+                                    <div class="status-label status-green">95%</div>
+                                </div>
+
+                                <div class="checklist-item checklist-before">
+                                    <div class="status-icon icon-red">R4</div>
+                                    <div class="checklist-content">Durcissement configurations</div>
+                                    <div class="status-label status-red">30%</div>
+                                </div>
+                                <div class="checklist-item checklist-after">
+                                    <div class="status-icon icon-green">R4</div>
+                                    <div class="checklist-content">Durcissement configurations</div>
+                                    <div class="status-label status-green">100%</div>
+                                </div>
+                            </div>
+
+                            <div class="charts-container">
+                                <div class="chart-box">
+                                    <div class="chart-title">Progression de la conformité ANSSI</div>
+                                    <div class="progress-circles">
+                                        <div class="progress-circle">
+                                            <div class="circle-track"></div>
+                                            <div class="circle-inner before-value">35%</div>
+                                            <div class="circle-label">Avant intervention</div>
+                                        </div>
+
+                                        <div class="progress-circle">
+                                            <div class="circle-track"></div>
+                                            <div class="circle-inner after-value">94%</div>
+                                            <div class="circle-label">Après intervention</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p style="text-align: center; font-weight: bold; margin-top: 10px;">Figure 5 : Évaluation de la conformité ANSSI</p>
+                </div>
+            </section>
+        </section>
+
+        <div class="page-break"></div>
+
+        <!-- 6. Conclusion et recommandations -->
+        <section id="conclusion">
+            <h1>6. Conclusion et recommandations</h1>
+
+            <section id="synthese">
+                <h2>6.1 Synthèse des actions réalisées</h2>
+                
+                <div class="success">
+                    <h3>Principales réalisations</h3>
+                    <ul>
+                        <li>Réduction de 12 à 4 du nombre de comptes Domain Admin</li>
+                        <li>Déploiement de LAPS sur 100% des postes et serveurs</li>
+                        <li>Durcissement complet des contrôleurs de domaine</li>
+                        <li>Mise en place d'un monitoring de sécurité avancé</li>
+                        <li>Implémentation du MFA pour les accès administratifs</li>
+                        <li>Formation complète des équipes techniques</li>
+                        <li>Documentation exhaustive des procédures</li>
+                    </ul>
+                </div>
+
+                <div class="success">
+                    <h3>Bénéfices pour Société Anonyme</h3>
+                    <ul>
+                        <li><strong>Sécurité :</strong> Élimination de toutes les vulnérabilités critiques</li>
+                        <li><strong>Conformité :</strong> Préparation à la certification ISO 27001</li>
+                        <li><strong>Détection :</strong> Capacité de détection d'incidents en temps réel</li>
+                        <li><strong>Résilience :</strong> Amélioration de la continuité de service</li>
+                        <li><strong>Gouvernance :</strong> Procédures formalisées et documentées</li>
+                        <li><strong>Compétences :</strong> Montée en compétence des équipes IT</li>
+                    </ul>
+                </div>
+
+                <div class="stats-container">
+                    <div class="stats-box">
+                        <div class="stats-number" style="color: #27ae60;">95%</div>
+                        <div class="stats-label">Amélioration Globale</div>
+                    </div>
+                    <div class="stats-box">
+                        <div class="stats-number" style="color: #3498db;">0</div>
+                        <div class="stats-label">Vulnérabilités Critiques</div>
+                    </div>
+                    <div class="stats-box">
+                        <div class="stats-number" style="color: #f39c12;">30</div>
+                        <div class="stats-label">Utilisateurs Protégés</div>
+                    </div>
+                    <div class="stats-box">
+                        <div class="stats-number" style="color: #27ae60;">100%</div>
+                        <div class="stats-label">Conformité Atteinte</div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="recommandations">
+                <h2>6.2 Recommandations à court et moyen terme</h2>
+                
+                <div class="recommendation">
+                    <h3>Recommandations à court terme (1-3 mois)</h3>
+                    <ul>
+                        <li>Effectuer un test de restauration complet des sauvegardes AD</li>
+                        <li>Organiser un exercice de gestion d'incident de sécurité</li>
+                        <li>Mettre en place un processus de revue trimestrielle des privilèges</li>
+                        <li>Configurer des alertes supplémentaires selon les besoins métier</li>
+                        <li>Planifier les formations de maintien des compétences</li>
+                    </ul>
+                </div>
+
+                <div class="recommendation">
+                    <h3>Recommandations à moyen terme (3-12 mois)</h3>
+                    <ul>
+                        <li>Évaluer l'opportunité de déployer une infrastructure PKI</li>
+                        <li>Étudier l'intégration avec Azure AD pour des fonctionnalités cloud</li>
+                        <li>Planifier la migration de l'application utilisant NTLM</li>
+                        <li>Considérer l'implémentation de Microsoft Defender for Identity</li>
+                        <li>Prévoir l'évolution vers Windows Server 2022</li>
+                        <li>Mettre en place un SOC externalisé ou interne</li>
+                    </ul>
+                </div>
+
+                <div class="warning">
+                    <h3>Points de vigilance</h3>
+                    <ul>
+                        <li>Maintenir la rigueur dans l'application des procédures établies</li>
+                        <li>Ne pas accorder de privilèges élevés sans justification métier</li>
+                        <li>Surveiller régulièrement l'évolution des menaces</li>
+                        <li>Maintenir à jour la documentation technique</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="surveillance">
+                <h2>6.3 Plan de surveillance continue</h2>
+                
+                <div class="recommendation">
+                    <h3>Surveillance opérationnelle quotidienne</h3>
+                    <ul>
+                        <li>Vérification des alertes de sécurité</li>
+                        <li>Contrôle de l'état des services critiques</li>
+                        <li>Surveillance des tentatives d'authentification échouées</li>
+                        <li>Vérification des sauvegardes</li>
+                    </ul>
+                </div>
+
+                <div class="recommendation">
+                    <h3>Contrôles périodiques</h3>
+                    <ul>
+                        <li><strong>Hebdomadaire :</strong> Revue des rapports de sécurité automatisés</li>
+                        <li><strong>Mensuel :</strong> Vérification de l'intégrité des sauvegardes</li>
+                        <li><strong>Trimestriel :</strong> Audit des comptes et privilèges</li>
+                        <li><strong>Semestriel :</strong> Évaluation de conformité et tests de sécurité</li>
+                        <li><strong>Annuel :</strong> Audit complet et test de pénétration</li>
+                    </ul>
+                </div>
+            </section>
+        </section>
+
+        <div class="page-break"></div>
+
+        <!-- 7. Annexes -->
+        <section id="annexes">
+            <h1>7. Annexes</h1>
+
+            <section id="annexe-gpo">
+                <h2>Annexe A : Détails des GPO implémentées</h2>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nom de la GPO</th>
+                            <th>Portée d'application</th>
+                            <th>Objectif principal</th>
+                            <th>Paramètres clés</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>TN-SEC-DomainControllers</td>
+                            <td>Contrôleurs de domaine</td>
+                            <td>Durcissement des DC</td>
+                            <td>Audit avancé, restrictions réseau, sécurité système</td>
+                        </tr>
+                        <tr>
+                            <td>TN-SEC-AdminWorkstations</td>
+                            <td>Postes d'administration</td>
+                            <td>Sécurisation des postes admin</td>
+                            <td>AppLocker, pare-feu, restrictions applications</td>
+                        </tr>
+                        <tr>
+                            <td>TN-SEC-LAPS</td>
+                            <td>Tous les ordinateurs</td>
+                            <td>Déploiement LAPS</td>
+                            <td>Installation agent, configuration rotation</td>
+                        </tr>
+                        <tr>
+                            <td>TN-SEC-PasswordPolicy</td>
+                            <td>Domaine complet</td>
+                            <td>Politique des mots de passe</td>
+                            <td>Complexité, longueur, durée de vie</td>
+                        </tr>
+                        <tr>
+                            <td>TN-SEC-UserWorkstations</td>
+                            <td>Postes utilisateurs</td>
+                            <td>Sécurisation postes standards</td>
+                            <td>Restrictions système, Windows Update</td>
+                        </tr>
+                        <tr>
+                            <td>TN-SEC-Servers</td>
+                            <td>Serveurs membres</td>
+                            <td>Durcissement serveurs</td>
+                            <td>Services, audit, configuration sécurisée</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="annexe-scripts">
+                <h2>Annexe B : Scripts de durcissement</h2>
+                
+                <div class="code-block">
+# Script de configuration LAPS pour l'entreprise
+param(
+    [Parameter(Mandatory=$true)]
+    [string]$Domain = "domaine.local"
+)
+
+Write-Host "=== Configuration LAPS pour Société Anonyme ===" -ForegroundColor Green
+
+# Installation du module LAPS
+Write-Host "Installation du module LAPS..." -ForegroundColor Yellow
+Install-Module -Name AdmPwd.PS -Force -Scope AllUsers
+
+# Extension du schéma AD
+Write-Host "Extension du schéma Active Directory..." -ForegroundColor Yellow
+Import-Module AdmPwd.PS
+Update-AdmPwdADSchema
+
+# Configuration des OUs
+$OUs = @(
+    "OU=PostesDeTravail,OU=Entreprise,DC=domaine,DC=local",
+    "OU=Serveurs,OU=Entreprise,DC=domaine,DC=local"
+)
+
+foreach ($OU in $OUs) {
+    Write-Host "Configuration de l'OU : $OU" -ForegroundColor Yellow
+    Set-AdmPwdComputerSelfPermission -OrgUnit $OU
+}
+
+# Configuration des permissions de lecture
+$AdminGroups = @{
+    "DOMAINE\DOM_Admins_PostesTravail" = "OU=PostesDeTravail,OU=Entreprise,DC=domaine,DC=local"
+    "DOMAINE\DOM_Admins_Serveurs" = "OU=Serveurs,OU=Entreprise,DC=domaine,DC=local"
+}
+
+foreach ($Group in $AdminGroups.Keys) {
+    Write-Host "Attribution des droits de lecture LAPS à $Group" -ForegroundColor Yellow
+    Set-AdmPwdReadPasswordPermission -OrgUnit $AdminGroups[$Group] -AllowedPrincipals $Group
+}
+
+Write-Host "=== Configuration LAPS terminée ===" -ForegroundColor Green
+                </div>
+            </section>
+
+            <section id="annexe-checklist">
+                <h2>Annexe C : Checklist de sécurité</h2>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Catégorie</th>
+                            <th>Contrôle</th>
+                            <th>Avant</th>
+                            <th>Après</th>
+                            <th>Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Authentification</td>
+                            <td>Politique de mots de passe renforcée</td>
+                            <td><span class="status-indicator red"></span></td>
+                            <td><span class="status-indicator green"></span></td>
+                            <td>✅ Implémenté</td>
+                        </tr>
+                        <tr>
+                            <td>Authentification</td>
+                            <td>MFA pour administrateurs</td>
+                            <td><span class="status-indicator red"></span></td>
+                            <td><span class="status-indicator green"></span></td>
+                            <td>✅ Implémenté</td>
+                        </tr>
+                        <tr>
+                            <td>Privilèges</td>
+                            <td>Réduction des comptes Domain Admin</td>
+                            <td><span class="status-indicator red"></span></td>
+                            <td><span class="status-indicator green"></span></td>
+                            <td>✅ Implémenté</td>
+                        </tr>
+                        <tr>
+                            <td>Configuration</td>
+                            <td>Durcissement des DC</td>
+                            <td><span class="status-indicator red"></span></td>
+                            <td><span class="status-indicator green"></span></td>
+                            <td>✅ Implémenté</td>
+                        </tr>
+                        <tr>
+                            <td>Monitoring</td>
+                            <td>Audit et surveillance</td>
+                            <td><span class="status-indicator red"></span></td>
+                            <td><span class="status-indicator green"></span></td>
+                            <td>✅ Implémenté</td>
+                        </tr>
+                        <tr>
+                            <td>Réseau</td>
+                            <td>Désactivation SMBv1</td>
+                            <td><span class="status-indicator red"></span></td>
+                            <td><span class="status-indicator green"></span></td>
+                            <td>✅ Implémenté</td>
+                        </tr>
+                        <tr>
+                            <td>Sauvegarde</td>
+                            <td>Stratégie de sauvegarde AD</td>
+                            <td><span class="status-indicator orange"></span></td>
+                            <td><span class="status-indicator green"></span></td>
+                            <td>✅ Implémenté</td>
+                        </tr>
+                        <tr>
+                            <td>Formation</td>
+                            <td>Sensibilisation utilisateurs</td>
+                            <td><span class="status-indicator red"></span></td>
+                            <td><span class="status-indicator green"></span></td>
+                            <td>✅ Implémenté</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="alert alert-success">
+                    <strong>✅ Résultat global :</strong> 100% des contrôles de sécurité sont désormais conformes aux bonnes pratiques.
+                </div>
+            </section>
+        </section>
+
+        <!-- Signature -->
+        <div class="signature">
+            <div class="signature-box">
+                <p><strong>Ben Cohen</strong></p>
+                <p>Consultant principal en cybersécurité</p>
+                <p>My Trust Partner</p>
+                <p>Le 18 juin 2025</p>
+                <br>
+                <p style="font-style: italic; font-size: 11px;">Avec la collaboration de Johan Buenavida</p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>My Trust Partner - Rapport d'intervention de sécurisation - Référence : MTP-SEC-2025-0089</p>
+            <p>Document préparé pour Société Anonyme - Intervention du 10 au 17 juin 2025</p>
+            <p>Document confidentiel - Reproduction interdite sans autorisation écrite</p>
+        </div>
+    </div>
+</body>
+
+</html>
