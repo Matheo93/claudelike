@@ -52,7 +52,7 @@ function needsMathJax(content) {
 
 // 🌐 ROUTING: Multi-page commercial site
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'landing.html'));
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.get('/app', (req, res) => {
