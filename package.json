@@ -1,21 +1,28 @@
 {
-  "name": "claude-like-app",
-  "version": "1.0.0",
-  "description": "Application Claude-like avec support PDF",
+  "name": "deepseek-docgenius",
+  "version": "2.0.0",
+  "description": "DocGenius - Application DeepSeek avec support PDF",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.24.3",
+    "@supabase/supabase-js": "^2.75.0",
+    "axios": "^1.12.2",
+    "cheerio": "^1.1.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "multer": "^1.4.5-lts.1",
+    "openai": "^5.20.3",
     "pdf-parse": "^1.1.1",
-    "@anthropic-ai/sdk": "^0.24.3",
-    "cors": "^2.8.5",
-    "dotenv": "^16.3.1"
+    "railway": "^2.0.17",
+    "stripe": "^19.1.0"
   },
   "devDependencies": {
+    "@railway/cli": "^4.10.0",
     "nodemon": "^3.0.1"
   }
 }
