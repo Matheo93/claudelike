@@ -1,0 +1,18 @@
+node_modules
+.git
+.env
+*.log
+.DS_Store
+
+# Ignore all untracked HTML files in root
+app.html
+auth.html
+chat-addon.html
+chat.html
+dashboard.html
+pricing.html
+test-report.html
+
+# Ignore all PDF reports
+*.pdf
+public/*report*.html
