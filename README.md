@@ -1,15 +1,23 @@
-# 🚀 DocGenius - AI-Powered Professional Report Generator
+# 🚀 SlideForge AI - Transform PDFs into Stunning Interactive Presentations
+
+> **The most intelligent PDF-to-Presentation converter with AI Chat Editing**
+> Upload any PDF, chat with AI to customize slides, download beautiful presentations in seconds.
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js](https://img.shields.io/badge/Node.js-18%2B-green)](https://nodejs.org/)
+[![DeepSeek AI](https://img.shields.io/badge/AI-DeepSeek-blue)](https://deepseek.com/)
 
 ## 📋 Description
 
-DocGenius est une application web révolutionnaire qui transforme vos documents PDF en rapports professionnels interactifs et présentations HTML. Utilisant l'API Claude Opus d'Anthropic, DocGenius analyse intelligemment le contenu de vos documents et génère des rapports visuellement riches adaptés à votre domaine.
+SlideForge AI est une application web révolutionnaire qui transforme vos documents PDF en présentations professionnelles interactives. Avec son interface de chat AI intégrée, vous pouvez modifier vos slides en langage naturel et voir les changements en temps réel.
 
 ## ✨ Fonctionnalités Principales
 
-### 📊 Système 4-Phases Intelligent
+### 📊 Système 5-Phases Intelligent
 - **Phase 1**: Analyse automatique du domaine et extraction du contenu
 - **Phase 2**: Génération de rapport professionnel (20 000 tokens)
 - **Phase 3**: Finalisation et optimisation
+- **Phase 5**: Enhancement visuel avec OpenAI (SVG, graphiques avancés, animations)
 - **Phase 4**: Conversion en présentation interactive (type PowerPoint en HTML)
 
 ### 🎨 Types de Rapports
@@ -18,8 +26,10 @@ DocGenius est une application web révolutionnaire qui transforme vos documents 
 - **💼 Exécutif**: Synthèses stratégiques avec KPIs
 
 ### 🎯 Caractéristiques Avancées
-- Visualisations SVG interactives
-- Graphiques et tableaux dynamiques
+- **Phase 5 NEW**: Enhancement visuel avec OpenAI GPT-4o
+- Visualisations SVG interactives et animations CSS
+- Graphiques avancés : pie charts, timeline, jauges, diagrammes
+- Tableaux de bord avec métriques colorées
 - Navigation par slides (présentation)
 - Support PDF jusqu'à 50MB
 - Retry automatique en cas de surcharge API
@@ -100,6 +110,7 @@ docgenius/
 
 ```env
 ANTHROPIC_API_KEY=sk-ant-api03-xxxxx
+OPENAI_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxx
 ```
 
 ## 🚀 Utilisation
@@ -107,14 +118,16 @@ ANTHROPIC_API_KEY=sk-ant-api03-xxxxx
 1. **Uploader un PDF**: Cliquez sur "📄 Télécharger un PDF"
 2. **Sélectionner le type**: Choisissez entre Académique, Intervention ou Exécutif
 3. **Générer le rapport**: Cliquez sur "📊 Générer Rapport Pro"
-4. **Convertir en présentation** (optionnel): "🎯 Convertir en Présentation"
-5. **Télécharger**: Sauvegardez votre rapport ou présentation HTML
+4. **Enhancement visuel** (optionnel): "✨ Enhancement Visuel (OpenAI)" pour SVG avancés
+5. **Convertir en présentation** (optionnel): "🎯 Convertir en Présentation"
+6. **Télécharger**: Sauvegardez votre rapport ou présentation HTML
 
 ## 📊 Limites Techniques
 
 - **Taille PDF**: Maximum 50MB
 - **Timeout**: 15 minutes (900s) sur Vercel Pro
 - **Tokens Phase 2**: 20 000 (rapports complets garantis)
+- **Tokens Phase 5**: 16 384 (OpenAI maximum pour enhancement complet)
 - **Tokens Phase 4**: 18 000 (présentations complètes)
 
 ## 🛡️ Sécurité
@@ -134,9 +147,10 @@ MIT
 
 ## 🙏 Crédits
 
-- **API**: Claude Opus (Anthropic)
+- **APIs**: Claude Opus (Anthropic) + OpenAI GPT-4o
 - **Framework**: Express.js + Vercel Serverless
 - **PDF Processing**: pdf-parse
+- **Enhancement**: OpenAI pour SVG et visualisations avancées
 
 ---
 

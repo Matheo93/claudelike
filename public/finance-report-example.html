@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Analysis Report - DocGenius</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s ease;
+            z-index: 1000;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            z-index: 999;
+            display: flex;
+            gap: 1rem;
+        }
+
+        nav a {
+            color: #667eea;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        nav a:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 5rem auto 2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 4rem 3rem;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .decorative-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .circle-1 {
+            width: 300px;
+            height: 300px;
+            top: -100px;
+            left: -100px;
+        }
+
+        .circle-2 {
+            width: 200px;
+            height: 200px;
+            bottom: -80px;
+            right: -80px;
+        }
+
+        /* Section */
+        section {
+            padding: 3rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        section:last-child {
+            border-bottom: none;
+        }
+
+        .section-tag {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: #2d3748;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .icon-circle {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        p {
+            line-height: 1.8;
+            color: #4a5568;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+        }
+
+        .card h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .card li {
+            padding: 0.5rem 0;
+            color: #4a5568;
+        }
+
+        .card li::before {
+            content: '✓';
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        /* Charts */
+        .chart-container {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+        }
+
+        .chart-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 1rem;
+            height: 200px;
+            margin-top: 1rem;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: linear-gradient(to top, #667eea, #764ba2);
+            border-radius: 8px 8px 0 0;
+            position: relative;
+            animation: growBar 1s ease-out;
+        }
+
+        @keyframes growBar {
+            from { height: 0; }
+        }
+
+        .chart-label {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.85rem;
+            color: #4a5568;
+            white-space: nowrap;
+        }
+
+        /* Footer */
+        footer {
+            background: #2d3748;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        footer p {
+            color: rgba(255, 255, 255, 0.8);
+            margin: 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 0.75rem 1rem;
+                gap: 0.5rem;
+            }
+
+            nav a {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            section {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <nav>
+        <a href="#exec">Exec</a>
+        <a href="#what">What</a>
+        <a href="#cash">Cash</a>
+        <a href="#task">Task</a>
+        <a href="#val">Val</a>
+        <a href="#market">Market</a>
+        <a href="#obj">Obj</a>
+        <a href="#concl">Concl</a>
+    </nav>
+
+    <div class="container">
+        <div class="hero">
+            <div class="decorative-circle circle-1"></div>
+            <div class="decorative-circle circle-2"></div>
+            <h1>Financial Analysis Report</h1>
+            <p class="subtitle">Comprehensive Introduction to Corporate Finance</p>
+        </div>
+
+        <section id="exec">
+            <span class="section-tag">EXECUTIVE SUMMARY</span>
+            <h2>
+                <div class="icon-circle">📊</div>
+                Executive Overview
+            </h2>
+            <p>
+                This comprehensive financial analysis provides an in-depth exploration of corporate finance fundamentals,
+                covering essential concepts from asset valuation to market dynamics. Our analysis demonstrates how modern
+                financial theory translates into practical business decision-making.
+            </p>
+            <div class="grid">
+                <div class="card">
+                    <h3>Key Findings</h3>
+                    <ul>
+                        <li>Time value of money is fundamental</li>
+                        <li>Risk-adjusted returns matter</li>
+                        <li>Market efficiency drives pricing</li>
+                        <li>Strategic allocation maximizes value</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Research Context</h3>
+                    <ul>
+                        <li>Big Four methodology applied</li>
+                        <li>Real-world case studies analyzed</li>
+                        <li>Industry benchmarks referenced</li>
+                        <li>Best practices documented</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="what">
+            <span class="section-tag">DEFINITIONS</span>
+            <h2>
+                <div class="icon-circle">💰</div>
+                What is Finance?
+            </h2>
+            <p>
+                Finance is the art and science of managing money, encompassing decisions about acquiring and disposing of assets.
+                It bridges the gap between current resources and future opportunities through strategic capital allocation.
+            </p>
+            <div class="grid">
+                <div class="card">
+                    <h3>Real Assets</h3>
+                    <ul>
+                        <li>Tangible property & equipment</li>
+                        <li>Intellectual property</li>
+                        <li>Patents and trademarks</li>
+                        <li>Production capabilities</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Financial Assets</h3>
+                    <ul>
+                        <li>Stocks and bonds</li>
+                        <li>Derivative instruments</li>
+                        <li>Claims on real assets</li>
+                        <li>Market-traded securities</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="cash">
+            <span class="section-tag">CASH FLOW</span>
+            <h2>
+                <div class="icon-circle">↔️</div>
+                Cash Flow Analysis
+            </h2>
+            <p>
+                Understanding cash flow is critical to financial management. The circular flow of capital between firms
+                and investors through financial markets drives corporate value creation.
+            </p>
+            <div class="chart-container">
+                <h3>Annual Cash Flow Projections</h3>
+                <div class="chart-bars">
+                    <div class="chart-bar" style="height: 60%;">
+                        <span class="chart-label">Year 1</span>
+                    </div>
+                    <div class="chart-bar" style="height: 75%;">
+                        <span class="chart-label">Year 2</span>
+                    </div>
+                    <div class="chart-bar" style="height: 85%;">
+                        <span class="chart-label">Year 3</span>
+                    </div>
+                    <div class="chart-bar" style="height: 92%;">
+                        <span class="chart-label">Year 4</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="task">
+            <span class="section-tag">MANAGER ROLE</span>
+            <h2>
+                <div class="icon-circle">🎯</div>
+                Financial Manager's Tasks
+            </h2>
+            <p>
+                The financial manager must optimize investment decisions, financing structures, dividend policies,
+                and risk management strategies to maximize shareholder value.
+            </p>
+            <div class="grid">
+                <div class="card">
+                    <h3>Investment Decisions</h3>
+                    <ul>
+                        <li>Capital budgeting</li>
+                        <li>Project evaluation</li>
+                        <li>Asset allocation</li>
+                        <li>NPV analysis</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Financing Decisions</h3>
+                    <ul>
+                        <li>Capital structure</li>
+                        <li>Debt vs equity mix</li>
+                        <li>Cost of capital</li>
+                        <li>Leverage optimization</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="val">
+            <span class="section-tag">VALUATION</span>
+            <h2>
+                <div class="icon-circle">📈</div>
+                Asset Valuation
+            </h2>
+            <p>
+                Asset valuation requires discounting future cash flows adjusted for time and risk. The two critical
+                factors are timing (when cash flows occur) and risk (uncertainty of those flows).
+            </p>
+            <div class="chart-container">
+                <h3>Valuation Methods Comparison</h3>
+                <div class="chart-bars">
+                    <div class="chart-bar" style="height: 70%;">
+                        <span class="chart-label">DCF</span>
+                    </div>
+                    <div class="chart-bar" style="height: 85%;">
+                        <span class="chart-label">Multiples</span>
+                    </div>
+                    <div class="chart-bar" style="height: 65%;">
+                        <span class="chart-label">Precedent</span>
+                    </div>
+                    <div class="chart-bar" style="height: 78%;">
+                        <span class="chart-label">Asset-Based</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="market">
+            <span class="section-tag">MARKETS</span>
+            <h2>
+                <div class="icon-circle">🌐</div>
+                Financial Markets
+            </h2>
+            <p>
+                Financial markets facilitate capital allocation, price discovery, and risk management. They connect
+                savers with borrowers and provide liquidity for asset trading.
+            </p>
+            <div class="grid">
+                <div class="card">
+                    <h3>Money Markets</h3>
+                    <ul>
+                        <li>Treasury bills</li>
+                        <li>Commercial paper</li>
+                        <li>Short-term instruments</li>
+                        <li>High liquidity</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Capital Markets</h3>
+                    <ul>
+                        <li>Stocks and bonds</li>
+                        <li>Long-term securities</li>
+                        <li>IPOs and offerings</li>
+                        <li>Growth financing</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="obj">
+            <span class="section-tag">OBJECTIVES</span>
+            <h2>
+                <div class="icon-circle">🎯</div>
+                Manager Objectives
+            </h2>
+            <p>
+                The primary objective is maximizing current market value for shareholders. This requires balancing
+                stakeholder interests while maintaining long-term sustainable growth.
+            </p>
+            <div class="grid">
+                <div class="card">
+                    <h3>Value Creation</h3>
+                    <ul>
+                        <li>Shareholder wealth maximization</li>
+                        <li>Positive NPV projects</li>
+                        <li>Efficient capital allocation</li>
+                        <li>Strategic growth initiatives</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Risk Management</h3>
+                    <ul>
+                        <li>Diversification strategies</li>
+                        <li>Hedging operations</li>
+                        <li>Insurance coverage</li>
+                        <li>Operational resilience</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="concl">
+            <span class="section-tag">CONCLUSION</span>
+            <h2>
+                <div class="icon-circle">✅</div>
+                Key Takeaways
+            </h2>
+            <p>
+                This analysis has demonstrated that successful financial management requires understanding time value,
+                risk assessment, market dynamics, and strategic decision-making. These principles form the foundation
+                of modern corporate finance.
+            </p>
+            <div class="grid">
+                <div class="card">
+                    <h3>Core Principles</h3>
+                    <ul>
+                        <li>Time value of money matters</li>
+                        <li>Risk requires compensation</li>
+                        <li>Markets determine value</li>
+                        <li>Strategy drives results</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Next Steps</h3>
+                    <ul>
+                        <li>Apply these concepts</li>
+                        <li>Monitor market conditions</li>
+                        <li>Optimize capital structure</li>
+                        <li>Maximize shareholder value</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>🤖 Generated with DocGenius - AI-Powered Financial Analysis</p>
+            <p style="margin-top: 0.5rem; opacity: 0.7;">Professional report generation powered by Claude AI</p>
+        </footer>
+    </div>
+
+    <script>
+        // Progress bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+    </script>
+</body>
+</html>

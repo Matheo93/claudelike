@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapport Finance d'Entreprise | Niveau Big Four</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Serif+Pro:wght@400;600&display=swap">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #1a4f72;
+            --secondary: #3e7cb1;
+            --accent: #f36f3a;
+            --light: #f5f7fa;
+            --dark: #2c3e50;
+            --grey: #e2e8f0;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --danger: #f44336;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --radius: 8px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: var(--light);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        .sidebar {
+            width: 280px;
+            background: var(--primary);
+            color: white;
+            padding: 2rem 1rem;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            transition: var(--transition);
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+
+        .sidebar-header {
+            padding: 0 0 2rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-header h2 {
+            font-weight: 600;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            padding: 0.75rem 1rem;
+            display: block;
+            border-radius: var(--radius);
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .nav-links a i {
+            margin-right: 0.75rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+        }
+
+        .section {
+            background: white;
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--grey);
+        }
+
+        .section-header h2 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        /* Cards */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+            border: 1px solid var(--grey);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+
+        .card-header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem;
+            font-weight: 500;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        /* Charts */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 2rem 0;
+        }
+
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .data-table th, .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--grey);
+        }
+
+        .data-table th {
+            background: var(--primary);
+            color: white;
+            font-weight: 500;
+        }
+
+        .data-table tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        .data-table tr:hover {
+            background-color: #f1f5f9;
+        }
+
+        /* Key points */
+        .key-points {
+            background: linear-gradient(135deg, #f6f9ff 0%, #e6f0ff 100%);
+            border-left: 4px solid var(--secondary);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 var(--radius) var(--radius) 0;
+        }
+
+        .key-points h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .key-points ul {
+            padding-left: 1.5rem;
+        }
+
+        .key-points li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Figures and diagrams */
+        .figure {
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .figure img {
+            max-width: 100%;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .figure-caption {
+            margin-top: 0.5rem;
+            font-style: italic;
+            color: #64748b;
+        }
+
+        /* Financial concepts visualization */
+        .finance-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .flow-step {
+            text-align: center;
+            flex: 1;
+            position: relative;
+            padding: 1.5rem;
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .flow-step:not(:last-child):after {
+            content: "→";
+            position: absolute;
+            right: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            color: var(--secondary);
+        }
+
+        .flow-step-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        /* Interactive elements */
+        .interactive-box {
+            background: white;
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--grey);
+        }
+
+        .slider-container {
+            margin: 1.5rem 0;
+        }
+
+        .slider-container label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .slider {
+            width: 100%;
+            margin: 1rem 0;
+        }
+
+        .calc-result {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: var(--radius);
+            font-weight: 500;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            border-top: 1px solid var(--grey);
+            color: #64748b;
+        }
+
+        /* Responsive design */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 220px;
+            }
+            .main-content {
+                margin-left: 220px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                padding: 1rem;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .finance-flow {
+                flex-direction: column;
+            }
+            .flow-step {
+                margin-bottom: 2rem;
+                width: 100%;
+            }
+            .flow-step:not(:last-child):after {
+                content: "↓";
+                right: 50%;
+                top: auto;
+                bottom: -30px;
+                transform: translateX(50%);
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        /* Utility classes */
+        .text-primary { color: var(--primary); }
+        .text-accent { color: var(--accent); }
+        .mt-2 { margin-top: 2rem; }
+        .mb-2 { margin-bottom: 2rem; }
+        .highlight { background: linear-gradient(120deg, rgba(243, 111, 58, 0.1) 0%, rgba(243, 111, 58, 0) 100%); padding: 0.25rem 0.5rem; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <!-- Navigation Sidebar -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2><i>📊</i> Finance Analytics</h2>
+            <p>Rapport d'Introduction à la Finance</p>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#intro" class="active"><i>🏠</i> Introduction</a></li>
+            <li><a href="#what-is-finance"><i>💰</i> Qu'est-ce que la Finance?</a></li>
+            <li><a href="#cash-flow"><i>↔️</i> Flux de Trésorerie</a></li>
+            <li><a href="#valuation"><i>📈</i> Évaluation d'Actifs</a></li>
+            <li><a href="#financial-markets"><i>🌐</i> Marchés Financiers</a></li>
+            <li><a href="#objectives"><i>🎯</i> Objectifs du Manager</a></li>
+            <li><a href="#conclusion"><i>✅</i> Conclusion</a></li>
+            <li><a href="#appendix"><i>📎</i> Annexes</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Introduction Section -->
+        <section id="intro" class="section">
+            <div class="section-header">
+                <h2><i>🏠</i> Introduction à la Finance</h2>
+            </div>
+            <p>La finance constitue l'épine dorsale des décisions économiques modernes. Ce rapport présente une analyse approfondie des concepts fondamentaux de la finance d'entreprise, inspirée des normes des Big Four et adaptée aux exigences contemporaines.</p>
+            
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-header">Plan du Rapport</div>
+                    <div class="card-body">
+                        <ol>
+                            <li>Définition et portée de la finance</li>
+                            <li>Flux de trésorerie de l'entreprise</li>
+                            <li>Rôle du manager financier</li>
+                            <li>Évaluation des actifs</li>
+                            <li>Coût d'opportunité du capital</li>
+                            <li>Valeur actuelle</li>
+                            <li>Marchés financiers</li>
+                            <li>Objectifs de gestion</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">Points Clés</div>
+                    <div class="card-body">
+                        <ul>
+                            <li>La finance concerne la création et la gestion de la valeur</li>
+                            <li>Les décisions financières optimales maximisent la valeur pour les actionnaires</li>
+                            <li>Les marchés financiers fournissent les références pour l'évaluation</li>
+                            <li>La valeur temporelle de l'argent est fondamentale</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="key-points">
+                <h4>📘 Contexte du Chapitre</h4>
+                <p>Ce rapport s'inspire du chapitre d'introduction aux concepts financiers, couvrant les bases nécessaires pour comprendre comment les entreprises prennent des décisions financières et comment les marchés évaluent les actifs.</p>
+            </div>
+        </section>
+
+        <!-- What is Finance Section -->
+        <section id="what-is-finance" class="section">
+            <div class="section-header">
+                <h2><i>💰</i> Qu'est-ce que la Finance?</h2>
+            </div>
+            <p>La finance se définit comme <span class="highlight">l'art et la science de la gestion de l'argent</span>. Elle concerne les décisions relatives à l'acquisition et à la disposition d'actifs:</p>
+            
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-header">Actifs Réels</div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Actifs tangibles (machines, bâtiments)</li>
+                            <li>Actifs intangibles (brevets, marques)</li>
+                            <li>Génèrent de la valeur par exploitation</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">Actifs Financiers</div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Actions, obligations, produits dérivés</li>
+                            <li>Représentent des claims sur des actifs réels</li>
+                            <li>Facilitent le transfert de capitaux</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="key-points">
+                <h4>🎯 Double Objectif des Entreprises</h4>
+                <ol>
+                    <li><strong>Croître la richesse</strong> grâce à des investissements judicieux</li>
+                    <li><strong>Utiliser la richesse</strong> pour répondre aux besoins économiques</li>
+                </ol>
+            </div>
+
+            <div class="interactive-box">
+                <h4>📊 Répartition Typique des Actifs dans les Entreprises S&P 500</h4>
+                <div class="chart-container">
+                    <canvas id="assetsChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cash Flow Section -->
+        <section id="cash-flow" class="section">
+            <div class="section-header">
+                <h2><i>↔️</i> Flux de Trésorerie de l'Entreprise</h2>
+            </div>
+            <p>Le cycle de trésorerie représente le flux circulaire des capitaux entre l'entreprise et les investisseurs à travers les marchés financiers.</p>
+            
+            <div class="figure">
+                <div class="finance-flow">
+                    <div class="flow-step">
+                        <div class="flow-step-icon">💰</div>
+                        <h4>Financement</h4>
+                        <p>Collecte de fonds auprès des investisseurs</p>
+                    </div>
+                    <div class="flow-step">
+                        <div class="flow-step-icon">🏭</div>
+                        <h4>Investissement</h4>
+                        <p>Acquisition d'actifs réels</p>
+                    </div>
+                    <div class="flow-step">
+                        <div class="flow-step-icon">📊</div>
+                        <h4>Exploitation</h4>
+                        <p>Génération de flux de trésorerie</p>
+                    </div>
+                    <div class="flow-step">
+                        <div class="flow-step-icon">↩️</div>
+                        <h4>Redistribution</h4>
+                        <p>Retour aux investisseurs</p>
+                    </div>
+                </div>
+                <div class="figure-caption">Figure 1: Cycle des flux de trésorerie de l'entreprise</div>
+            </div>
+
+            <div class="key-points">
+                <h4>🔍 Rôle du Manager Financier</h4>
+                <p>Le manager financier doit optimiser les décisions concernant:</p>
+                <ul>
+                    <li><strong>Investissement</strong>: Quels projets entreprendre?</li>
+                    <li><strong>Financement</strong>: Comment financer ces projets?</li>
+                    <li><strong>Politique de dividende</strong>: Quelle part des bénéfices redistribuer?</li>
+                    <li><strong>Gestion du risque</strong>: Quels risques prendre ou couvrir?</li>
+                </ul>
+            </div>
+
+            <div class="interactive-box">
+                <h4>📈 Simulateur de Flux de Trésorerie</h4>
+                <div class="slider-container">
+                    <label for="investment">Montant de l'investissement initial ($): <output id="investmentValue">1,000,000</output></label>
+                    <input type="range" id="investment" class="slider" min="500000" max="5000000" value="1000000" step="100000">
+                </div>
+                <div class="slider-container">
+                    <label for="returnRate">Taux de rendement annuel (%): <output id="returnValue">10</output></label>
+                    <input type="range" id="returnRate" class="slider" min="5" max="25" value="10" step="1">
+                </div>
+                <div class="slider-container">
+                    <label for="period">Période (années): <output id="periodValue">5</output></label>
+                    <input type="range" id="period" class="slider" min="1" max="10" value="5" step="1">
+                </div>
+                <div class="calc-result">
+                    <h4>Résultat:</h4>
+                    <p>Valeur future: <span id="futureValue">$1,610,510</span></p>
+                    <p>Valeur actuelle nette: <span id="npv">$610,510</span></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Valuation Section -->
+        <section id="valuation" class="section">
+            <div class="section-header">
+                <h2><i>📈</i> Évaluation d'Actifs</h2>
+            </div>
+            <p>L'évaluation est la question centrale en finance. Tout actif est défini par ses flux de trésorerie futurs, qui doivent être ajustés selon deux caractéristiques essentielles:</p>
+            
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-header">⏱️ Facteur Temps</div>
+                    <div class="card-body">
+                        <p>Un dollar aujourd'hui vaut plus qu'un dollar demain en raison des opportunités d'investissement.</p>
+                        <p class="text-accent">« Mieux vaut recevoir $1000 aujourd'hui que $1000 dans un an »</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">🎲 Facteur Risque</div>
+                    <div class="card-body">
+                        <p>Un dollar certain vaut plus qu'un dollar incertain en raison de l'aversion au risque.</p>
+                        <p class="text-accent">« Mieux vaut recevoir $1000 certain que 50% de $0 et 50% de $2000 »</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Approches d'Évaluation</h3>
+            <div class="data-table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Méthode</th>
+                            <th>Principe</th>
+                            <th>Avantages</th>
+                            <th>Limites</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Valeur Actuelle Nette (VAN)</td>
+                            <td>Actualisation des flux futurs</td>
+                            <td>Prend en compte la valeur temps de l'argent</td>
+                            <td>Dépend du taux d'actualisation</td>
+                        </tr>
+                        <tr>
+                            <td>Comparables</td>
+                            <td>Benchmark avec actifs similaires</td>
+                            <td>Simple et intuitive</td>
+                            <td>Difficulté à trouver des comparables exacts</td>
+                        </tr>
+                        <tr>
+                            <td>Arbitrage</td>
+                            <td>Évaluation par replication</td>
+                            <td>Robuste théoriquement</td>
+                            <td>Nécessite des actifs de replication</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="interactive-box">
+                <h4>📉 Coût d'Opportunité du Capital</h4>
+                <p>Le coût d'opportunité du capital est le taux de rendement attendu offert par des investissements équivalents sur les marchés financiers. Il représente le rendement auquel renoncent les investisseurs en choisissant un projet plutôt qu'un autre.</p>
+                <div class="chart-container">
+                    <canvas id="opportunityCostChart"></canvas>
+                </div>
+            </div>
+
+            <div class="key-points">
+                <h4>🧮 Calcul de la Valeur Actuelle</h4>
+                <p>La valeur actuelle d'un flux de trésorerie futur se calcule comme:</p>
+                <p>VA = CF<sub>1</sub> / (1 + r) + CF<sub>2</sub> / (1 + r)<sup>2</sup> + ... + CF<sub>n</sub> / (1 + r)<sup>n</sup></p>
+                <p>Où CF<sub>t</sub> est le flux de trésorerie à la période t et r est le taux d'actualisation.</p>
+            </div>
+        </section>
+
+        <!-- Financial Markets Section -->
+        <section id="financial-markets" class="section">
+            <div class="section-header">
+                <h2><i>🌐</i> Marchés Financiers</h2>
+            </div>
+            <p>Les marchés financiers jouent un rôle central dans l'économie en facilitant l'allocation des ressources et la communication de l'information.</p>
+            
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-header">Marchés Monétaires</div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Instruments de dette à court terme</li>
+                            <li>Bons du Trésor (T-bills)</li>
+                            <li>Certificats de dépôt (CDs)</li>
+                            <li>Billets de trésorerie (commercial papers)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">Marchés de Capitaux</div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Instruments de dette à long terme</li>
+                            <li>Obligations d'État et d'entreprise</li>
+                            <li>Actions</li>
+                            <li>Instruments hybrides</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">Produits Dérivés</div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Contrats à terme (futures)</li>
+                            <li>Options</li>
+                            <li>Swaps</li>
+                            <li>Contrats dont la valeur dérive d'autres actifs</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Fonctions des Marchés Financiers</h3>
+            <div class="finance-flow">
+                <div class="flow-step">
+                    <div class="flow-step-icon">📤</div>
+                    <h4>Allocation des Ressources</h4>
+                    <p>Transfert des capitaux des épargnants vers les investisseurs</p>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-step-icon">💡</div>
+                    <h4>Communication d'Information</h4>
+                    <p>Les prix reflètent l'information disponible</p>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-step-icon">⚖️</div>
+                    <h4>Gestion des Risques</h4>
+                    <p>Transfert et diversification des risques</p>
+                </div>
+            </div>
+
+            <div class="interactive-box">
+                <h4>📊 Représentation Schématique de l'Écosystème Financier</h4>
+                <div class="chart-container">
+                    <canvas id="marketEcosystemChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Manager Objectives Section -->
+        <section id="objectives" class="section">
+            <div class="section-header">
+                <h2><i>🎯</i> Objectifs du Manager Financier</h2>
+            </div>
+            <p>L'objectif premier du manager financier est de maximiser la valeur de marché actuelle de l'entreprise pour ses actionnaires.</p>
+            
+            <div class="key-points">
+                <h4>📈 Pourquoi Maximiser la Valeur de Marché?</h4>
+                <ol>
+                    <li>La valeur de marché incorpore la valeur actuelle de tous les flux de trésorerie futurs, ajustés pour le temps et le risque</li>
+                    <li>Les actionnaires peuvent ajuster leur allocation de richesse via les marchés financiers</li>
+                    <li>La séparation entre propriété et gestion est possible grâce aux marchés financiers parfaits</li>
+                </ol>
+            </div>
+
+            <div class="interactive-box">
+                <h4>📋 Dilemmes de Gestion - Étude de Cas 50MD</h4>
+                <p>La société 50MD, cotée au NASDAQ, est détenue majoritairement par trois membres de la famille fondatrice. Le CEO évalue deux projets:</p>
+                
+                <div class="card-grid">
+                    <div class="card">
+                        <div class="card-header">Projet A</div>
+                        <div class="card-body">
+                            <ul>
+                                <li>VAN positive</li>
+                                <li>Délai de récupération: 3 ans</li>
+                                <li>Risque modéré</li>
+                                <li>Flux stables</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">Projet B</div>
+                        <div class="card-body">
+                            <ul>
+                                <li>VAN plus élevée</li>
+                                <li>Délai de récupération: 10 ans</li>
+                                <li>Risque élevé</li>
+                                <li>Potentiel de croissance important</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="key-points">
+                    <h4>👥 Objections des Actionnaires</h4>
+                    <ul>
+                        <li><strong>Grand-mère (85 ans)</strong>: "Je ne verrai probablement pas le bénéfice du projet B"</li>
+                        <li><strong>Père</strong>: "Je préfère la stabilité pour maintenir mon train de vie"</li>
+                        <li><strong>Fils</strong>: "Le marché surestime ce secteur, B est un mauvais choix"</li>
+                    </ul>
+                </div>
+
+                <div class="key-points">
+                    <h4>💡 Réponse du Manager</h4>
+                    <p>Le manager doit expliquer que:</p>
+                    <ol>
+                        <li>La maximisation de la valeur profite à tous les actionnaires</li>
+                        <li>Chaque actionnaire peut ajuster son exposition au temps et au risque via les marchés financiers</li>
+                        <li>Le projet B maximise la valeur de l'entreprise, et les actionnaires insatisfaits peuvent vendre leurs parts</li>
+                    </ol>
+                </div>
+            </div>
+
+            <h3>Problèmes Pratiques de la Maximisation de Valeur</h3>
+            <div class="data-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Défi</th>
+                            <th>Description</th>
+                            <th>Impact Potentiel</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Problèmes d'Agence</td>
+                            <td>Intérêts divergents entre managers et actionnaires</td>
+                            <td>Décisions suboptimales, coûts de surveillance</td>
+                        </tr>
+                        <tr>
+                            <td>Parties Prenantes Multiples</td>
+                            <td>Intérêts conflictuels entre différentes parties</td>
+                            <td>Compromis difficiles, coûts de transaction</td>
+                        </tr>
+                        <tr>
+                            <td>Imperfections des Marchés</td>
+                            <td>Frictions, asymétries d'information</td>
+                            <td>Prix qui ne reflètent pas la valeur fondamentale</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Conclusion Section -->
+        <section id="conclusion" class="section">
+            <div class="section-header">
+                <h2><i>✅</i> Conclusion</h2>
+            </div>
+            
+            <div class="key-points">
+                <h4>🔑 Points Clés à Retenir</h4>
+                <ol>
+                    <li>L'objectif des managers est de maximiser la valeur de marché actuelle de l'entreprise</li>
+                    <li>L'évaluation d'une entreprise se réduit à l'évaluation de ses actifs</li>
+                    <li>Un actif est défini par ses flux de trésorerie (CF)</li>
+                    <li>Les deux caractéristiques importantes des flux de trésorerie sont le timing et le risque</li>
+                    <li>La valeur des actifs est déterminée par les marchés financiers</li>
+                    <li>Le coût du capital est le taux de rendement attendu sur des investissements équivalents</li>
+                    <li>La valeur actuelle est la valeur espérée actualisée au coût d'opportunité du capital</li>
+                </ol>
+            </div>
+
+            <div class="card">
+                <div class="card-header">Postulats Clés</div>
+                <div class="card-body">
+                    <ol>
+                        <li>Marchés financiers "parfaits"</li>
+                        <li>Absence de problèmes d'agence et de conflits entre parties prenantes</li>
+                    </ol>
+                    <p class="mt-2">En pratique, ces postulats sont rarement totalement vérifiés, ce qui complexifie la prise de décision financière.</p>
+                </div>
+            </div>
+
+            <div class="interactive-box">
+                <h4>📈 Synthèse des Concepts Financiers</h4>
+                <div class="chart-container">
+                    <canvas id="conceptsSummaryChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Appendix Section -->
+        <section id="appendix" class="section">
+            <div class="section-header">
+                <h2><i>📎</i> Annexes</h2>
+            </div>
+
+            <h3>Glossaire des Termes Financiers</h3>
+            <div class="data-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Terme</th>
+                            <th>Définition</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Actif Réel</td>
+                            <td>Actif tangible ou intangible utilisé dans les opérations de l'entreprise</td>
+                        </tr>
+                        <tr>
+                            <td>Actif Financier</td>
+                            <td>Droit sur les flux de trésorerie générés par des actifs réels</td>
+                        </tr>
+                        <tr>
+                            <td>Valeur Actuelle (VA)</td>
+                            <td>Valeur aujourd'hui d'un flux de trésorerie futur</td>
+                        </tr>
+                        <tr>
+                            <td>Valeur Actuelle Nette (VAN)</td>
+                            <td>Différence entre la valeur actuelle des entrées de trésorerie et la valeur actuelle des sorties de trésorerie</td>
+                        </tr>
+                        <tr>
+                            <td>Coût d'Opportunité du Capital</td>
+                            <td>Taux de rendement attendu offert par des investissements équivalents sur les marchés financiers</td>
+                        </tr>
+                        <tr>
+                            <td>Prime de Risque</td>
+                            <td>Rendement supplémentaire exigé par les investisseurs pour prendre un risque supplémentaire</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Références et Lectures Complémentaires</h3>
+            <div class="key-points">
+                <ul>
+                    <li>Berk, J., DeMarzo, P. - Corporate Finance</li>
+                    <li>Brealey, R., Myers, S., Allen, F. - Principles of Corporate Finance</li>
+                    <li>Bodie, Z., Kane, A., Marcus, A. - Investments</li>
+                    <li>Ross, S., Westerfield, R., Jaffe, J. - Corporate Finance</li>
+                </ul>
+            </div>
+
+            <h3>Méthodologie et Sources des Données</h3>
+            <p>Les données et graphiques présentés dans ce rapport sont basés sur:</p>
+            <ul>
+                <li>L'analyse du chapitre d'introduction à la finance fourni</li>
+                <li>Les données historiques des marchés financiers</li>
+                <li>Les pratiques standards d'évaluation des actifs</li>
+                <li>Les principes de gestion financière des entreprises</li>
+            </ul>
+        </section>
+
+        <footer class="footer">
+            <p>© 2023 Finance Analytics | Rapport Professionnel d'Introduction à la Finance</p>
+            <p>Ce document a été généré à des fins éducatives et ne constitue pas un conseil financier professionnel.</p>
+        </footer>
+    </main>
+
+    <script>
+        // Navigation active state
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.section');
+            const navLinks = document.querySelectorAll('.nav-links a');
+            
+            // Intersection Observer to detect visible sections
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        
+                        // Update active navigation link
+                        const id = entry.target.getAttribute('id');
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === `#${id}`) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+            
+            // Smooth scrolling for navigation links
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetSection = document.querySelector(targetId);
+                    window.scrollTo({
+                        top: targetSection.offsetTop - 20,
+                        behavior: 'smooth'
+                    });
+                });
+            });
+            
+            // Initialize charts
+            initAssetsChart();
+            initOpportunityCostChart();
+            initMarketEcosystemChart();
+            initConceptsSummaryChart();
+            
+            // Setup interactive elements
+            setupCashFlowSimulator();
+        });
+
+        // Assets Chart
+        function initAssetsChart() {
+            const ctx = document.getElementById('assetsChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Actifs Corporels', 'Actifs Incorporels', 'Trésorerie', 'Investissements'],
+                    datasets: [{
+                        data: [45, 30, 10, 15],
+                        backgroundColor: [
+                            '#1a4f72',
+                            '#3e7cb1',
+                            '#f36f3a',
+                            '#84a98c'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Répartition Typique des Actifs'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Opportunity Cost Chart
+        function initOpportunityCostChart() {
+            const ctx = document.getElementById('opportunityCostChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Dépôt Bancaire', 'Obligations d\'État', 'Obligations d\'Entreprise', 'Actions'],
+                    datasets: [{
+                        label: 'Rendement Annuel Moyen (%)',
+                        data: [2, 4, 6, 9],
+                        backgroundColor: '#3e7cb1',
+                        borderColor: '#1a4f72',
+                        borderWidth: 1
+                    }, {
+                        label: 'Prime de Risque (%)',
+                        data: [0, 2, 4, 7],
+                        backgroundColor: '#f36f3a',
+                        borderColor: '#d45a2a',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Rendement (%)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Rendements et Primes de Risque par Classe d\'Actifs'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Market Ecosystem Chart
+        function initMarketEcosystemChart() {
+            const ctx = document.getElementById('marketEcosystemChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Ménages', Entreprises', 'Institutions Financières', 'Gouvernement'],
+                    datasets: [{
+                        data: [40, 25, 30, 5],
+                        backgroundColor: [
+                            '#1a4f72',
+                            '#3e7cb1',
+                            '#f36f3a',
+                            '#84a98c'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Répartition des Participants aux Marchés Financiers'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Concepts Summary Chart
+        function initConceptsSummaryChart() {
+            const ctx = document.getElementById('conceptsSummaryChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Valeur Temps', 'Gestion Risque', 'Évaluation Actifs', 'Décision Investissement', 'Structure Capital', 'Politique Dividendes'],
+                    datasets: [{
+                        label: 'Importance en Finance d\'Entreprise',
+                        data: [9, 8, 9, 8, 7, 6],
+                        backgroundColor: 'rgba(62, 124, 177, 0.2)',
+                        borderColor: 'rgb(62, 124, 177)',
+                        pointBackgroundColor: 'rgb(62, 124, 177)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(62, 124, 177)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: {
+                                display: true
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 10
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Importance Relative des Concepts Clés'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Cash Flow Simulator
+        function setupCashFlowSimulator() {
+            const investmentSlider = document.getElementById('investment');
+            const returnSlider = document.getElementById('returnRate');
+            const periodSlider = document.getElementById('period');
+            
+            const investmentValue = document.getElementById('investmentValue');
+            const returnValue = document.getElementById('returnValue');
+            const periodValue = document.getElementById('periodValue');
+            
+            const futureValueElement = document.getElementById('futureValue');
+            const npvElement = document.getElementById('npv');
+            
+            function formatCurrency(value) {
+                return new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                }).format(value);
+            }
+            
+            function calculateResults() {
+                const investment = parseInt(investmentSlider.value);
+                const returnRate = parseInt(returnSlider.value) / 100;
+                const period = parseInt(periodSlider.value);
+                
+                const futureValue = investment * Math.pow(1 + returnRate, period);
+                const npv = futureValue - investment;
+                
+                investmentValue.textContent = formatCurrency(investment);
+                returnValue.textContent = `${returnRate * 100}%`;
+                periodValue.textContent = `${period}`;
+                
+                futureValueElement.textContent = formatCurrency(futureValue);
+                npvElement.textContent = formatCurrency(npv);
+            }
+            
+            investmentSlider.addEventListener('input', calculateResults);
+            returnSlider.addEventListener('input', calculateResults);
+            periodSlider.addEventListener('input', calculateResults);
+            
+            // Initial calculation
+            calculateResults();
+        }
+    </script>
+</body>
+</html>

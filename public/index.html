@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Claude-like App</title>
+    <title>DocGenius - AI-Powered PDF to Presentation Converter</title>
     <style>
         * {
             margin: 0;
@@ -11,586 +11,1267 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --primary: #6366f1;
+            --secondary: #ec4899;
+            --accent: #14b8a6;
+            --dark: #0a0a0f;
+            --dark-light: #15151f;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #f5f5f5;
-            height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, sans-serif;
+            background: var(--dark);
+            color: white;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(99, 102, 241, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            transition: all 0.1s ease;
+            mix-blend-mode: difference;
+        }
+
+        .cursor-dot {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: #6366f1;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10001;
+            transition: all 0.15s ease;
+        }
+
+        /* Animated Mesh Background */
+        .mesh-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background:
+                radial-gradient(at 20% 30%, rgba(99, 102, 241, 0.3) 0px, transparent 50%),
+                radial-gradient(at 80% 70%, rgba(236, 72, 153, 0.3) 0px, transparent 50%),
+                radial-gradient(at 50% 50%, rgba(20, 184, 166, 0.2) 0px, transparent 50%),
+                linear-gradient(180deg, #0a0a0f 0%, #15151f 100%);
+            animation: meshMove 20s ease infinite;
+        }
+
+        @keyframes meshMove {
+            0%, 100% {
+                background-position: 0% 0%, 100% 100%, 50% 50%;
+                filter: hue-rotate(0deg);
+            }
+            50% {
+                background-position: 100% 100%, 0% 0%, 30% 70%;
+                filter: hue-rotate(20deg);
+            }
+        }
+
+        /* Particles Canvas */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 15, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            z-index: 1000;
+            animation: slideDown 0.8s ease;
         }
 
-        .header {
-            background-color: #fff;
-            padding: 1rem;
-            border-bottom: 1px solid #e1e1e1;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
-        .header h1 {
-            color: #333;
-            text-align: center;
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientFlow 3s ease infinite;
+            letter-spacing: -0.5px;
         }
 
-        .container {
+        @keyframes gradientFlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .nav-links {
             display: flex;
-            flex: 1;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn {
+            padding: 0.85rem 1.8rem;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: none;
+            font-size: 0.95rem;
+            position: relative;
             overflow: hidden;
         }
 
-        .sidebar {
-            width: 300px;
-            background-color: #fff;
-            border-right: 1px solid #e1e1e1;
-            padding: 1rem;
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.6);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 8rem 5% 4rem;
+            position: relative;
         }
 
-        .pdf-upload {
-            margin-bottom: 1rem;
+        .hero-content {
+            max-width: 1100px;
+            z-index: 10;
         }
 
-        .upload-btn {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-            margin-bottom: 0.5rem;
-        }
-
-        .upload-btn:hover {
-            background-color: #0056b3;
-        }
-
-        .report-btn {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-            margin-bottom: 0.5rem;
-        }
-
-        .report-btn:hover {
-            background-color: #218838;
-        }
-
-        .report-btn:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
-
-        .report-actions {
-            margin-top: 1rem;
-            display: none;
-        }
-
-        .report-type-selector {
-            margin-bottom: 1rem;
-        }
-
-        .report-type-selector label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
-            color: #333;
+        .hero-badge {
+            display: inline-block;
+            padding: 0.6rem 1.5rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 50px;
             font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            animation: fadeInUp 0.8s ease 0.2s both;
         }
 
-        .report-type-dropdown {
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 2rem;
+            letter-spacing: -2px;
+            animation: fadeInUp 0.8s ease 0.3s both;
+        }
+
+        .hero h1 .gradient-text {
+            background: linear-gradient(135deg, #ffffff, var(--primary), var(--secondary), var(--accent));
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientFlow 5s ease infinite;
+        }
+
+        .hero h1 .highlight {
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero h1 .highlight::after {
+            content: '';
+            position: absolute;
+            bottom: 10px;
+            left: 0;
             width: 100%;
-            padding: 0.5rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            background-color: white;
-            font-size: 0.9rem;
-            cursor: pointer;
+            height: 20px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            opacity: 0.3;
+            z-index: -1;
+            transform: skewY(-2deg);
         }
 
-        .report-type-dropdown:focus {
-            outline: none;
-            border-color: #007bff;
-        }
-
-        .pdf-info {
-            background-color: #f8f9fa;
-            padding: 0.5rem;
-            border-radius: 4px;
-            font-size: 0.875rem;
-            color: #666;
-        }
-
-        .chat-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            background-color: #fff;
-        }
-
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 1rem;
-        }
-
-        .message {
-            margin-bottom: 1rem;
-            padding: 0.75rem;
-            border-radius: 8px;
-            max-width: 80%;
-        }
-
-        .message.user {
-            background-color: #007bff;
-            color: white;
+        .hero p {
+            font-size: clamp(1.1rem, 2vw, 1.4rem);
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 3rem;
+            line-height: 1.7;
+            max-width: 800px;
             margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp 0.8s ease 0.4s both;
         }
 
-        .message.assistant {
-            background-color: #f1f3f5;
-            color: #333;
-        }
-
-        .chat-input {
-            border-top: 1px solid #e1e1e1;
-            padding: 1rem;
+        .hero-buttons {
             display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease 0.5s both;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+
+        /* Showcase Section */
+        .showcase {
+            padding: 8rem 5%;
+            position: relative;
+        }
+
+        .example-container {
+            max-width: 1400px;
+            margin: 0 auto 6rem;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 3rem;
+            transition: all 0.5s ease;
+        }
+
+        .example-container:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.2);
+        }
+
+        .example-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .example-badge {
+            display: inline-block;
+            padding: 0.6rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .example-header h3 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .example-header p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .example-iframe-wrapper {
+            position: relative;
+            width: 100%;
+            height: 700px;
+            border-radius: 16px;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+        }
+
+        .example-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        .iframe-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            padding: 3rem 2rem 2rem;
+            display: flex;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .example-iframe-wrapper:hover .iframe-overlay {
+            opacity: 1;
+        }
+
+        .iframe-overlay .btn {
+            pointer-events: all;
+        }
+
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .example-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+        }
+
+        .example-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.3);
+        }
+
+        .card-label {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .example-card h4 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            padding: 0.75rem 0;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s;
+        }
+
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-list li:hover {
+            color: white;
+            padding-left: 0.5rem;
+        }
+
+        /* Format Selector */
+        .format-selector {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .format-btn {
+            padding: 0.9rem 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
             gap: 0.5rem;
         }
 
-        .chat-input input {
-            flex: 1;
-            padding: 0.75rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            outline: none;
-        }
-
-        .chat-input input:focus {
-            border-color: #007bff;
-        }
-
-        .send-btn {
-            background-color: #007bff;
+        .format-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(99, 102, 241, 0.3);
             color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 4px;
-            cursor: pointer;
+            transform: translateY(-2px);
         }
 
-        .send-btn:hover {
-            background-color: #0056b3;
+        .format-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
         }
 
-        .send-btn:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
+        /* Stats Section */
+        .stats {
+            padding: 8rem 5%;
+            position: relative;
         }
 
-        .loading {
-            display: none;
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stat-card {
             text-align: center;
-            padding: 1rem;
-            color: #666;
+            padding: 3rem 2rem;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
         }
 
-        .error {
-            background-color: #f8d7da;
-            color: #721c24;
-            padding: 0.5rem;
-            border-radius: 4px;
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+            transform: scaleX(0);
+            transition: transform 0.6s ease;
+        }
+
+        .stat-card:hover::after {
+            transform: scaleX(1);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        .stat-number {
+            font-size: 4.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin-bottom: 1rem;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 8rem 5%;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .section-tag {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            background: rgba(20, 184, 166, 0.1);
+            border: 1px solid rgba(20, 184, 166, 0.3);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+        }
+
+        .section-subtitle {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.6);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            perspective: 1000px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 3rem;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+                        rgba(99, 102, 241, 0.15),
+                        transparent 40%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-15px) rotateX(5deg);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow:
+                0 30px 80px rgba(0, 0, 0, 0.5),
+                0 0 60px rgba(99, 102, 241, 0.3);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+            transition: all 0.4s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.5);
+        }
+
+        .feature-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .feature-card p {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.7;
+            font-size: 1.05rem;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 10rem 5%;
+            text-align: center;
+            position: relative;
+        }
+
+        .cta-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 5rem 4rem;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(30px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                transparent,
+                rgba(99, 102, 241, 0.1),
+                transparent 30%
+            );
+            animation: rotate 6s linear infinite;
+        }
+
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
+        }
+
+        .cta-content > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 1.5rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+
+        .cta p {
+            font-size: 1.4rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 3rem;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 5%;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-copy {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.95rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 5%;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 6rem 5% 3rem;
+            }
+
+            .example-container {
+                padding: 2rem;
+                margin-bottom: 4rem;
+            }
+
+            .example-iframe-wrapper {
+                height: 500px;
+            }
+
+            .examples-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .example-card {
+                padding: 2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .feature-card {
+                padding: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .cta-content {
+                padding: 3rem 2rem;
+            }
+
+            body {
+                cursor: auto;
+            }
+
+            .cursor, .cursor-dot {
+                display: none;
+            }
+        }
+
+        /* Scroll Reveal */
+        [data-scroll] {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-scroll].revealed {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Claude-like avec Support PDF</h1>
-    </div>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-dot"></div>
 
-    <div class="container">
-        <div class="sidebar">
-            <div class="pdf-upload">
-                <input type="file" id="pdf-file" accept=".pdf" style="display: none;">
-                <button class="upload-btn" onclick="document.getElementById('pdf-file').click()">
-                    📄 Télécharger un PDF
-                </button>
-                <div id="pdf-info" class="pdf-info" style="display: none;"></div>
+    <!-- Animated Background -->
+    <div class="mesh-bg"></div>
+    <canvas id="particles-canvas"></canvas>
 
-                <div id="report-actions" class="report-actions">
-                    <div class="report-type-selector">
-                        <label for="report-type">Type de rapport :</label>
-                        <select id="report-type" class="report-type-dropdown">
-                            <option value="intervention">🔧 Rapport d'Intervention</option>
-                            <option value="academique">📚 Rapport Académique</option>
-                            <option value="executif">💼 Rapport Exécutif</option>
-                        </select>
-                    </div>
-                    <button class="report-btn" id="generate-report-btn" onclick="generateReport()">
-                        📊 Générer Rapport Pro
+    <!-- Navigation -->
+    <nav>
+        <a href="/" class="logo">DocGenius</a>
+        <div class="nav-links">
+            <a href="#showcase">Examples</a>
+            <a href="#features">Features</a>
+            <a href="/pricing">Pricing</a>
+            <a href="/auth" class="btn btn-primary">Get Started</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">✨ Powered by Claude AI & GPT-4</div>
+            <h1>
+                <span class="gradient-text">Transform PDFs</span><br>
+                into <span class="highlight">stunning presentations</span>
+            </h1>
+            <p>
+                The most advanced AI to analyze your documents and create
+                professional presentations in seconds. Interactive chat,
+                advanced visualizations, exceptional results.
+            </p>
+            <div class="hero-buttons">
+                <a href="/auth" class="btn btn-primary">Try for Free</a>
+                <a href="#showcase" class="btn btn-secondary">See Examples →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-card" data-scroll>
+                <div class="stat-number" data-target="50000">0</div>
+                <div class="stat-label">Presentations Created</div>
+            </div>
+            <div class="stat-card" data-scroll>
+                <div class="stat-number" data-target="10000">0</div>
+                <div class="stat-label">Active Users</div>
+            </div>
+            <div class="stat-card" data-scroll>
+                <div class="stat-number" data-target="99">0</div>
+                <div class="stat-label">% Satisfaction</div>
+            </div>
+            <div class="stat-card" data-scroll>
+                <div class="stat-number" data-target="24">0</div>
+                <div class="stat-label">Hours / 7 Days</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Showcase Section -->
+    <section id="showcase" class="showcase">
+        <div class="section-header">
+            <div class="section-tag">REAL EXAMPLES</div>
+            <h2 class="section-title">See What DocGenius Creates</h2>
+            <p class="section-subtitle">
+                From academic papers to technical reports - AI-generated presentations that impress
+            </p>
+        </div>
+
+        <!-- Full Report Example -->
+        <div class="example-container" data-scroll>
+            <div class="example-header">
+                <span class="example-badge">💼 Financial Analysis Example</span>
+                <h3>Complete Interactive Output</h3>
+                <p>See a real example generated by DocGenius - switch between detailed report and presentation formats</p>
+
+                <!-- Format Selector -->
+                <div class="format-selector">
+                    <button class="format-btn active" data-format="report">
+                        📄 Report Format
                     </button>
-                    <button class="report-btn" id="convert-presentation-btn" onclick="convertToPresentation()" style="display: none; background-color: #28a745;">
-                        🎯 Convertir en Présentation
+                    <button class="format-btn" data-format="presentation">
+                        🎯 Presentation Format
                     </button>
-                    <button class="report-btn" id="download-report-btn" onclick="downloadReport()" style="display: none; background-color: #17a2b8;">
-                        💾 Télécharger Rapport
-                    </button>
-                    <button class="report-btn" id="download-presentation-btn" onclick="downloadPresentation()" style="display: none; background-color: #6f42c1;">
-                        🎞️ Télécharger Présentation
-                    </button>
+                </div>
+            </div>
+            <div class="example-iframe-wrapper">
+                <iframe id="exampleIframe" src="/financial-report.html" class="example-iframe" loading="lazy"></iframe>
+                <div class="iframe-overlay">
+                    <a id="openFullBtn" href="/financial-report.html" target="_blank" class="btn btn-primary">
+                        Open Full Report →
+                    </a>
                 </div>
             </div>
         </div>
 
-        <div class="chat-container">
-            <div class="chat-messages" id="chat-messages">
-                <div class="message assistant">
-                    Bonjour ! Je suis votre assistant Claude-like. Vous pouvez me poser des questions ou télécharger un PDF pour que je l'analyse.
-                </div>
+        <!-- More Examples Grid -->
+        <div class="examples-grid">
+            <div class="example-card" data-scroll>
+                <div class="card-label">📚 Academic Report</div>
+                <h4>Research Analysis</h4>
+                <ul class="feature-list">
+                    <li>✓ Executive Summary with context</li>
+                    <li>✓ Methodology & Research Design</li>
+                    <li>✓ Statistical Analysis & Charts</li>
+                    <li>✓ Literature Review</li>
+                    <li>✓ Conclusions & Implications</li>
+                    <li>✓ Proper Citations & References</li>
+                </ul>
             </div>
 
-            <div class="loading" id="loading">
-                ⏳ Réflexion en cours...
+            <div class="example-card" data-scroll>
+                <div class="card-label">🔧 Technical Report</div>
+                <h4>System Documentation</h4>
+                <ul class="feature-list">
+                    <li>✓ Architecture Overview</li>
+                    <li>✓ Technical Specifications</li>
+                    <li>✓ System Diagrams & Flowcharts</li>
+                    <li>✓ Performance Metrics</li>
+                    <li>✓ Implementation Details</li>
+                    <li>✓ API Documentation</li>
+                </ul>
             </div>
 
-            <div class="chat-input">
-                <input type="text" id="message-input" placeholder="Tapez votre message..." onkeypress="handleKeyPress(event)">
-                <button class="send-btn" id="send-btn" onclick="sendMessage()">Envoyer</button>
+            <div class="example-card" data-scroll>
+                <div class="card-label">💡 Business Strategy</div>
+                <h4>Strategic Planning</h4>
+                <ul class="feature-list">
+                    <li>✓ Market Analysis & Trends</li>
+                    <li>✓ Competitive Landscape</li>
+                    <li>✓ SWOT Analysis</li>
+                    <li>✓ Growth Projections</li>
+                    <li>✓ Action Plans & Roadmap</li>
+                    <li>✓ Risk Assessment</li>
+                </ul>
             </div>
         </div>
-    </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="section-header">
+            <div class="section-tag">CUTTING-EDGE TECHNOLOGY</div>
+            <h2 class="section-title">Why DocGenius?</h2>
+            <p class="section-subtitle">
+                A complete platform that revolutionizes presentation creation
+            </p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card" data-scroll>
+                <div class="feature-icon">🚀</div>
+                <h3>Ultra-Powerful AI</h3>
+                <p>Deep analysis with 20,000 tokens, automatic domain detection,
+                and professional report generation in 5 intelligent phases.</p>
+            </div>
+            <div class="feature-card" data-scroll>
+                <div class="feature-icon">💬</div>
+                <h3>Interactive Chat</h3>
+                <p>Edit your slides in natural language: "change colors",
+                "add details", "reorganize sections". AI understands everything.</p>
+            </div>
+            <div class="feature-card" data-scroll>
+                <div class="feature-icon">🎨</div>
+                <h3>Advanced Visuals</h3>
+                <p>Interactive SVGs, animated charts, colorful dashboards with
+                real-time metrics. Visual rendering optimized by GPT-4o.</p>
+            </div>
+            <div class="feature-card" data-scroll>
+                <div class="feature-icon">📊</div>
+                <h3>Multi-Format</h3>
+                <p>Academic reports, technical interventions, executive summaries
+                with KPIs. Adapt the format to your specific needs.</p>
+            </div>
+            <div class="feature-card" data-scroll>
+                <div class="feature-icon">⚡</div>
+                <h3>Lightning Fast</h3>
+                <p>Process PDFs up to 50MB with automatic retry.
+                Complete generation in minutes with extended timeout.</p>
+            </div>
+            <div class="feature-card" data-scroll>
+                <div class="feature-icon">🔒</div>
+                <h3>Total Security</h3>
+                <p>No permanent PDF storage. In-memory processing.
+                Your documents remain 100% confidential and private.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="cta-content">
+            <h2>Ready to revolutionize your presentations?</h2>
+            <p>Join thousands of professionals using DocGenius every day</p>
+            <a href="/auth" class="btn btn-primary">Start for Free</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="/pricing">Pricing</a>
+                <a href="/auth">Sign In</a>
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">Support</a>
+            </div>
+            <p class="footer-copy">&copy; 2025 DocGenius. All rights reserved.</p>
+        </div>
+    </footer>
 
     <script>
-        let pdfContent = null;
-        let reportHtml = null;
-        let reportFileName = null;
-        let analysisData = null;
-        let presentationHtml = null;
-        let presentationFileName = null;
+        // Custom Cursor
+        const cursor = document.querySelector('.cursor');
+        const cursorDot = document.querySelector('.cursor-dot');
 
-        document.getElementById('pdf-file').addEventListener('change', uploadPDF);
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            cursorDot.style.left = (e.clientX - 2) + 'px';
+            cursorDot.style.top = (e.clientY - 2) + 'px';
+        });
 
-        async function uploadPDF() {
-            const fileInput = document.getElementById('pdf-file');
-            const file = fileInput.files[0];
+        // Particles Canvas
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-            if (!file) return;
+        const particles = [];
+        const particleCount = 80;
+        const mouse = { x: null, y: null, radius: 150 };
 
-            const formData = new FormData();
-            formData.append('pdf', file);
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.opacity = Math.random() * 0.5 + 0.2;
+            }
 
-            try {
-                const response = await fetch('/api/upload-pdf', {
-                    method: 'POST',
-                    body: formData
-                });
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
 
-                const data = await response.json();
+                if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
+                if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
 
-                if (response.ok) {
-                    pdfContent = data.text;
-                    document.getElementById('pdf-info').innerHTML = `
-                        <strong>PDF chargé:</strong> ${file.name}<br>
-                        <strong>Pages:</strong> ${data.pages}<br>
-                        <strong>Caractères:</strong> ${data.text.length}
-                    `;
-                    document.getElementById('pdf-info').style.display = 'block';
+                const dx = mouse.x - this.x;
+                const dy = mouse.y - this.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
 
-                    addMessage('PDF téléchargé avec succès ! Vous pouvez maintenant me poser des questions à son sujet ou générer un rapport professionnel.', 'assistant');
-                    document.getElementById('report-actions').style.display = 'block';
-                } else {
-                    showError(data.error);
+                if (distance < mouse.radius) {
+                    const force = (mouse.radius - distance) / mouse.radius;
+                    const angle = Math.atan2(dy, dx);
+                    this.x -= Math.cos(angle) * force * 2;
+                    this.y -= Math.sin(angle) * force * 2;
                 }
-            } catch (error) {
-                showError('Erreur lors du téléchargement du PDF');
+            }
+
+            draw() {
+                ctx.fillStyle = `rgba(99, 102, 241, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
             }
         }
 
-        function handleKeyPress(event) {
-            if (event.key === 'Enter') {
-                sendMessage();
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function connectParticles() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 120) {
+                        ctx.strokeStyle = `rgba(99, 102, 241, ${0.15 * (1 - distance / 120)})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
             }
         }
 
-        async function sendMessage() {
-            const input = document.getElementById('message-input');
-            const message = input.value.trim();
-
-            if (!message) return;
-
-            addMessage(message, 'user');
-            input.value = '';
-
-            const sendBtn = document.getElementById('send-btn');
-            const loading = document.getElementById('loading');
-
-            sendBtn.disabled = true;
-            loading.style.display = 'block';
-
-            try {
-                const response = await fetch('/chat', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        message: message,
-                        pdfContent: pdfContent
-                    })
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    addMessage(data.response, 'assistant');
-                } else {
-                    showError(data.error);
-                }
-            } catch (error) {
-                showError('Erreur de communication avec le serveur');
-            } finally {
-                sendBtn.disabled = false;
-                loading.style.display = 'none';
-            }
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+            connectParticles();
+            requestAnimationFrame(animate);
         }
 
-        function addMessage(text, sender) {
-            const messagesContainer = document.getElementById('chat-messages');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${sender}`;
-            messageDiv.textContent = text;
-            messagesContainer.appendChild(messageDiv);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
+        animate();
 
-        function showError(errorMessage) {
-            const messagesContainer = document.getElementById('chat-messages');
-            const errorDiv = document.createElement('div');
-            errorDiv.className = 'error';
-            errorDiv.textContent = errorMessage;
-            messagesContainer.appendChild(errorDiv);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
+        document.addEventListener('mousemove', (e) => {
+            mouse.x = e.x;
+            mouse.y = e.y;
+        });
 
-        async function generateReport() {
-            if (!pdfContent) {
-                showError('Aucun PDF chargé pour générer un rapport');
-                return;
-            }
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
 
-            const generateBtn = document.getElementById('generate-report-btn');
-            const loading = document.getElementById('loading');
-            const reportType = document.getElementById('report-type').value;
+        // 3D Card Tilt Effect
+        const cards = document.querySelectorAll('.feature-card');
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                const y = ((e.clientY - rect.top) / rect.height) * 100;
 
-            generateBtn.disabled = true;
-            loading.style.display = 'block';
+                card.style.setProperty('--mouse-x', x + '%');
+                card.style.setProperty('--mouse-y', y + '%');
+            });
+        });
 
-            try {
-                // PHASE 1: Analyse du PDF
-                generateBtn.textContent = '⏳ Phase 1/4 - Analyse...';
-                addMessage('🔍 PHASE 1: Analyse et structuration du document PDF...', 'assistant');
+        // Scroll Reveal Animation
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: '0px 0px -100px 0px'
+        };
 
-                const phase1Response = await fetch('/api/analyze-pdf', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ pdfContent: pdfContent })
-                });
-
-                const phase1Data = await phase1Response.json();
-
-                if (!phase1Response.ok) {
-                    throw new Error(phase1Data.error || 'Erreur Phase 1');
-                }
-
-                analysisData = phase1Data.analysis;
-                addMessage('✅ Phase 1 terminée: Analyse du contenu effectuée', 'assistant');
-
-                // PHASE 2: Génération du rapport
-                generateBtn.textContent = '⏳ Phase 2/4 - Génération...';
-                addMessage('🔧 PHASE 2: Génération du rapport professionnel...', 'assistant');
-                addMessage('⏰ Cette phase peut prendre jusqu\'à 5-10 minutes pour une analyse approfondie', 'assistant');
-
-                const phase2Response = await fetch('/api/generate-report-structure', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        analysis: analysisData,
-                        fileName: document.getElementById('pdf-file').files[0].name.replace('.pdf', ''),
-                        reportType: reportType
-                    })
-                });
-
-                let phase2Data;
-                const contentType = phase2Response.headers.get("content-type");
-                if (contentType && contentType.includes("application/json")) {
-                    phase2Data = await phase2Response.json();
-                } else {
-                    const text = await phase2Response.text();
-                    console.error('Non-JSON response:', text);
-                    throw new Error(`Erreur serveur (${phase2Response.status}): ${text.substring(0, 100)}`);
-                }
-
-                if (!phase2Response.ok) {
-                    throw new Error(phase2Data.error || 'Erreur Phase 2');
-                }
-
-                addMessage('✅ Phase 2 terminée: Rapport HTML généré avec succès', 'assistant');
-
-                // PHASE 3: Finalisation
-                generateBtn.textContent = '⏳ Phase 3/4 - Finalisation...';
-                addMessage('🎯 PHASE 3: Finalisation et préparation du téléchargement...', 'assistant');
-
-                const phase3Response = await fetch('/api/finalize-report', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        reportHtml: phase2Data.reportHtml,
-                        fileName: phase2Data.fileName
-                    })
-                });
-
-                const phase3Data = await phase3Response.json();
-
-                if (!phase3Response.ok) {
-                    throw new Error(phase3Data.error || 'Erreur Phase 3');
-                }
-
-                // Success !
-                reportHtml = phase3Data.reportHtml;
-                reportFileName = phase3Data.fileName;
-
-                addMessage('✅ Phase 3 terminée: Rapport finalisé', 'assistant');
-                addMessage(`📊 Rapport généré (${(phase3Data.size / 1000).toFixed(1)}kb)`, 'assistant');
-                addMessage('💡 Cliquez sur "Convertir en Présentation" pour la Phase 4 !', 'assistant');
-
-                document.getElementById('download-report-btn').style.display = 'block';
-                document.getElementById('convert-presentation-btn').style.display = 'block';
-                generateBtn.textContent = '✅ Rapport Généré (3/4)';
-
-            } catch (error) {
-                console.error('Erreur:', error);
-
-                if (error.message.includes('surchargée') || error.message.includes('503')) {
-                    showError('🚨 API surchargée détectée. Tentative automatique dans les phases suivantes.');
-                    generateBtn.textContent = '🔄 Réessayer dans 3 min';
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
                     setTimeout(() => {
-                        generateBtn.textContent = '📊 Générer Rapport Pro';
-                    }, 180000);
+                        entry.target.classList.add('revealed');
+                    }, index * 100);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('[data-scroll]').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Animated Counter
+        function animateCounter(element) {
+            const target = parseInt(element.dataset.target);
+            const duration = 2000;
+            const step = target / (duration / 16);
+            let current = 0;
+
+            const timer = setInterval(() => {
+                current += step;
+                if (current >= target) {
+                    element.textContent = target.toLocaleString();
+                    clearInterval(timer);
                 } else {
-                    showError('❌ ' + error.message);
-                    generateBtn.textContent = '📊 Générer Rapport Pro';
+                    element.textContent = Math.floor(current).toLocaleString();
                 }
-            } finally {
-                generateBtn.disabled = false;
-                loading.style.display = 'none';
-            }
+            }, 16);
         }
 
-        function downloadReport() {
-            if (!reportHtml) {
-                showError('Aucun rapport à télécharger');
-                return;
-            }
-
-            const blob = new Blob([reportHtml], { type: 'text/html' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = url;
-            a.download = reportFileName;
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(a);
-
-            addMessage('💾 Rapport téléchargé avec succès !', 'assistant');
-        }
-
-        async function convertToPresentation() {
-            if (!reportHtml) {
-                showError('Aucun rapport généré pour conversion');
-                return;
-            }
-
-            const convertBtn = document.getElementById('convert-presentation-btn');
-            const loading = document.getElementById('loading');
-            const reportType = document.getElementById('report-type').value;
-
-            convertBtn.disabled = true;
-            loading.style.display = 'block';
-
-            try {
-                convertBtn.textContent = '⏳ Phase 4/4 - Conversion...';
-                addMessage('🎯 PHASE 4: Conversion en format Présentation interactive...', 'assistant');
-
-                const phase4Response = await fetch('/api/convert-to-presentation', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        reportHtml: reportHtml,
-                        fileName: reportFileName,
-                        reportType: reportType
-                    })
-                });
-
-                let phase4Data;
-                try {
-                    phase4Data = await phase4Response.json();
-                } catch (jsonError) {
-                    console.error('Erreur parsing JSON Phase 4:', jsonError);
-                    throw new Error('Réponse serveur invalide - Réessayez dans quelques secondes');
+        const statObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const number = entry.target.querySelector('.stat-number');
+                    if (number && !number.classList.contains('animated')) {
+                        number.classList.add('animated');
+                        animateCounter(number);
+                    }
                 }
+            });
+        }, { threshold: 0.5 });
 
-                if (!phase4Response.ok) {
-                    throw new Error(phase4Data.error || 'Erreur Phase 4');
+        document.querySelectorAll('.stat-card').forEach(card => {
+            statObserver.observe(card);
+        });
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
+            });
+        });
 
-                // Success !
-                presentationHtml = phase4Data.presentationHtml;
-                presentationFileName = phase4Data.fileName;
+        // Format Selector
+        const formatBtns = document.querySelectorAll('.format-btn');
+        const exampleIframe = document.getElementById('exampleIframe');
+        const openFullBtn = document.getElementById('openFullBtn');
 
-                addMessage('✅ Phase 4 terminée: Présentation interactive créée !', 'assistant');
-                addMessage(`🎞️ Présentation générée (${(phase4Data.size / 1000).toFixed(1)}kb)`, 'assistant');
-                addMessage('🎯 Navigation: Flèches ← → ou clavier, points indicateurs inclus', 'assistant');
-
-                document.getElementById('download-presentation-btn').style.display = 'block';
-                convertBtn.textContent = '✅ Présentation Créée (4/4)';
-
-            } catch (error) {
-                console.error('Erreur Phase 4:', error);
-                showError('❌ ' + error.message);
-                convertBtn.textContent = '🎯 Convertir en Présentation';
-            } finally {
-                convertBtn.disabled = false;
-                loading.style.display = 'none';
+        const formats = {
+            report: {
+                url: '/financial-report.html',
+                text: 'Open Full Report →',
+                hash: ''
+            },
+            presentation: {
+                url: '/financial-presentation.html#cash',
+                text: 'Open Full Presentation →',
+                hash: '#cash'
             }
-        }
+        };
 
-        function downloadPresentation() {
-            if (!presentationHtml) {
-                showError('Aucune présentation à télécharger');
-                return;
-            }
+        formatBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all buttons
+                formatBtns.forEach(b => b.classList.remove('active'));
 
-            const blob = new Blob([presentationHtml], { type: 'text/html' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = url;
-            a.download = presentationFileName;
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(a);
+                // Add active class to clicked button
+                this.classList.add('active');
 
-            addMessage('🎞️ Présentation téléchargée avec succès ! Ouvrez le fichier HTML dans votre navigateur.', 'assistant');
-        }
+                // Get selected format
+                const format = this.dataset.format;
+                const formatData = formats[format];
+
+                // Update iframe and button
+                exampleIframe.src = formatData.url;
+                openFullBtn.href = formatData.url;
+                openFullBtn.textContent = formatData.text;
+            });
+        });
     </script>
 </body>
 </html>

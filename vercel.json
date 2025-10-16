@@ -1,18 +1,43 @@
 {
+  "version": 2,
   "functions": {
     "api/index.js": {
-      "maxDuration": 300,
-      "memory": 1024
+      "maxDuration": 800,
+      "memory": 3008
     }
   },
-  "rewrites": [
+  "routes": [
     {
-      "source": "/api/(.*)",
-      "destination": "/api/index.js"
+      "src": "/api/(.*)",
+      "dest": "/api/index.js"
     },
     {
-      "source": "/(.*)",
-      "destination": "/public/$1"
+      "src": "/app",
+      "dest": "/public/chat.html"
+    },
+    {
+      "src": "/auth",
+      "dest": "/public/auth.html"
+    },
+    {
+      "src": "/dashboard",
+      "dest": "/public/dashboard.html"
+    },
+    {
+      "src": "/pricing",
+      "dest": "/public/pricing.html"
+    },
+    {
+      "src": "/financial-report.html",
+      "dest": "/public/financial-report.html"
+    },
+    {
+      "src": "/financial-presentation.html",
+      "dest": "/public/financial-presentation.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public/$1"
     }
   ]
 }

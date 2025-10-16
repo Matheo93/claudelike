@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Analysis Report | Introduction to Finance</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px;
+        }
+
+        body {
+            background: #f8fafc;
+            color: #334155;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            padding: 0 40px;
+            margin: 0 auto;
+        }
+
+        section {
+            padding: 80px 0;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .icon-circle {
+            display: inline-flex;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .slide-in-left { animation: slideInLeft 0.6s ease-out; }
+        .slide-in-right { animation: slideInRight 0.6s ease-out; }
+
+        @media (max-width: 768px) {
+            .container { padding: 0 20px; }
+            section { padding: 60px 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Progress Reading Bar -->
+    <div class="progress-bar-reading" style="position:fixed; top:0; left:0; width:0%; height:4px; background:linear-gradient(90deg, #3b82f6, #1d4ed8); z-index:9999; transition:width 0.3s ease;"></div>
+
+    <!-- Navigation -->
+    <nav style="background:white; padding:16px 0; border-bottom:1px solid rgba(59,130,246,0.1); position:sticky; top:0; z-index:100; box-shadow:0 2px 20px rgba(0,0,0,0.08);">
+        <div class="container">
+            <ul style="display:flex; white-space:nowrap; overflow-x:auto; flex-wrap:nowrap; list-style:none; margin:0; padding:0; gap:12px; scrollbar-width:thin;">
+                <li><a href="#exec" style="color:#3b82f6; text-decoration:none; padding:8px 16px; background:rgba(59,130,246,0.1); border-radius:20px; font-weight:600; font-size:0.9rem; transition:all 0.2s;">Exec</a></li>
+                <li><a href="#what" style="color:#10b981; text-decoration:none; padding:8px 16px; background:rgba(16,185,129,0.1); border-radius:20px; font-weight:600; font-size:0.9rem; transition:all 0.2s;">What</a></li>
+                <li><a href="#cash" style="color:#f59e0b; text-decoration:none; padding:8px 16px; background:rgba(245,158,11,0.1); border-radius:20px; font-weight:600; font-size:0.9rem; transition:all 0.2s;">Cash</a></li>
+                <li><a href="#task" style="color:#9333ea; text-decoration:none; padding:8px 16px; background:rgba(147,51,234,0.1); border-radius:20px; font-weight:600; font-size:0.9rem; transition:all 0.2s;">Task</a></li>
+                <li><a href="#val" style="color:#ef4444; text-decoration:none; padding:8px 16px; background:rgba(239,68,68,0.1); border-radius:20px; font-weight:600; font-size:0.9rem; transition:all 0.2s;">Value</a></li>
+                <li><a href="#market" style="color:#06b6d4; text-decoration:none; padding:8px 16px; background:rgba(6,182,212,0.1); border-radius:20px; font-weight:600; font-size:0.9rem; transition:all 0.2s;">Market</a></li>
+                <li><a href="#obj" style="color:#3b82f6; text-decoration:none; padding:8px 16px; background:rgba(59,130,246,0.1); border-radius:20px; font-weight:600; font-size:0.9rem; transition:all 0.2s;">Obj</a></li>
+                <li><a href="#concl" style="color:#10b981; text-decoration:none; padding:8px 16px; background:rgba(16,185,129,0.1); border-radius:20px; font-weight:600; font-size:0.9rem; transition:all 0.2s;">Concl</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- PPT_SECTION: Executive Summary -->
+    <section id="hero" style="background:linear-gradient(135deg, #667eea 0%, #764ba2 100%); color:white; padding:80px 60px; border-radius:0; text-align:center; margin-bottom:80px; position:relative; overflow:hidden; box-shadow:0 8px 32px rgba(118,75,162,0.3);">
+        <!-- Decorative circles -->
+        <div style="position:absolute; top:-50px; right:-50px; width:200px; height:200px; border-radius:50%; background:rgba(255,255,255,0.1);"></div>
+        <div style="position:absolute; bottom:-80px; left:-80px; width:250px; height:250px; border-radius:50%; background:rgba(255,255,255,0.08);"></div>
+        <div style="position:absolute; top:50%; left:10%; width:100px; height:100px; border-radius:50%; background:rgba(255,255,255,0.06);"></div>
+
+        <!-- Content wrapper -->
+        <div style="position:relative; z-index:1;">
+            <div style="display:inline-block; background:rgba(255,255,255,0.15); padding:8px 20px; border-radius:20px; font-size:0.85rem; font-weight:600; margin-bottom:20px; letter-spacing:1px; text-transform:uppercase;">Financial Analysis Report</div>
+            <h1 style="font-size:3.5rem; margin:0 0 20px 0; color:white; font-weight:700; letter-spacing:-1px; text-shadow:0 2px 20px rgba(0,0,0,0.2);">Introduction to Finance</h1>
+            <p style="font-size:1.3rem; color:white; opacity:1; margin:0 auto; max-width:700px; line-height:1.6;">Comprehensive analysis of financial principles, valuation methods, and market dynamics</p>
+            <div style="display:flex; gap:12px; justify-content:center; margin-top:32px; flex-wrap:wrap;">
+                <div style="background:rgba(255,255,255,0.25); padding:10px 24px; border-radius:20px; font-weight:600; font-size:0.95rem; backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.2); display:flex; align-items:center; gap:8px;">Valuation</div>
+                <div style="background:rgba(255,255,255,0.25); padding:10px 24px; border-radius:20px; font-weight:600; font-size:0.95rem; backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.2); display:flex; align-items:center; gap:8px;">Strategy</div>
+                <div style="background:rgba(255,255,255,0.25); padding:10px 24px; border-radius:20px; font-weight:600; font-size:0.95rem; backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.2); display:flex; align-items:center; gap:8px;">Analysis</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PPT_SECTION: What is Finance -->
+    <section id="what" class="container fade-in">
+        <div class="section-header">
+            <div class="icon-circle" style="background:rgba(59,130,246,0.15); color:#3b82f6;">💰</div>
+            <div>
+                <h2 style="font-size:2.5rem; color:#1e293b; margin:0;">What is Finance?</h2>
+                <p style="color:#64748b; margin-top:8px;">Understanding the fundamental principles of financial management</p>
+            </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:24px; margin:32px 0;">
+            <div style="background:linear-gradient(135deg, rgba(59,130,246,0.1) 0%, rgba(147,51,234,0.05) 100%); padding:32px; border-radius:20px; border:1px solid rgba(59,130,246,0.2); transition:transform 0.2s, box-shadow 0.2s; cursor:pointer;" onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 20px 40px rgba(59,130,246,0.15)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                <div style="display:inline-flex; width:60px; height:60px; border-radius:16px; background:rgba(59,130,246,0.2); align-items:center; justify-content:center; font-size:28px; margin-bottom:20px;">📈</div>
+                <h3 style="margin:12px 0; color:#1e293b; font-size:1.5rem;">Core Definition</h3>
+                <p style="color:#475569; margin-bottom:24px;">Finance focuses on the bottom line of business activities through acquisition and disposal of assets.</p>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                    <div style="text-align:center;">
+                        <div style="background:rgba(59,130,246,0.1); width:50px; height:50px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 8px; font-size:20px;">🏢</div>
+                        <p style="font-size:0.85rem; font-weight:600; margin:0;">Real Assets</p>
+                    </div>
+                    <div style="text-align:center;">
+                        <div style="background:rgba(16,185,129,0.1); width:50px; height:50px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 8px; font-size:20px;">📊</div>
+                        <p style="font-size:0.85rem; font-weight:600; margin:0;">Financial Assets</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background:rgba(16,185,129,0.1); padding:32px; border-radius:20px; border:1px solid rgba(16,185,129,0.2); transition:transform 0.2s, box-shadow 0.2s; cursor:pointer;" onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 20px 40px rgba(16,185,129,0.15)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                <div style="display:inline-flex; width:60px; height:60px; border-radius:16px; background:rgba(16,185,129,0.2); align-items:center; justify-content:center; font-size:28px; margin-bottom:20px;">🎯</div>
+                <h3 style="margin:12px 0; color:#1e293b; font-size:1.5rem;">Business Objectives</h3>
+                <p style="color:#475569; margin-bottom:24px;">Two primary financial objectives for any business entity.</p>
+                <div style="display:flex; gap:16px; margin-top:20px;">
+                    <div style="flex:1; text-align:center; background:rgba(255,255,255,0.5); padding:16px; border-radius:12px;">
+                        <div style="font-size:2rem; font-weight:bold; color:#10b981; margin-bottom:8px;">↑</div>
+                        <p style="font-size:0.9rem; font-weight:600; margin:0;">Grow Wealth</p>
+                    </div>
+                    <div style="flex:1; text-align:center; background:rgba(255,255,255,0.5); padding:16px; border-radius:12px;">
+                        <div style="font-size:2rem; font-weight:bold; color:#10b981; margin-bottom:8px;">⚡</div>
+                        <p style="font-size:0.9rem; font-weight:600; margin:0;">Use Wealth</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background:rgba(245,158,11,0.1); padding:32px; border-radius:20px; border:1px solid rgba(245,158,11,0.2); transition:transform 0.2s, box-shadow 0.2s; cursor:pointer;" onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 20px 40px rgba(245,158,11,0.15)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                <div style="display:inline-flex; width:60px; height:60px; border-radius:16px; background:rgba(245,158,11,0.2); align-items:center; justify-content:center; font-size:28px; margin-bottom:20px;">🔍</div>
+                <h3 style="margin:12px 0; color:#1e293b; font-size:1.5rem;">Key Questions</h3>
+                <p style="color:#475569; margin-bottom:20px;">Fundamental questions addressed in financial analysis.</p>
+                <ul style="list-style:none; padding:0; margin:0;">
+                    <li style="display:flex; align-items:start; gap:12px; margin:12px 0;">
+                        <div style="width:6px; height:6px; border-radius:50%; background:#f59e0b; margin-top:8px; flex-shrink:0;"></div>
+                        <span>How do financial markets determine asset prices?</span>
+                    </li>
+                    <li style="display:flex; align-items:start; gap:12px; margin:12px 0;">
+                        <div style="width:6px; height:6px; border-radius:50%; background:#f59e0b; margin-top:8px; flex-shrink:0;"></div>
+                        <span>How do corporations make financial decisions?</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div style="background:linear-gradient(135deg, rgba(147,51,234,0.1) 0%, rgba(59,130,246,0.05) 100%); padding:40px; border-radius:20px; margin:40px 0; text-align:center;">
+            <div style="display:inline-flex; width:80px; height:80px; border-radius:50%; background:rgba(147,51,234,0.2); align-items:center; justify-content:center; font-size:40px; margin-bottom:20px;">💎</div>
+            <div style="font-size:2.5rem; font-weight:bold; color:#9333ea; margin:16px 0;">Valuation</div>
+            <h3 style="margin:12px 0; color:#1e293b; font-size:1.8rem;">The Central Issue of Finance</h3>
+            <p style="margin:0 auto; color:#64748b; max-width:600px;">Every business decision ultimately reduces to the valuation of assets, making valuation the core focus of financial analysis.</p>
+        </div>
+    </section>
+
+    <!-- PPT_SECTION: Cash Flow of a Firm -->
+    <section id="cash" class="container fade-in">
+        <div class="section-header">
+            <div class="icon-circle" style="background:rgba(245,158,11,0.15); color:#f59e0b;">💸</div>
+            <div>
+                <h2 style="font-size:2.5rem; color:#1e293b; margin:0;">Cash Flow of a Firm</h2>
+                <p style="color:#64748b; margin-top:8px;">Understanding the movement of cash through business operations</p>
+            </div>
+        </div>
+
+        <div style="background:linear-gradient(135deg, rgba(245,158,11,0.1) 0%, rgba(239,68,68,0.05) 100%); padding:40px; border-radius:24px; margin:40px 0; position:relative; overflow:hidden;">
+            <!-- Decorative elements -->
+            <div style="position:absolute; top:-20px; right:-20px; width:120px; height:120px; border-radius:50%; background:rgba(245,158,11,0.1);"></div>
+            <div style="position:absolute; bottom:-40px; left:-40px; width:150px; height:150px; border-radius:50%; background:rgba(239,68,68,0.08);"></div>
+            
+            <div style="position:relative; z-index:1;">
+                <h3 style="text-align:center; margin-bottom:40px; color:#1e293b; font-size:1.8rem;">Cash Flow Diagram</h3>
+                
+                <div style="display:grid; grid-template-columns:1fr 2fr 1fr; gap:30px; align-items:center;">
+                    <!-- Investors Column -->
+                    <div style="text-align:center;">
+                        <div style="background:rgba(59,130,246,0.15); padding:20px; border-radius:16px; border:2px solid rgba(59,130,246,0.3); margin-bottom:20px;">
+                            <div style="font-size:2rem; margin-bottom:10px;">👥</div>
+                            <h4 style="margin:0; color:#1e293b;">Investors</h4>
+                            <p style="margin:8px 0 0 0; color:#64748b; font-size:0.9rem;">Individuals & Institutions</p>
+                        </div>
+                        <div style="display:flex; flex-direction:column; gap:15px;">
+                            <div style="background:rgba(16,185,129,0.1); padding:12px; border-radius:12px; border:1px solid rgba(16,185,129,0.2); text-align:center;">
+                                <div style="font-weight:bold; color:#10b981;">(1)</div>
+                                <p style="margin:4px 0 0 0; font-size:0.85rem;">Cash from investors</p>
+                            </div>
+                            <div style="background:rgba(239,68,68,0.1); padding:12px; border-radius:12px; border:1px solid rgba(239,68,68,0.2); text-align:center;">
+                                <div style="font-weight:bold; color:#ef4444;">(5)</div>
+                                <p style="margin:4px 0 0 0; font-size:0.85rem;">Cash to investors</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Center Flow -->
+                    <div style="text-align:center;">
+                        <div style="background:rgba(147,51,234,0.15); padding:30px; border-radius:20px; border:2px solid rgba(147,51,234,0.3); margin-bottom:30px;">
+                            <div style="font-size:2.5rem; margin-bottom:15px;">🏢</div>
+                            <h4 style="margin:0; color:#1e293b; font-size:1.3rem;">Firm's Operations</h4>
+                            <p style="margin:8px 0 0 0; color:#64748b;">Core Business Activities</p>
+                        </div>
+                        
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+                            <div style="background:rgba(59,130,246,0.1); padding:15px; border-radius:12px; border:1px solid rgba(59,130,246,0.2); text-align:center;">
+                                <div style="font-weight:bold; color:#3b82f6;">(2)</div>
+                                <p style="margin:4px 0 0 0; font-size:0.85rem;">Cash invested</p>
+                            </div>
+                            <div style="background:rgba(16,185,129,0.1); padding:15px; border-radius:12px; border:1px solid rgba(16,185,129,0.2); text-align:center;">
+                                <div style="font-weight:bold; color:#10b981;">(3)</div>
+                                <p style="margin:4px 0 0 0; font-size:0.85rem;">Cash generated</p>
+                            </div>
+                        </div>
+                        
+                        <div style="background:rgba(245,158,11,0.1); padding:15px; border-radius:12px; border:1px solid rgba(245,158,11,0.2); margin-top:20px; text-align:center;">
+                            <div style="font-weight:bold; color:#f59e0b;">(4)</div>
+                            <p style="margin:4px 0 0 0; font-size:0.85rem;">Cash reinvested</p>
+                        </div>
+                    </div>
+
+                    <!-- Financial Manager Column -->
+                    <div style="text-align:center;">
+                        <div style="background:rgba(6,182,212,0.15); padding:20px; border-radius:16px; border:2px solid rgba(6,182,212,0.3); margin-bottom:20px;">
+                            <div style="font-size:2rem; margin-bottom:10px;">👨‍💼</div>
+                            <h4 style="margin:0; color:#1e293b;">Financial Manager</h4>
+                            <p style="margin:8px 0 0 0; color:#64748b; font-size:0.9rem;">Decision Maker</p>
+                        </div>
+                        <div style="background:rgba(59,130,246,0.1); padding:20px; border-radius:12px; border:1px solid rgba(59,130,246,0.2); text-align:center;">
+                            <h5 style="margin:0 0 8px 0; color:#1e293b;">Manages Cash Flow</h5>
+                            <p style="margin:0; font-size:0.85rem; color:#64748b;">Coordinates (1), (2), (4), (5)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:20px; margin:40px 0;">
+            <div style="background:rgba(59,130,246,0.1); padding:24px; border-radius:16px; border:1px solid rgba(59,130,246,0.2); text-align:center;">
+                <div style="font-size:3rem; font-weight:bold; color:#3b82f6; margin-bottom:12px;">(1)</div>
+                <h4 style="margin:0 0 12px 0; color:#1e293b;">Financing</h4>
+                <p style="margin:0; color:#64748b; font-size:0.9rem;">Cash raised from investors by selling financial assets</p>
+            </div>
+            <div style="background:rgba(16,185,129,0.1); padding:24px; border-radius:16px; border:1px solid rgba(16,185,129,0.2); text-align:center;">
+                <div style="font-size:3rem; font-weight:bold; color:#10b981; margin-bottom:12px;">(2)</div>
+                <h4 style="margin:0 0 12px 0; color:#1e293b;">Investment</h4>
+                <p style="margin:0; color:#64748b; font-size:0.9rem;">Cash invested in real assets (tangible and intangible)</p>
+            </div>
+            <div style="background:rgba(245,158,11,0.1); padding:24px; border-radius:16px; border:1px solid rgba(245,158,11,0.2); text-align:center;">
+                <div style="font-size:3rem; font-weight:bold; color:#f59e0b; margin-bottom:12px;">(3)</div>
+                <h4 style="margin:0 0 12px 0; color:#1e293b;">Operations</h4>
+                <p style="margin:0; color:#64748b; font-size:0.9rem;">Cash generated by business operations and activities</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PPT_SECTION: Task of Financial Manager -->
+    <section id="task" class="container fade-in">
+        <div class="section-header">
+            <div class="icon-circle" style="background:rgba(147,51,234,0.15); color:#9333ea;">👨‍💼</div>
+            <div>
+                <h2 style="font-size:2.5rem; color:#1e293b; margin:0;">Task of Financial Manager</h2>
+                <p style="color:#64748b; margin-top:8px;">Key responsibilities and decision-making processes</p>
+            </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:2fr 1fr; gap:24px; margin:40px 0;">
+            <div style="background:linear-gradient(135deg, rgba(147,51,234,0.1) 0%, rgba(59,130,246,0.05) 100%); padding:32px; border-radius:20px; border:1px solid rgba(147,51,234,0.2);">
+                <h3 style="margin:0 0 24px 0; color:#1e293b; font-size:1.8rem;">Primary Responsibilities</h3>
+                
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:20px; margin-bottom:32px;">
+                    <div style="background:rgba(255,255,255,0.7); padding:20px; border-radius:12px; text-align:center;">
+                        <div style="display:inline-flex; width:50px; height:50px; border-radius:12px; background:rgba(59,130,246,0.15); align-items:center; justify-content:center; font-size:24px; margin-bottom:12px;">💼</div>
+                        <h4 style="margin:0 0 8px 0; color:#1e293b; font-size:1.1rem;">Investment</h4>
+                        <p style="margin:0; color:#64748b; font-size:0.85rem;">Determine which projects to invest in</p>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.7); padding:20px; border-radius:12px; text-align:center;">
+                        <div style="display:inline-flex; width:50px; height:50px; border-radius:12px; background:rgba(16,185,129,0.15); align-items:center; justify-content:center; font-size:24px; margin-bottom:12px;">💰</div>
+                        <h4 style="margin:0 0 8px 0; color:#1e293b; font-size:1.1rem;">Financing</h4>
+                        <p style="margin:0; color:#64748b; font-size:0.85rem;">Decide how to finance projects</p>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.7); padding:20px; border-radius:12px; text-align:center;">
+                        <div style="display:inline-flex; width:50px; height:50px; border-radius:12px; background:rgba(245,158,11,0.15); align-items:center; justify-content:center; font-size:24px; margin-bottom:12px;">📤</div>
+                        <h4 style="margin:0 0 8px 0; color:#1e293b; font-size:1.1rem;">Payout</h4>
+                        <p style="margin:0; color:#64748b; font-size:0.85rem;">Determine what to pay back to shareholders</p>
+                    </div>
+                </div>
+
+                <div style="background:rgba(6,182,212,0.1); padding:24px; border-radius:16px; border:1px solid rgba(6,182,212,0.2);">
+                    <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
+                        <div style="display:inline-flex; width:48px; height:48px; border-radius:12px; background:rgba(6,182,212,0.2); align-items:center; justify-content:center; font-size:24px;">🛡️</div>
+                        <h4 style="margin:0; color:#1e293b;">Risk Management</h4>
+                    </div>
+                    <p style="margin:0; color:#475569;">Determine what risks to take or avoid and implement strategies to manage financial exposure</p>
+                </div>
+            </div>
+
+            <div style="background:rgba(6,182,212,0.1); padding:32px; border-radius:20px; border:1px solid rgba(6,182,212,0.2); text-align:center;">
+                <div style="display:inline-flex; width:80px; height:80px; border-radius:50%; background:rgba(6,182,212,0.2); align-items:center; justify-content:center; font-size:40px; margin-bottom:20px;">🎯</div>
+                <h3 style="margin:0 0 16px 0; color:#1e293b;">Primary Objective</h3>
+                <div style="font-size:2.5rem; font-weight:bold; color:#06b6d4; margin:20px 0;">Create Value</div>
+                <p style="margin:0; color:#475569;">Maximize shareholder wealth through strategic financial decisions</p>
+                
+                <div style="background:rgba(255,255,255,0.7); padding:20px; border-radius:12px; margin-top:24px;">
+                    <h4 style="margin:0 0 12px 0; color:#1e293b; font-size:1.1rem;">Decision Framework</h4>
+                    <ul style="list-style:none; padding:0; margin:0; text-align:left;">
+                        <li style="display:flex; align-items:start; gap:8px; margin:8px 0;">
+                            <div style="width:6px; height:6px; border-radius:50%; background:#06b6d4; margin-top:6px; flex-shrink:0;"></div>
+                            <span style="font-size:0.9rem;">Investment: How real assets are valued</span>
+                        </li>
+                        <li style="display:flex; align-items:start; gap:8px; margin:8px 0;">
+                            <div style="width:6px; height:6px; border-radius:50%; background:#06b6d4; margin-top:6px; flex-shrink:0;"></div>
+                            <span style="font-size:0.9rem;">Financing: How corporate securities are valued</span>
+                        </li>
+                        <li style="display:flex; align-items:start; gap:8px; margin:8px 0;">
+                            <div style="width:6px; height:6px; border-radius:50%; background:#06b6d4; margin-top:6px; flex-shrink:0;"></div>
+                            <span style="font-size:0.9rem;">Risk: How financial contracts are valued</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div style="background:linear-gradient(135deg, rgba(59,130,246,0.1) 0%, rgba(147,51,234,0.05) 100%); padding:32px; border-radius:20px; margin:40px 0;">
+            <h3 style="text-align:center; margin-bottom:32px; color:#1e293b;">Valuation Expertise</h3>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:20px;">
+                <div style="text-align:center;">
+                    <div style="background:rgba(59,130,246,0.1); width:80px; height:80px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; font-size:32px;">🏢</div>
+                    <h4 style="margin:0 0 8px 0; color:#1e293b;">Real Assets</h4>
+                    <p style="margin:0; color:#64748b; font-size:0.9rem;">Tangible and intangible business assets</p>
+                </div>
+                <div style="text-align:center;">
+                    <div style="background:rgba(16,185,129,0.1); width:80px; height:80px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; font-size:32px;">📊</div>
+                    <h4 style="margin:0 0 8px 0; color:#1e293b;">Securities</h4>
+                    <p style="margin:0; color:#64748b; font-size:0.9rem;">Corporate stocks and bonds</p>
+                </div>
+                <div style="text-align:center;">
+                    <div style="background:rgba(245,158,11,0.1); width:80px; height:80px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; font-size:32px;">📄</div>
+                    <h4 style="margin:0 0 8px 0; color:#1e293b;">Contracts</h4>
+                    <p style="margin:0; color:#64748b; font-size:0.9rem;">Financial agreements and derivatives</p>
+                </div>
+                <div style="text-align:center;">
+                    <div style="background:rgba(147,51,234,0.1); width:80px; height:80px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; font-size:32px;">⚡</div>
+                    <h4 style="margin:0 0 8px 0; color:#1e293b;">Cash Flows</h4>
+                    <p style="margin:0; color:#64748b; font-size:0.9rem;">Future income streams and payments</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PPT_SECTION: Valuation of Assets -->
+    <section id="val" class="container fade-in">
+        <div class="section-header">
+            <div class="icon-circle" style="background:rgba(239,68,68,0.15); color:#ef4444;">📊</div>
+            <div>
+                <h2 style="font-size:2.5rem; color:#1e293b; margin:0;">Valuation of Assets</h2>
+                <p style="color:#64748b; margin-top:8px;">Principles and methods for determining asset value</p>
+            </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin:40px 0;">
+            <div style="background:rgba(239,68,68,0.1); padding:32px; border-radius:20px; border:1px solid rgba(239,68,68,0.2);">
+                <h3 style="margin:0 0 24px 0; color:#1e293b;">Cash Flow Characteristics</h3>
+                <p style="color:#475569; margin-bottom:32px;">Each asset is defined by its cash flow pattern over time</p>
+                
+                <div style="background:rgba(255,255,255,0.7); padding:24px; border-radius:16px; margin-bottom:24px;">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:16px; font-weight:600; color:#1e293b;">
+                        <span>Time</span>
+                        <span>0</span>
+                        <span>1</span>
+                        <span>2</span>
+                        <span>...</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:8px; color:#64748b;">
+                        <span>Cash Out</span>
+                        <span>CF₀</span>
+                        <span>·</span>
+                        <span>·</span>
+                        <span>·</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:8px; color:#64748b;">
+                        <span>Cash In</span>
+                        <span>·</span>
+                        <span>CF₁</span>
+                        <span>CF₂</span>
+                        <span>·</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:0; font-weight:600; color:#ef4444;">
+                        <span>Net Cash Flow</span>
+                        <span>(-)CF₀</span>
+                        <span>CF₁</span>
+                        <span>CF₂</span>
+                        <span>·</span>
+                    </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                    <div style="background:rgba(59,130,246,0.1); padding:20px; border-radius:12px; border:1px solid rgba(59,130,246,0.2); text-align:center;">
+                        <div style="font-size:2rem; margin-bottom:12px;">⏰</div>
+                        <h4 style="margin:0 0 8px 0; color:#1e293b; font-size:1.1rem;">Time</h4>
+                        <p style="margin:0; color:#64748b; font-size:0.85rem;">Time value of money considerations</p>
+                    </div>
+                    <div style="background:rgba(245,158,11,0.1); padding:20px; border-radius:12px; border:1px solid rgba(245,158,11,0.2); text-align:center;">
+                        <div style="font-size:2rem; margin-bottom:12px;">🎲</div>
+                        <h4 style="margin:0 0 8px 0; color:#1e293b; font-size:1.1rem;">Risk</h4>
+                        <p style="margin:0; color:#64748b; font-size:0.85rem;">Uncertainty and risk premium</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background:rgba(59,130,246,0.1); padding:32px; border-radius:20px; border:1px solid rgba(59,130,246,0.2);">
+                <h3 style="margin:0 0 24px 0; color:#1e293b;">Valuation Approaches</h3>
+                
+                <div style="background:rgba(255,255,255,0.7); padding:24px; border-radius:16px; margin-bottom:24px;">
+                    <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
+                        <div style="display:inline-flex; width:48px; height:48px; border-radius:12px; background:rgba(16,185,129,0.15); align-items:center; justify-content:center; font-size:24px;">🔍</div>
+                        <h4 style="margin:0; color:#1e293b;">Valuation by Matching</h4>
+                    </div>
+                    <p style="margin:0; color:#475569;">Find traded assets with equivalent cash flow characteristics in timing and risk</p>
+                </div>
+
+                <div style="background:rgba(255,255,255,0.7); padding:24px; border-radius:16px;">
+                    <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
+                        <div style="display:inline-flex; width:48px; height:48px; border-radius:12px; background:rgba(245,158,11,0.15); align-items:center; justify-content:center; font-size:24px;">⚖️</div>
+                        <h4 style="margin:0; color:#1e293b;">Equilibrium Analysis</h4>
+                    </div>
+                    <p style="margin:0; color:#475569;">Valuation through analysis of demand and supply dynamics</p>
+                </div>
+
+                <div style="margin-top:32px;">
+                    <h4 style="margin:0 0 16px 0; color:#1e293b;">Fundamental Principle</h4>
+                    <div style="background:rgba(147,51,234,0.1); padding:20px; border-radius:12px; border:1px solid rgba(147,51,234,0.2); text-align:center;">
+                        <p style="margin:0; font-weight:600; color:#9333ea;">Assets with same payoffs have same prices</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="background:linear-gradient(135deg, rgba(16,185,129,0.1) 0%, rgba(59,130,246,0.05) 100%); padding:40px; border-radius:20px; margin:40px 0;">
+            <h3 style="text-align:center; margin-bottom:32px; color:#1e293b;">Present Value & Opportunity Cost</h3>
+            
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:24px;">
+                <div style="background:rgba(255,255,255,0.8); padding:24px; border-radius:16px; text-align:center;">
+                    <div style="display:inline-flex; width:60px; height:60px; border-radius:50%; background:rgba(59,130,246,0.15); align-items:center; justify-content:center; font-size:28px; margin-bottom:16px;">💰</div>
+                    <h4 style="margin:0 0 12px 0; color:#1e293b;">Safe Investment Example</h4>
+                    <div style="font-size:1.8rem; font-weight:bold; color:#3b82f6; margin:16px 0;">$1,048</div>
+                    <p style="margin:0; color:#64748b; font-size:0.9rem;">Present value of $1,100 in one year at 5% return</p>
+                    <div style="background:#f3f4f6; height:12px; border-radius:6px; overflow:hidden; margin:16px 0;">
+                        <div style="background:linear-gradient(90deg, #3b82f6, #06b6d4); height:100%; width:100%;"></div>
+                    </div>
+                </div>
+
+                <div style="background:rgba(255,255,255,0.8); padding:24px; border-radius:16px; text-align:center;">
+                    <div style="display:inline-flex; width:60px; height:60px; border-radius:50%; background:rgba(245,158,11,0.15); align-items:center; justify-content:center; font-size:28px; margin-bottom:16px;">⚡</div>
+                    <h4 style="margin:0 0 12px 0; color:#1e293b;">Risky Investment Example</h4>
+                    <div style="font-size:1.8rem; font-weight:bold; color:#f59e0b; margin:16px 0;">$917</div>
+                    <p style="margin:0; color:#64748b; font-size:0.9rem;">Present value of $1,100 in one year at 20% return</p>
+                    <div style="background:#f3f4f6; height:12px; border-radius:6px; overflow:hidden; margin:16px 0;">
+                        <div style="background:linear-gradient(90deg, #f59e0b, #ef4444); height:100%; width:100%;"></div>
+                    </div>
+                </div>
+
+                <div style="background:rgba(255,255,255,0.8); padding:24px; border-radius:16px; text-align:center;">
+                    <div style="display:inline-flex; width:60px; height:60px; border-radius:50%; background:rgba(16,185,129,0.15); align-items:center; justify-content:center; font-size:28px; margin-bottom:16px;">🎯</div>
+                    <h4 style="margin:0 0 12px 0; color:#1e293b;">Risk Premium</h4>
+                    <div style="font-size:1.8rem; font-weight:bold; color:#10b981; margin:16px 0;">15%</div>
+                    <p style="margin:0; color:#64748b; font-size:0.9rem;">Difference between risky and safe expected returns</p>
+                    <div style="display:flex; gap:8px; justify-content:center; margin-top:16px;">
+                        <span style="background:#3b82f6; color:white; padding:4px 12px; border-radius:12px; font-size:0.8rem;">Safe: 5%</span>
+                        <span style="background:#f59e0b; color:white; padding:4px 12px; border-radius:12px; font-size:0.8rem;">Risky: 20%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="background:rgba(6,182,212,0.1); padding:32px; border-radius:20px; border:1px solid rgba(6,182,212,0.2);">
+            <div style="display:flex; align-items:center; gap:16px; margin-bottom:20px;">
+                <div style="display:inline-flex; width:48px; height:48px; border-radius:12px; background:rgba(6,182,212,0.2); align-items:center; justify-content:center; font-size:24px;">💡</div>
+                <h3 style="margin:0; color:#1e293b;">Key Valuation Insight</h3>
+            </div>
+            <p style="margin:0; color:#475569; font-size:1.1rem;">The present value of a cash flow equals its expected value discounted at the opportunity cost of capital, which properly adjusts for both time and risk considerations.</p>
+        </div>
+    </section>
+
+    <!-- PPT_SECTION: Financial Markets -->
+    <section id="market" class="container fade-in">
+        <div class="section-header">
+            <div class="icon-circle" style="background:rgba(6,182,212,0.15); color:#06b6d4;">🌐</div>
+            <div>
+                <h2 style="font-size:2.5rem; color:#1e293b; margin:0;">Role of Financial Markets</h2>
+                <p style="color:#64748b; margin-top:8px;">Market structures and their economic functions</p>
+            </div>
+        </div>
+
+        <div style="text-align:center; background:linear-gradient(135deg, rgba(6,182,212,0.1) 0%, rgba(59,130,246,0.05) 100%); padding:40px; border-radius:20px; margin:40px 0;">
+            <h3 style="margin:0 0 20px 0; color:#1e293b;">Financial Markets at the Center</h3>
+            <div style="display:inline-flex; width:100px; height:100px; border-radius:50%; background:rgba(6,182,212,0.2); align-items:center; justify-content:center; font-size:48px; margin-bottom:24px;">⚡</div>
+            <div style="display:flex; justify-content:center; gap:40px; flex-wrap:wrap;">
+                <div style="text-align:center;">
+                    <div style="background:rgba(59,130,246,0.1); width:70px; height:70px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; font-size:32px;">👥</div>
+                    <p style="margin:0; font-weight:600; color:#1e293b;">Individuals</p>
+                </div>
+                <div style="text-align:center;">
+                    <div style="background:rgba(16,185,129,0.1); width:70px; height:70px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; font-size:32px;">🏢</div>
+                    <p style="margin:0; font-weight:600; color:#1e293b;">Firms</p>
+                </div>
+                <div style="text-align:center;">
+                    <div style="background:rgba(245,158,11,0.1); width:70px; height:70px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; font-size:32px;">🏦</div>
+                    <p style="margin:0; font-weight:600; color:#1e293b;">Intermediaries</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:24px; margin:40px 0;">
+            <div style="background:rgba(59,130,246,0.1); padding:32px; border-radius:20px; border:1px solid rgba(59,130,246,0.2);">
+                <div style="display:inline-flex; width:60px; height:60px; border-radius:16px; background:rgba(59,130,246,0.2); align-items:center; justify-content:center; font-size:28px; margin-bottom:20px;">💵</div>
+                <h3 style="margin:0 0 16px 0; color:#1e293b;">Money Markets</h3>
+                <p style="color:#475569; margin-bottom:24px;">Short-term debt securities and instruments</p>
+                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                    <span style="background:#3b82f6; color:white; padding:6px 16px; border-radius:12px; font-size:0.85rem;">T-bills</span>
+                    <span style="background:#3b82f6; color:white; padding:6px 16px; border-radius:12px; font-size:0.85rem;">CDs</span>
+                    <span style="background:#3b82f6; color:white; padding:6px 16px; border-radius:12px; font-size:0.85rem;">CPs</span>
+                </div>
+            </div>
+
+            <div style="background:rgba(16,185,129,0.1); padding:32px; border-radius:20px; border:1px solid rgba(16,185,129,0.2);">
+                <div style="display:inline-flex; width:60px; height:60px; border-radius:16px; background:rgba(16,185,129,0.2); align-items:center; justify-content:center; font-size:28px; margin-bottom:20px;">📈</div>
+                <h3 style="margin:0 0 16px 0; color:#1e293b;">Capital Markets</h3>
+                <p style="color:#475569; margin-bottom:24px;">Long-term securities and investment instruments</p>
+                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                    <span style="background:#10b981; color:white; padding:6px 16px; border-radius:12px; font-size:0.85rem;">Stocks</span>
+                    <span style="background:#10b981; color:white; padding:6px 16px; border-radius:12px; font-size:0.85rem;">Bonds</span>
+                    <span style="background:#10b981; color:white; padding:6px 16px; border-radius:12px; font-size:0.85rem;">T-notes</span>
+                </div>
+            </div>
+
+            <div style="background:rgba(245,158,11,0.1); padding:32px; border-radius:20px; border:1px solid rgba(245,158,11,0.2);">
+                <div style="display:inline-flex; width:60px; height:60px; border-radius:16px; background:rgba(245,158,11,0.2); align-items:center; justify-content:center; font-size:28px; margin-bottom:20px;">🔄</div>
+                <h3 style="margin:0 0 16px 0; color:#1e293b;">Derivatives</h3>
+                <p style="color:#475569; margin-bottom:24px;">Securities with payoffs tied to other underlying prices</p>
+                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                    <span style="background:#f59e0b; color:white; padding:6px 16px; border-radius:12px; font-size:0.85rem;">Futures</span>
+                    <span style="background:#f59e0b; color:white; padding:6px 16px; border-radius:12px; font-size:0.85rem;">Options</span>
+                    <span style="background:#f59e0b; color:white; padding:6px 16px; border-radius:12px; font-size:0.85rem;">Forwards</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="background:linear-gradient(135deg, rgba(147,51,234,0.1) 0%, rgba(59,130,246,0.05) 100%); padding:32px; border-radius:20px; margin:40px 0;">
+            <h3 style="text-align:center; margin-bottom:32px; color:#1e293b;">Market Functions & Characteristics</h3>
+            
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:24px;">
+                <div style="text-align:center;">
+                    <div style="background:rgba(59,130,246,0.1); width:70px; height:70px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; font-size:32px;">⏰</div>
+                    <h4 style="margin:0 0 12px 0; color:#1e293b;">Resource Allocation</h4>
+                    <p style="margin:0; color:#64748b; font-size:0.9rem;">Efficient allocation of capital across time and economic states</p>
+                </div>
+                <div style="text-align:center;">
+                    <div style="background:rgba(16,185,129,0.1); width:70px; height:70px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; font-size:32px;">📢</div>
+                    <h4 style="margin:0 0 12px 0; color:#1e293b;">Information Communication</h4>
+                    <p style="margin:0; color:#64748b; font-size:0.9rem;">Market prices reflect all available information</p>
+                </div>
+                <div style="text-align:center;">
+                    <div style="background:rgba(245,158,11,0.1); width:70px; height:70px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; font-size:32px;">⚡</div>
+                    <h4 style="margin:0 0 12px 0; color:#1e293b;">Perfect Market Assumptions</h4>
+                    <p style="margin:0; color:#64748b; font-size:0.9rem;">Rich security set, free access, competitive trading, no frictions</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:16px; margin:40px 0;">
+            <div style="background:rgba(59,130,246,0.1); padding:20px; border-radius:12px; border:1px solid rgba(59,130,246,0.2); text-align:center;">
+                <div style="font-size:2.5rem; font-weight:bold; color:#3b82f6;">🏦</div>
+                <p style="margin:8px 0 0 0; font-weight:600; color:#1e293b;">Banks</p>
+            </div>
+            <div style="background:rgba(16,185,129,0.1); padding:20px; border-radius:12px; border:1px solid rgba(16,185,129,0.2); text-align:center;">
+                <div style="font-size:2.5rem; font-weight:bold; color:#10b981;">🛡️</div>
+                <p style="margin:8px 0 0 0; font-weight:600; color:#1e293b;">Insurance</p>
+            </div>
+            <div style="background:rgba(245,158,11,0.1); padding:20px; border-radius:12px; border:1px solid rgba(245,158,11,0.2); text-align:center;">
+                <div style="font-size:2.5rem; font-weight:bold; color:#f59e0b;">🏠</div>
+                <p style="margin:8px 0 0 0; font-weight:600; color:#1e293b;">S&Ls</p>
+            </div>
+            <div style="background:rgba(147,51,234,0.1); padding:20px; border-radius:12px; border:1px solid rgba(147,51,234,0.2); text-align:center;">
+                <div style="font-size:2.5rem; font-weight:bold; color:#9333ea;">📊</div>
+                <p style="margin:8px 0 0 0; font-weight:600; color:#1e293b;">Mutual Funds</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PPT_SECTION: Manager Objectives -->
+    <section id="obj" class="container fade-in">
+        <div class="section-header">
+            <div class="icon-circle" style="background:rgba(59,130,246,0.15); color:#3b82f6;">🎯</div>
+            <div>
+                <h2 style="font-size:2.5rem; color:#1e293b; margin:0;">Objectives of Financial Manager</h2>
+                <p style="color:#64748b; margin-top:8px;">Strategic goals and stakeholder considerations</p>
+            </div>
+        </div>
+
+        <div style="background:linear-gradient(135deg, rgba(59,130,246,0.1) 0%, rgba(147,51,234,0.05) 100%); padding:40px; border-radius:20px; margin:40px 0; text-align:center;">
+            <div style="display:inline-flex; width:80px; height:80px; border-radius:50%; background:rgba(59,130,246,0.2); align-items:center; justify-content:center; font-size:40px; margin-bottom:20px;">📈</div>
+            <div style="font-size:2.5rem; font-weight:bold; color:#3b82f6; margin:16px 0;">Value Maximization</div>
+            <h3 style="margin:12px 0; color:#1e293b; font-size:1.8rem;">Primary Financial Objective</h3>
+            <p style="margin:0 auto; color:#64748b; max-width:600px;">Maximizing current market value is the only plausible financial objective for corporate managers, incorporating present value of all current and future cash flows adjusted for timing and risk.</p>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:24px; margin:40px 0;">
+            <div style="background:rgba(16,185,129,0.1); padding:32px; border-radius:20px; border:1px solid rgba(16,185,129,0.2);">
+                <div style="display:inline-flex; width:60px; height:60px; border-radius:16px; background:rgba(16,185,129,0.2); align-items:center; justify-content:center; font-size:28px; margin-bottom:20px;">💼</div>
+                <h3 style="margin:0 0 16px 0; color:#1e293b;">Shareholder Objectives</h3>
+                <ul style="list-style:none; padding:0; margin:0;">
+                    <li style="display:flex; align-items:start; gap:12px; margin:16px 0;">
+                        <div style="width:6px; height:6px; border-radius:50%; background:#10b981; margin-top:8px; flex-shrink:0;"></div>
+                        <span>Increase total wealth</span>
+                    </li>
+                    <li style="display:flex; align-items:start; gap:12px; margin:16px 0;">
+                        <div style="width:6px; height:6px; border-radius:50%; background:#10b981; margin-top:8px; flex-shrink:0;"></div>
+                        <span>Right allocation of wealth over time</span>
+                    </li>
+                    <li style="display:flex; align-items:start; gap:12px; margin:16px 0;">
+                        <div style="width:6px; height:6px; border-radius:50%; background:#10b981; margin-top:8px; flex-shrink:0;"></div>
+                        <span>Right allocation across future contingencies</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div style="background:rgba(245,158,11,0.1); padding:32px; border-radius:20px; border:1px solid rgba(245,158,11,0.2);">
+                <div style="display:inline-flex; width:60px; height:60px; border-radius:16px; background:rgba(245,158,11,0.2); align-items:center; justify-content:center; font-size:28px; margin-bottom:20px;">🔄</div>
+                <h3 style="margin:0 0 16px 0; color:#1e293b;">Managerial Focus</h3>
+                <p style="color:#475569; margin-bottom:24px;">Financial managers help shareholders achieve their objectives through strategic decision-making</p>
+                <div style="background:rgba(255,255,255,0.7); padding:20px; border-radius:12px; text-align:center;">
+                    <div style="font-size:2rem; font-weight:bold; color:#f59e0b; margin-bottom:8px;">↑</div>
+                    <p style="margin:0; font-weight:600; color:#1e293b;">Increase Firm Market Value</p>
+                </div>
+            </div>
+
+            <div style="background:rgba(147,51,234,0.1); padding:32px; border-radius:20px; border:1px solid rgba(147,51,234,0.2);">
+                <div style="display:inline-flex; width:60px; height:60px; border-radius:16px; background:rgba(147,51,234,0.2); align-items:center; justify-content:center; font-size:28px; margin-bottom:20px;">⚡</div>
+                <h3 style="margin:0 0 16px 0; color:#1e293b;">Market Efficiency</h3>
+                <p style="color:#475569; margin-bottom:24px;">Perfect financial markets enable separation of ownership and management</p>
+                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                    <span style="background:#9333ea; color:white; padding:6px 16px; border-radius:12px; font-size:0.85rem;">Ownership</span>
+                    <span style="background:#9333ea; color:white; padding:6px 16px; border-radius:12px; font-size:0.85rem;">Management</span>
+                    <span style="background:#9333ea; color:white; padding:6px 16px; border-radius:12px; font-size:0.85rem;">Separation</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="background:linear-gradient(90deg, rgba(245,158,11,0.1) 0%, rgba(239,68,68,0.1) 100%); border:1px solid rgba(245,158,11,0.2); border-left:4px solid #f59e0b; padding:24px; border-radius:16px; margin:40px 0;">
+            <div style="display:flex; align-items:start; gap:16px;">
+                <div style="display:inline-flex; width:48px; height:48px; border-radius:12px; background:rgba(245,158,11,0.2); align-items:center; justify-content:center; font-size:24px; flex-shrink:0;">⚠️</div>
+                <div>
+                    <h4 style="margin:0 0 8px 0; color:#92400e; font-size:1.2rem;">Practical Challenges</h4>
+                    <p style="margin:0 0 16px 0; color:#475569;">Real-world considerations that complicate the value maximization objective</p>
+                    <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                        <span style="background:rgba(245,158,11,0.2); color:#92400e; padding:6px 16px; border-radius:12px; font-size:0.85rem;">Agency Problems</span>
+                        <span style="background:rgba(239,68,68,0.2); color:#991b1b; padding:6px 16px; border-radius:12px; font-size:0.85rem;">Stakeholder Conflicts</span>
+                        <span style="background:rgba(59,130,246,0.2); color:#1e40af; padding:6px 16px; border-radius:12px; font-size:0.85rem;">Market Imperfections</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="background:rgba(6,182,212,0.1); padding:32px; border-radius:20px; border:1px solid rgba(6,182,212,0.2);">
+            <h3 style="text-align:center; margin-bottom:32px; color:#1e293b;">Case Study: 50MD Corporation</h3>
+            
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:20px; margin-bottom:32px;">
+                <div style="text-align:center;">
+                    <div style="background:rgba(59,130,246,0.1); width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; font-size:28px;">👵</div>
+                    <h4 style="margin:0 0 8px 0; color:#1e293b;">Granny (85)</h4>
+                    <p style="margin:0; color:#64748b; font-size:0.9rem;">"Couldn't wait to see payoff from long-term project"</p>
+                </div>
+                <div style="text-align:center;">
+                    <div style="background:rgba(16,185,129,0.1); width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; font-size:28px;">👨</div>
+                    <h4 style="margin:0 0 8px 0; color:#1e293b;">Father</h4>
+                    <p style="margin:0; color:#64748b; font-size:0.9rem;">"Not prepared to give up current lifestyle"</p>
+                </div>
+                <div style="text-align:center;">
+                    <div style="background:rgba(245,158,11,0.1); width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; font-size:28px;">👦</div>
+                    <h4 style="margin:0 0 8px 0; color:#1e293b;">Son</h4>
+                    <p style="margin:0; color:#64748b; font-size:0.9rem;">"Market consensus may be wrong about project"</p>
+                </div>
+            </div>
+
+            <div style="background:rgba(255,255,255,0.7); padding:24px; border-radius:16px; text-align:center;">
+                <h4 style="margin:0 0 16px 0; color:#1e293b;">Resolution Framework</h4>
+                <p style="margin:0; color:#475569;">Shareholder differences can be settled in financial markets through individual trading decisions, allowing the firm to focus on value maximization.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PPT_SECTION: Conclusions -->
+    <section id="concl" class="container fade-in">
+        <div class="section-header">
+            <div class="icon-circle" style="background:rgba(16,185,129,0.15); color:#10b981;">✅</div>
+            <div>
+                <h2 style="font-size:2.5rem; color:#1e293b; margin:0;">Summary & Conclusions</h2>
+                <p style="color:#64748b; margin-top:8px;">Key insights and fundamental principles</p>
+            </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:24px; margin:40px 0;">
+            <div style="background:linear-gradient(135deg, rgba(16,185,129,0.1) 0%, rgba(59,130,246,0.05) 100%); padding:32px; border-radius:20px; border:1px solid rgba(16,185,129,0.2);">
+                <h3 style="margin:0 0 24px 0; color:#1e293b;">Key Principles</h3>
+                <ul style="list-style:none; padding:0; margin:0;">
+                    <li style="display:flex; align-items:start; gap:12px; margin:16px 0;">
+                        <div style="width:6px; height:6px; border-radius:50%; background:#10b981; margin-top:8px; flex-shrink:0;"></div>
+                        <span>Managers should maximize firm's current market value</span>
+                    </li>
+                    <li style="display:flex; align-items:start; gap:12px; margin:16px 0;">
+                        <div style="width:6px; height:6px; border-radius:50%; background:#10b981; margin-top:8px; flex-shrink:0;"></div>
+                        <span>Business evaluation reduces to asset valuation</span>
+                    </li>
+                    <li style="display:flex; align-items:start; gap:12px; margin:16px 0;">
+                        <div style="width:6px; height:6px; border-radius:50%; background:#10b981; margin-top:8px; flex-shrink:0;"></div>
+                        <span>Assets are defined by their cash flow patterns</span>
+                    </li>
+                    <li style="display:flex; align-items:start; gap:12px; margin:16px 0;">
+                        <div style="width:6px; height:6px; border-radius:50%; background:#10b981; margin-top:8px; flex-shrink:0;"></div>
+                        <span>Cash flows have two key characteristics: timing and risk</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div style="background:rgba(59,130,246,0.1); padding:32px; border-radius:20px; border:1px solid rgba(59,130,246,0.2);">
+                <h3 style="margin:0 0 24px 0; color:#1e293b;">Valuation Framework</h3>
+                <ul style="list-style:none; padding:0; margin:0;">
+                    <li style="display:flex; align-items:start; gap:12px; margin:16px 0;">
+                        <div style="width:6px; height:6px; border-radius:50%; background:#3b82f6; margin-top:8px; flex-shrink:0;"></div>
+                        <span>Asset values are determined by financial markets</span>
+                    </li>
+                    <li style="display:flex; align-items:start; gap:12px; margin:16px 0;">
+                        <div style="width:6px; height:6px; border-radius:50%; background:#3b82f6; margin-top:8px; flex-shrink:0;"></div>
+                        <span>Cost of capital reflects equivalent investment returns</span>
+                    </li>
+                    <li style="display:flex; align-items:start; gap:12px; margin:16px 0;">
+                        <div style="width:6px; height:6px; border-radius:50%; background:#3b82f6; margin-top:8px; flex-shrink:0;"></div>
+                        <span>Present value adjusts for both time and risk</span>
+                    </li>
+                    <li style="display:flex; align-items:start; gap:12px; margin:16px 0;">
+                        <div style="width:6px; height:6px; border-radius:50%; background:#3b82f6; margin-top:8px; flex-shrink:0;"></div>
+                        <span>Perfect markets enable ownership-management separation</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div style="background:linear-gradient(135deg, rgba(147,51,234,0.1) 0%, rgba(59,130,246,0.05) 100%); padding:40px; border-radius:20px; margin:40px 0; text-align:center;">
+            <h3 style="margin:0 0 24px 0; color:#1e293b;">Fundamental Insight</h3>
+            <div style="display:inline-flex; width:100px; height:100px; border-radius:50%; background:rgba(147,51,234,0.2); align-items:center; justify-content:center; font-size:48px; margin-bottom:24px;">💡</div>
+            <p style="font-size:1.3rem; color:#475569; margin:0 auto; max-width:700px; line-height:1.7;">The present value of a cash flow equals its expected value discounted at the opportunity cost of capital, which properly accounts for both the time value of money and risk considerations, forming the foundation of modern financial decision-making.</p>
+        </div>
+
+        <div style="display:flex; gap:24px; justify-content:center; margin:40px 0;">
+            <div style="text-align:center;">
+                <div style="width:80px; height:80px; border-radius:50%; background:rgba(59,130,246,0.1); display:flex; align-items:center; justify-content:center; border:4px solid #3b82f6; margin:0 auto;">
+                    <span style="font-size:1.5rem; font-weight:bold; color:#3b82f6;">✓</span>
+                </div>
+                <p style="margin-top:12px; font-weight:600; color:#1e293b;">Principles</p>
+            </div>
+            <div style="text-align:center;">
+                <div style="width:80px; height:80px; border-radius:50%; background:rgba(16,185,129,0.1); display:flex; align-items:center; justify-content:center; border:4px solid #10b981; margin:0 auto;">
+                    <span style="font-size:1.5rem; font-weight:bold; color:#10b981;">✓</span>
+                </div>
+                <p style="margin-top:12px; font-weight:600; color:#1e293b;">Framework</p>
+            </div>
+            <div style="text-align:center;">
+                <div style="width:80px; height:80px; border-radius:50%; background:rgba(245,158,11,0.1); display:flex; align-items:center; justify-content:center; border:4px solid #f59e0b; margin:0 auto;">
+                    <span style="font-size:1.5rem; font-weight:bold; color:#f59e0b;">✓</span>
+                </div>
+                <p style="margin-top:12px; font-weight:600; color:#1e293b;">Application</p>
+            </div>
+        </div>
+    </section>
+
+    <footer style="background:linear-gradient(135deg, #1e293b 0%, #334155 100%); color:white; padding:60px 0; text-align:center;">
+        <div class="container">
+            <div style="display:inline-flex; width:60px; height:60px; border-radius:16px; background:rgba(255,255,255,0.1); align-items:center; justify-content:center; font-size:28px; margin-bottom:20px;">📊</div>
+            <h3 style="margin:0 0 16px 0; color:white; font-size:1.8rem;">Financial Analysis Report</h3>
+            <p style="margin:0 0 32px 0; color:rgba(255,255,255,0.8); max-width:600px; margin:0 auto 32px;">Comprehensive analysis of financial principles based on MIT 15.401 Lecture Notes</p>
+            <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
+                <span style="background:rgba(255,255,255,0.1); padding:8px 20px; border-radius:16px; font-size:0.9rem;">Valuation</span>
+                <span style="background:rgba(255,255,255,0.1); padding:8px 20px; border-radius:16px; font-size:0.9rem;">Cash Flow</span>
+                <span style="background:rgba(255,255,255,0.1); padding:8px 20px; border-radius:16px; font-size:0.9rem;">Markets</span>
+                <span style="background:rgba(255,255,255,0.1); padding:8px 20px; border-radius:16px; font-size:0.9rem;">Management</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Progress bar update on scroll
+        window.addEventListener('scroll', function() {
+            const winHeight = window.innerHeight;
+            const docHeight = document.documentElement.scrollHeight;
+            const scrollTop = window.pageYOffset;
+            const scrollPercent = (scrollTop / (docHeight - winHeight)) * 100;
+            document.querySelector('.progress-bar-reading').style.width = scrollPercent + '%';
+        });
+
+        // Intersection Observer for fade-in animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        });
+
+        document.querySelectorAll('section, .card').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
