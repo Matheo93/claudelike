@@ -45,7 +45,8 @@
       "Bash(done)",
       "Bash(git ls-tree:*)",
       "Bash(cat:*)",
-      "Bash(git rm:*)"
+      "Bash(git rm:*)",
+      "Read(///**)"
     ],
     "deny": [],
     "ask": []
