@@ -1049,11 +1049,18 @@
 
             // If deleting current chat, start new one
             if (currentChatId === chatId) {
-                startNewChat();
-            }
+                // Close menu first
+                closeChatMenu();
 
-            saveChats();
-            updateChatMenu();
+                // Start new chat after a small delay to ensure smooth transition
+                setTimeout(() => {
+                    startNewChat();
+                }, 100);
+            } else {
+                // Just update menu for non-current chats
+                saveChats();
+                updateChatMenu();
+            }
         }
 
         // Save chats to localStorage
