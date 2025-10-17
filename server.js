@@ -22,7 +22,7 @@ app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.static('public'));
 
-const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY || 'sk-85e95f690c6048a688ee24e50c0b3701';
+const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY || 'sk-c9bb25c84d524f368e727eec656d4766';
 
 // Initialisation OpenAI
 const openai = new OpenAI({
