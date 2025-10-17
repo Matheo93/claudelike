@@ -1041,25 +1041,42 @@
 
         // Delete a chat
         function deleteChat(chatId, event) {
+            console.log('🗑️ DELETE CHAT CALLED:', {
+                chatId,
+                currentChatId,
+                isCurrent: currentChatId === chatId,
+                event
+            });
+
             event.stopPropagation();
             event.preventDefault();
 
-            if (!confirm('Delete this chat?')) return;
+            if (!confirm('Delete this chat?')) {
+                console.log('❌ Delete cancelled by user');
+                return;
+            }
+
+            console.log('✅ Delete confirmed, proceeding...');
 
             // Delete from storage
             delete chats[chatId];
             saveChats();
 
+            console.log('💾 Chat deleted from storage');
+
             // If deleting current chat, start new one
             if (currentChatId === chatId) {
+                console.log('🔄 Deleting CURRENT chat, closing menu and starting new chat');
                 // Close menu first
                 closeChatMenu();
 
                 // Start new chat after a small delay to ensure smooth transition
                 setTimeout(() => {
+                    console.log('✨ Starting new chat...');
                     startNewChat();
                 }, 100);
             } else {
+                console.log('📋 Deleting non-current chat, updating menu only');
                 // Just update menu for non-current chats
                 updateChatMenu();
             }
@@ -1141,6 +1158,11 @@
                 deleteBtn.textContent = '🗑️ Delete';
                 deleteBtn.className = 'chat-menu-delete';
                 deleteBtn.addEventListener('click', (e) => {
+                    console.log('🔴 DELETE BUTTON CLICKED:', {
+                        chatId: chat.id,
+                        chatName: chat.name,
+                        target: e.target
+                    });
                     e.stopPropagation();
                     e.preventDefault();
                     deleteChat(chat.id, e);
@@ -1149,9 +1171,18 @@
 
                 // Click handler for the entire item
                 item.addEventListener('click', (e) => {
+                    console.log('🔵 ITEM CLICKED:', {
+                        chatId: chat.id,
+                        target: e.target,
+                        isDeleteBtn: e.target === deleteBtn,
+                        hasDeleteClass: e.target.classList.contains('chat-menu-delete')
+                    });
                     // Only load chat if not clicking on delete button
                     if (e.target !== deleteBtn && !e.target.classList.contains('chat-menu-delete')) {
+                        console.log('✅ Loading chat:', chat.id);
                         loadChat(chat.id);
+                    } else {
+                        console.log('⏭️ Skipping loadChat (delete button clicked)');
                     }
                 });
 
