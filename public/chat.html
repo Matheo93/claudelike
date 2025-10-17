@@ -1091,13 +1091,26 @@
             const dropdown = document.getElementById('chat-menu-dropdown');
             const chatList = Object.values(chats).sort((a, b) => new Date(b.date) - new Date(a.date));
 
-            dropdown.innerHTML = `
-                <div class="chat-menu-item chat-menu-new" onclick="startNewChat()">
-                    ➕ Start New Chat
-                </div>
-                <div style="height: 1px; background: var(--glass-border); margin: 0.5rem 0;"></div>
-            `;
+            // Clear dropdown
+            dropdown.innerHTML = '';
 
+            // Add "Start New Chat" button
+            const newChatBtn = document.createElement('div');
+            newChatBtn.className = 'chat-menu-item chat-menu-new';
+            newChatBtn.textContent = '➕ Start New Chat';
+            newChatBtn.onclick = (e) => {
+                e.stopPropagation();
+                closeChatMenu();
+                startNewChat();
+            };
+            dropdown.appendChild(newChatBtn);
+
+            // Add divider
+            const divider = document.createElement('div');
+            divider.style.cssText = 'height: 1px; background: var(--glass-border); margin: 0.5rem 0;';
+            dropdown.appendChild(divider);
+
+            // Add chat items
             chatList.forEach(chat => {
                 const date = new Date(chat.date).toLocaleString('en-US', {
                     month: 'short',
@@ -1108,11 +1121,26 @@
 
                 const item = document.createElement('div');
                 item.className = `chat-menu-item ${chat.id === currentChatId ? 'active' : ''}`;
-                item.innerHTML = `
-                    <div class="chat-menu-item-title">${chat.name}</div>
-                    <div class="chat-menu-item-date">${date}${chat.pdfFileName ? ' • ' + chat.pdfFileName.substring(0, 20) : ''}</div>
-                `;
-                item.onclick = () => loadChat(chat.id);
+
+                // Create title and date div
+                const titleDiv = document.createElement('div');
+                titleDiv.className = 'chat-menu-item-title';
+                titleDiv.textContent = chat.name;
+
+                const dateDiv = document.createElement('div');
+                dateDiv.className = 'chat-menu-item-date';
+                dateDiv.textContent = date + (chat.pdfFileName ? ' • ' + chat.pdfFileName.substring(0, 20) : '');
+
+                item.appendChild(titleDiv);
+                item.appendChild(dateDiv);
+
+                // Click handler for the entire item
+                item.onclick = (e) => {
+                    // Only load chat if not clicking on delete button
+                    if (!e.target.classList.contains('chat-menu-delete')) {
+                        loadChat(chat.id);
+                    }
+                };
 
                 // Add delete button
                 const deleteBtn = document.createElement('button');
