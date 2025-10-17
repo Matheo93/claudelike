@@ -61,6 +61,7 @@
 
         /* Header */
         .header {
+            position: relative;
             background: var(--glass-bg);
             backdrop-filter: blur(20px) saturate(180%);
             border-bottom: 1px solid var(--glass-border);
@@ -83,6 +84,122 @@
         @keyframes gradientFlow {
             0%, 100% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
+        }
+
+        /* Chat History Menu */
+        .chat-menu {
+            position: absolute;
+            left: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .chat-menu-btn {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            color: white;
+            padding: 0.625rem 1rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .chat-menu-btn:hover {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: var(--primary);
+        }
+
+        .chat-menu-dropdown {
+            position: absolute;
+            top: calc(100% + 0.5rem);
+            left: 0;
+            min-width: 300px;
+            max-width: 400px;
+            background: var(--dark-lighter);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1rem;
+            display: none;
+            flex-direction: column;
+            gap: 0.5rem;
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .chat-menu-dropdown.show {
+            display: flex;
+        }
+
+        .chat-menu-item {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .chat-menu-item:hover {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: var(--primary);
+            transform: translateX(4px);
+        }
+
+        .chat-menu-item.active {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.15);
+        }
+
+        .chat-menu-item-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: white;
+        }
+
+        .chat-menu-item-date {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .chat-menu-new {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            font-weight: 600;
+        }
+
+        .chat-menu-new:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .chat-menu-delete {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+            padding: 0.5rem;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .chat-menu-delete:hover {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.5);
         }
 
         /* Main Container */
@@ -512,6 +629,16 @@
 </head>
 <body>
     <div class="header">
+        <!-- Chat History Menu -->
+        <div class="chat-menu">
+            <button class="chat-menu-btn" onclick="toggleChatMenu()">
+                💬 <span id="current-chat-name">Current Chat</span> ▾
+            </button>
+            <div class="chat-menu-dropdown" id="chat-menu-dropdown">
+                <!-- Chats will be loaded here -->
+            </div>
+        </div>
+
         <h1>DocGenius</h1>
     </div>
 
@@ -635,6 +762,10 @@
     </div>
 
     <script>
+        // 💾 CHAT HISTORY SYSTEM
+        let currentChatId = null;
+        let chats = {};
+
         let pdfContent = null;
         let reportHtml = null;
         let reportFileName = null;
@@ -643,6 +774,214 @@
         let enhancedFileName = null;
         let presentationHtml = null;
         let presentationFileName = null;
+
+        // Initialize chat history from localStorage
+        function initChatHistory() {
+            const savedChats = localStorage.getItem('docgenius_chats');
+            if (savedChats) {
+                chats = JSON.parse(savedChats);
+            }
+
+            // Load last active chat or create new one
+            const lastChatId = localStorage.getItem('docgenius_last_chat');
+            if (lastChatId && chats[lastChatId]) {
+                loadChat(lastChatId);
+            } else {
+                startNewChat();
+            }
+
+            updateChatMenu();
+        }
+
+        // Start a new chat
+        function startNewChat() {
+            currentChatId = Date.now().toString();
+            chats[currentChatId] = {
+                id: currentChatId,
+                name: `Chat ${Object.keys(chats).length + 1}`,
+                date: new Date().toISOString(),
+                messages: [],
+                pdfContent: null,
+                pdfFileName: null,
+                reportHtml: null,
+                reportFileName: null
+            };
+
+            // Clear current state
+            pdfContent = null;
+            reportHtml = null;
+            reportFileName = null;
+            document.getElementById('chat-messages').innerHTML = `
+                <div class="message assistant">
+                    Hello! I'm DocGenius, your AI assistant. Upload a PDF to generate a professional report.
+                </div>
+            `;
+
+            // Reset UI
+            document.getElementById('config-section').style.display = 'none';
+            document.getElementById('generate-section').style.display = 'none';
+            document.getElementById('actions-section').style.display = 'none';
+            document.querySelector('.upload-area').classList.remove('has-file');
+            document.getElementById('pdf-info').style.display = 'none';
+
+            saveChats();
+            updateChatMenu();
+            updateCurrentChatName();
+        }
+
+        // Load a specific chat
+        function loadChat(chatId) {
+            if (!chats[chatId]) return;
+
+            currentChatId = chatId;
+            const chat = chats[chatId];
+
+            // Restore state
+            pdfContent = chat.pdfContent;
+            reportHtml = chat.reportHtml;
+            reportFileName = chat.reportFileName;
+
+            // Restore messages
+            document.getElementById('chat-messages').innerHTML = '';
+            chat.messages.forEach(msg => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${msg.sender}`;
+                messageDiv.textContent = msg.text;
+                document.getElementById('chat-messages').appendChild(messageDiv);
+            });
+
+            // Restore UI state
+            if (chat.pdfFileName) {
+                document.querySelector('.upload-area').classList.add('has-file');
+                document.getElementById('pdf-info').innerHTML = `<strong>✓ ${chat.pdfFileName}</strong>`;
+                document.getElementById('pdf-info').style.display = 'block';
+                document.getElementById('config-section').style.display = 'flex';
+                document.getElementById('generate-section').style.display = 'flex';
+            }
+
+            if (chat.reportHtml) {
+                document.getElementById('actions-section').style.display = 'flex';
+                document.getElementById('actions-divider').style.display = 'block';
+            }
+
+            localStorage.setItem('docgenius_last_chat', chatId);
+            updateCurrentChatName();
+            closeChatMenu();
+        }
+
+        // Delete a chat
+        function deleteChat(chatId, event) {
+            event.stopPropagation();
+
+            if (!confirm('Delete this chat?')) return;
+
+            delete chats[chatId];
+
+            // If deleting current chat, start new one
+            if (currentChatId === chatId) {
+                startNewChat();
+            }
+
+            saveChats();
+            updateChatMenu();
+        }
+
+        // Save chats to localStorage
+        function saveChats() {
+            // Update current chat with latest data
+            if (currentChatId && chats[currentChatId]) {
+                chats[currentChatId].pdfContent = pdfContent;
+                chats[currentChatId].reportHtml = reportHtml;
+                chats[currentChatId].reportFileName = reportFileName;
+                chats[currentChatId].pdfFileName = document.getElementById('pdf-file').files[0]?.name || chats[currentChatId].pdfFileName;
+
+                // Save messages
+                const messages = [];
+                document.querySelectorAll('#chat-messages .message').forEach(msg => {
+                    messages.push({
+                        text: msg.textContent,
+                        sender: msg.classList.contains('user') ? 'user' : 'assistant'
+                    });
+                });
+                chats[currentChatId].messages = messages;
+            }
+
+            localStorage.setItem('docgenius_chats', JSON.stringify(chats));
+        }
+
+        // Update chat menu UI
+        function updateChatMenu() {
+            const dropdown = document.getElementById('chat-menu-dropdown');
+            const chatList = Object.values(chats).sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            dropdown.innerHTML = `
+                <div class="chat-menu-item chat-menu-new" onclick="startNewChat()">
+                    ➕ Start New Chat
+                </div>
+                <div style="height: 1px; background: var(--glass-border); margin: 0.5rem 0;"></div>
+            `;
+
+            chatList.forEach(chat => {
+                const date = new Date(chat.date).toLocaleString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                const item = document.createElement('div');
+                item.className = `chat-menu-item ${chat.id === currentChatId ? 'active' : ''}`;
+                item.innerHTML = `
+                    <div class="chat-menu-item-title">${chat.name}</div>
+                    <div class="chat-menu-item-date">${date}${chat.pdfFileName ? ' • ' + chat.pdfFileName.substring(0, 20) : ''}</div>
+                `;
+                item.onclick = () => loadChat(chat.id);
+
+                // Add delete button
+                const deleteBtn = document.createElement('button');
+                deleteBtn.textContent = '🗑️ Delete';
+                deleteBtn.className = 'chat-menu-delete';
+                deleteBtn.onclick = (e) => deleteChat(chat.id, e);
+                item.appendChild(deleteBtn);
+
+                dropdown.appendChild(item);
+            });
+        }
+
+        // Update current chat name display
+        function updateCurrentChatName() {
+            if (currentChatId && chats[currentChatId]) {
+                document.getElementById('current-chat-name').textContent = chats[currentChatId].name;
+            }
+        }
+
+        // Toggle chat menu
+        function toggleChatMenu() {
+            document.getElementById('chat-menu-dropdown').classList.toggle('show');
+        }
+
+        // Close chat menu
+        function closeChatMenu() {
+            document.getElementById('chat-menu-dropdown').classList.remove('show');
+        }
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('chat-menu-dropdown');
+            const btn = document.querySelector('.chat-menu-btn');
+            if (menu && !menu.contains(event.target) && !btn.contains(event.target)) {
+                closeChatMenu();
+            }
+        });
+
+        // Auto-save every 30 seconds
+        setInterval(saveChats, 30000);
+
+        // Save before page unload
+        window.addEventListener('beforeunload', saveChats);
+
+        // Initialize on load
+        window.addEventListener('load', initChatHistory);
 
         // 🔄 UNDO/REDO SYSTEM
         let historyStack = [];
@@ -936,6 +1275,11 @@
             messageDiv.textContent = text;
             messagesContainer.appendChild(messageDiv);
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            // Auto-save after new message
+            if (currentChatId) {
+                saveChats();
+            }
         }
 
         function showError(errorMessage) {
