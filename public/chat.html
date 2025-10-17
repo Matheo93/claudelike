@@ -715,31 +715,6 @@
                 </div>
             </div>
 
-            <div class="divider" id="tools-divider" style="display: none;"></div>
-
-            <!-- Tools Section -->
-            <div id="tools-section" class="section" style="display: none;">
-                <div class="section-title">🔧 Tools</div>
-
-                <button class="btn btn-secondary" onclick="checkCredits()">
-                    💳 Check API Credits
-                </button>
-
-                <!-- Undo/Redo Controls -->
-                <div id="history-controls" class="history-controls" style="display: none;">
-                    <div class="action-row">
-                        <button id="undo-btn" onclick="undo()" class="btn btn-secondary" disabled>
-                            ⏪ Undo
-                        </button>
-                        <button id="redo-btn" onclick="redo()" class="btn btn-secondary" disabled>
-                            ⏩ Redo
-                        </button>
-                    </div>
-                    <div class="history-info">
-                        History: <span id="history-info">0/0</span>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <!-- Chat Container -->
@@ -1118,8 +1093,6 @@
                     // Show config and generate sections
                     document.getElementById('config-section').style.display = 'flex';
                     document.getElementById('generate-section').style.display = 'flex';
-                    document.getElementById('tools-section').style.display = 'flex';
-                    document.getElementById('tools-divider').style.display = 'block';
 
                     addMessage('✓ PDF uploaded successfully! Configure your report and click Generate.', 'assistant');
                 } else {
@@ -1339,7 +1312,6 @@
                 // Show action sections
                 document.getElementById('actions-section').style.display = 'flex';
                 document.getElementById('actions-divider').style.display = 'block';
-                document.getElementById('history-controls').style.display = 'block';
 
                 addMessage('✅ Your report is ready! You can preview or download it.', 'assistant');
                 addMessage('✨ Options available: Visual enhancement or conversion to presentation', 'assistant');
