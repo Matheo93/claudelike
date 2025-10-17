@@ -959,11 +959,19 @@
             dropdown.style.left = `${btnRect.left}px`;
 
             dropdown.classList.toggle('show');
+
+            // Prevent body scroll when dropdown is open
+            if (dropdown.classList.contains('show')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
         }
 
         // Close chat menu
         function closeChatMenu() {
             document.getElementById('chat-menu-dropdown').classList.remove('show');
+            document.body.style.overflow = '';
         }
 
         // Close menu when clicking outside
