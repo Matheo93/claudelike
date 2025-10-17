@@ -949,7 +949,15 @@
 
         // Toggle chat menu
         function toggleChatMenu() {
-            document.getElementById('chat-menu-dropdown').classList.toggle('show');
+            const dropdown = document.getElementById('chat-menu-dropdown');
+            const btn = document.querySelector('.chat-menu-btn');
+
+            // Calculate position dynamically
+            const btnRect = btn.getBoundingClientRect();
+            dropdown.style.top = `${btnRect.bottom + 8}px`;
+            dropdown.style.left = `${btnRect.left}px`;
+
+            dropdown.classList.toggle('show');
         }
 
         // Close chat menu
