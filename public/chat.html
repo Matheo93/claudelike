@@ -512,7 +512,7 @@
 </head>
 <body>
     <div class="header">
-        <h1>DocGenius - Powered by DeepSeek AI</h1>
+        <h1>DocGenius</h1>
     </div>
 
     <div class="container">
@@ -537,17 +537,15 @@
                 <div class="dropdown-group">
                     <label class="dropdown-label" for="report-type">Report Type</label>
                     <select id="report-type" class="dropdown">
-                        <option value="intervention">🔧 Rapport d'Intervention</option>
-                        <option value="academique">📚 Rapport Académique</option>
-                        <option value="executif">💼 Rapport Exécutif</option>
+                        <option value="academique">📚 Report Enhanced</option>
+                        <option value="professional" disabled>💼 Professional (Coming Soon)</option>
                     </select>
                 </div>
 
                 <div class="dropdown-group">
                     <label class="dropdown-label" for="ai-model">AI Model</label>
                     <select id="ai-model" class="dropdown">
-                        <option value="deepseek">🚀 DeepSeek V3 (Ultra Performance)</option>
-                        <option value="lovable">🎨 Lovable.dev (Style Moderne)</option>
+                        <option value="deepseek">🤖 DeepSeek AI</option>
                     </select>
                 </div>
             </div>
@@ -556,7 +554,7 @@
             <div id="generate-section" class="section" style="display: none;">
                 <div class="section-title">🎯 Step 3: Generate</div>
                 <button class="btn btn-primary" id="generate-report-btn" onclick="generateReport()">
-                    🏆 Generate Ultimate Report
+                    📊 Generate Report
                 </button>
             </div>
 
@@ -621,7 +619,7 @@
         <div class="chat-container">
             <div class="chat-messages" id="chat-messages">
                 <div class="message assistant">
-                    Bonjour ! Je suis DocGenius, votre assistant DeepSeek. Vous pouvez me poser des questions ou télécharger un PDF pour que je l'analyse.
+                    Hello! I'm DocGenius, your AI assistant. Upload a PDF to generate a professional report.
                 </div>
             </div>
 
@@ -968,9 +966,9 @@
             }
 
             try {
-                generateBtn.textContent = '🏆 Competition in progress...';
-                addMessage('🏆 WORLD COMPETITION - Generating the BEST report!', 'assistant');
-                addMessage('🚀 DeepSeek Reasoning with 64K tokens in action...', 'assistant');
+                generateBtn.textContent = '⏳ Generating...';
+                addMessage('☕ Go grab a coffee, this will take a few minutes...', 'assistant');
+                addMessage('📧 You can also come back later, we\'ll send you the report by email when it\'s ready!', 'assistant');
 
                 const reportResponse = await fetch('/generate-report', {
                     method: 'POST',
@@ -999,18 +997,16 @@
                 document.getElementById('actions-divider').style.display = 'block';
                 document.getElementById('history-controls').style.display = 'block';
 
-                addMessage('🏆 ULTIMATE REPORT GENERATED! DeepSeek used all its power!', 'assistant');
-                addMessage(`📊 Report generated (${(reportData.reportHtml.length / 1000).toFixed(1)}kb)`, 'assistant');
-                addMessage('💎 Modern design, spectacular charts, impactful data included', 'assistant');
-                addMessage('✨ Optional: Visual enhancement with OpenAI for advanced SVG', 'assistant');
+                addMessage('✅ Your report is ready! You can preview or download it.', 'assistant');
+                addMessage('✨ Options available: Visual enhancement or conversion to presentation', 'assistant');
                 addMessage('🎯 Optional: Convert to presentation slides', 'assistant');
 
-                generateBtn.textContent = '🏆 ULTIMATE REPORT CREATED';
+                generateBtn.textContent = '✅ Report Generated';
 
             } catch (error) {
                 console.error('Error:', error);
                 showError('❌ ' + error.message);
-                generateBtn.textContent = '🏆 Generate Ultimate Report';
+                generateBtn.textContent = '📊 Generate Report';
             } finally {
                 generateBtn.disabled = false;
                 loading.style.display = 'none';
@@ -1272,7 +1268,7 @@
             } finally {
                 loading.style.display = 'none';
                 generateBtn.disabled = false;
-                generateBtn.textContent = '🏆 Generate Ultimate Report';
+                generateBtn.textContent = '📊 Generate Report';
             }
         }
     </script>
