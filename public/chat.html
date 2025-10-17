@@ -1042,10 +1042,13 @@
         // Delete a chat
         function deleteChat(chatId, event) {
             event.stopPropagation();
+            event.preventDefault();
 
             if (!confirm('Delete this chat?')) return;
 
+            // Delete from storage
             delete chats[chatId];
+            saveChats();
 
             // If deleting current chat, start new one
             if (currentChatId === chatId) {
@@ -1058,7 +1061,6 @@
                 }, 100);
             } else {
                 // Just update menu for non-current chats
-                saveChats();
                 updateChatMenu();
             }
         }
@@ -1146,7 +1148,11 @@
                 const deleteBtn = document.createElement('button');
                 deleteBtn.textContent = '🗑️ Delete';
                 deleteBtn.className = 'chat-menu-delete';
-                deleteBtn.onclick = (e) => deleteChat(chat.id, e);
+                deleteBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    deleteChat(chat.id, e);
+                };
                 item.appendChild(deleteBtn);
 
                 dropdown.appendChild(item);
