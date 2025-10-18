@@ -1067,6 +1067,11 @@
             // If deleting current chat, start new one
             if (currentChatId === chatId) {
                 console.log('🔄 Deleting CURRENT chat, closing menu and starting new chat');
+
+                // IMPORTANT: Reset currentChatId to null BEFORE starting new chat
+                // This prevents saveChats() from trying to save the deleted chat
+                currentChatId = null;
+
                 // Close menu first
                 closeChatMenu();
 
