@@ -964,7 +964,7 @@
         }
 
         // Start a new chat
-        function startNewChat() {
+        function startNewChat(skipSave = false) {
             currentChatId = Date.now().toString();
             chats[currentChatId] = {
                 id: currentChatId,
@@ -994,7 +994,9 @@
             document.querySelector('.upload-area').classList.remove('has-file');
             document.getElementById('pdf-info').style.display = 'none';
 
-            saveChats();
+            if (!skipSave) {
+                saveChats();
+            }
             updateChatMenu();
             updateCurrentChatName();
         }
@@ -1058,27 +1060,41 @@
 
             console.log('✅ Delete confirmed, proceeding...');
 
-            // If deleting current chat, start new one
+            // If deleting current chat, load another chat FIRST, then delete
             if (currentChatId === chatId) {
-                console.log('🔄 Deleting CURRENT chat, closing menu and starting new chat');
+                console.log('🔄 Deleting CURRENT chat');
 
-                // CRITICAL: Delete from chats object FIRST
-                delete chats[chatId];
+                // Get all chats BEFORE deleting
+                const allChats = Object.values(chats).sort((a, b) => new Date(b.date) - new Date(a.date));
 
-                // CRITICAL: Reset currentChatId to null to prevent saveChats() from accessing deleted chat
-                currentChatId = null;
-
-                // Save without current chat
-                localStorage.setItem('docgenius_chats', JSON.stringify(chats));
-
-                console.log('💾 Chat deleted from storage');
+                // Find other chats (excluding current)
+                const otherChats = allChats.filter(chat => chat.id !== chatId);
 
                 // Close menu first
                 closeChatMenu();
 
-                // Start new chat WITHOUT setTimeout - immediate
-                console.log('✨ Starting new chat...');
-                startNewChat();
+                if (otherChats.length > 0) {
+                    // Load the most recent OTHER chat FIRST
+                    console.log('📂 Loading most recent other chat:', otherChats[0].id);
+                    loadChat(otherChats[0].id);
+
+                    // NOW delete the old chat
+                    console.log('🗑️ Now deleting chat:', chatId);
+                    delete chats[chatId];
+                    localStorage.setItem('docgenius_chats', JSON.stringify(chats));
+                    console.log('💾 Chat deleted from storage');
+
+                    // Update menu to reflect deletion
+                    updateChatMenu();
+                } else {
+                    // No other chats, delete current and create new one
+                    console.log('✨ No other chats, deleting and creating new one...');
+                    delete chats[chatId];
+                    localStorage.setItem('docgenius_chats', JSON.stringify(chats));
+                    console.log('💾 Chat deleted from storage');
+
+                    startNewChat();
+                }
             } else {
                 console.log('📋 Deleting non-current chat, updating menu only');
                 // Delete from storage
