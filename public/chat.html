@@ -1058,30 +1058,32 @@
 
             console.log('✅ Delete confirmed, proceeding...');
 
-            // Delete from storage
-            delete chats[chatId];
-            saveChats();
-
-            console.log('💾 Chat deleted from storage');
-
             // If deleting current chat, start new one
             if (currentChatId === chatId) {
                 console.log('🔄 Deleting CURRENT chat, closing menu and starting new chat');
 
-                // IMPORTANT: Reset currentChatId to null BEFORE starting new chat
-                // This prevents saveChats() from trying to save the deleted chat
+                // CRITICAL: Delete from chats object FIRST
+                delete chats[chatId];
+
+                // CRITICAL: Reset currentChatId to null to prevent saveChats() from accessing deleted chat
                 currentChatId = null;
+
+                // Save without current chat
+                localStorage.setItem('docgenius_chats', JSON.stringify(chats));
+
+                console.log('💾 Chat deleted from storage');
 
                 // Close menu first
                 closeChatMenu();
 
-                // Start new chat after a small delay to ensure smooth transition
-                setTimeout(() => {
-                    console.log('✨ Starting new chat...');
-                    startNewChat();
-                }, 100);
+                // Start new chat WITHOUT setTimeout - immediate
+                console.log('✨ Starting new chat...');
+                startNewChat();
             } else {
                 console.log('📋 Deleting non-current chat, updating menu only');
+                // Delete from storage
+                delete chats[chatId];
+                saveChats();
                 // Just update menu for non-current chats
                 updateChatMenu();
             }
