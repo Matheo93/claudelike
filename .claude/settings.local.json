@@ -46,7 +46,12 @@
       "Bash(git ls-tree:*)",
       "Bash(cat:*)",
       "Bash(git rm:*)",
-      "Read(///**)"
+      "Read(///**)",
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "Bash(for dir in 6 7 8 9)",
+      "Bash(do echo \"=== Copie ($dir) ===\")",
+      "Bash(xargs -I {} bash -c 'echo \"\"\"\"=== {} ===\"\"\"\" && grep -c \"\"\"\"professional\\|intervention\\|executif\"\"\"\" {} 2>/dev/null')"
     ],
     "deny": [],
     "ask": []

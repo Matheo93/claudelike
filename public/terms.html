@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - DocGenius</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --secondary: #ec4899;
+            --accent: #14b8a6;
+            --dark: #0f172a;
+            --dark-light: #1e293b;
+            --dark-lighter: #334155;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--dark);
+            color: white;
+            min-height: 100vh;
+        }
+
+        /* Animated Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(-45deg, #0f172a, #1e293b, #312e81, #1e293b);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            z-index: -1;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.5rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .content-section {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 1.5rem;
+            padding: 3rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .content-section h2 {
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .content-section h3 {
+            font-size: 1.3rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .content-section p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .content-section ul {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-section li {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.8;
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-box {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .highlight-box p {
+            color: rgba(255, 255, 255, 0.9);
+            margin: 0;
+        }
+
+        .warning-box {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .warning-box p {
+            color: rgba(255, 255, 255, 0.9);
+            margin: 0;
+        }
+
+        .last-updated {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">DocGenius</div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/app">App</a>
+            <a href="/pricing">Pricing</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="hero">
+            <h1>Terms of Service</h1>
+            <p>Please read these terms carefully before using DocGenius</p>
+        </div>
+
+        <div class="content-section">
+            <h2>Agreement to Terms</h2>
+            <p>
+                By accessing or using DocGenius, you agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree with any of these terms, you are prohibited from using or accessing this service.
+            </p>
+
+            <div class="highlight-box">
+                <p><strong>Important:</strong> These terms constitute a legally binding agreement between you and DocGenius. By using our service, you accept these terms in full.</p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Use License</h2>
+            <p>Permission is granted to temporarily use DocGenius for personal and commercial purposes, subject to the following restrictions:</p>
+            <ul>
+                <li>You must not modify or copy the service or its materials</li>
+                <li>You must not use the service for any illegal or unauthorized purpose</li>
+                <li>You must not attempt to reverse engineer or decompile the service</li>
+                <li>You must not remove any copyright or proprietary notations</li>
+                <li>You must not transfer the service to another person or entity</li>
+                <li>You must not use the service to spam, harass, or abuse others</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>Account Terms</h2>
+            <p>When you create an account with DocGenius, you agree to:</p>
+            <ul>
+                <li>Provide accurate, current, and complete information</li>
+                <li>Maintain the security of your password</li>
+                <li>Accept responsibility for all activities under your account</li>
+                <li>Notify us immediately of any unauthorized use</li>
+                <li>Be at least 13 years of age (or the age of majority in your jurisdiction)</li>
+            </ul>
+
+            <div class="warning-box">
+                <p><strong>Warning:</strong> You are responsible for all content uploaded and actions performed under your account. Do not share your login credentials with others.</p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Service Description</h2>
+            <p>DocGenius provides AI-powered document analysis and report generation services. We reserve the right to:</p>
+            <ul>
+                <li>Modify or discontinue the service at any time</li>
+                <li>Change pricing and subscription plans with 30 days notice</li>
+                <li>Limit or suspend access to certain features</li>
+                <li>Update our AI models and processing algorithms</li>
+                <li>Set usage limits and quotas</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>Acceptable Use Policy</h2>
+
+            <h3>Permitted Uses</h3>
+            <p>You may use DocGenius to:</p>
+            <ul>
+                <li>Generate reports from your own PDF documents</li>
+                <li>Create presentations for business, academic, or personal purposes</li>
+                <li>Analyze and visualize document data</li>
+                <li>Export and share generated content</li>
+            </ul>
+
+            <h3>Prohibited Uses</h3>
+            <p>You must NOT:</p>
+            <ul>
+                <li>Upload documents you don't have rights to</li>
+                <li>Process confidential or classified information without authorization</li>
+                <li>Upload malicious files, viruses, or harmful code</li>
+                <li>Use the service to violate any laws or regulations</li>
+                <li>Attempt to overload or disrupt our infrastructure</li>
+                <li>Scrape, crawl, or automate access to the service</li>
+                <li>Create fake accounts or impersonate others</li>
+                <li>Use the service for cryptocurrency mining or similar activities</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>Intellectual Property</h2>
+
+            <h3>Your Content</h3>
+            <p>You retain all rights to the documents you upload. By using DocGenius, you grant us a limited license to:</p>
+            <ul>
+                <li>Process your documents to provide the service</li>
+                <li>Temporarily store generated reports</li>
+                <li>Use anonymized data to improve our AI models</li>
+            </ul>
+
+            <h3>Our Content</h3>
+            <p>DocGenius, our logo, and all service-related content are protected by copyright, trademark, and other intellectual property laws. You may not:</p>
+            <ul>
+                <li>Copy or reproduce our branding or interface</li>
+                <li>Create derivative works of our service</li>
+                <li>Use our name or logo without written permission</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>Payment Terms</h2>
+            <p>For paid subscriptions:</p>
+            <ul>
+                <li>Payments are processed securely through our payment provider</li>
+                <li>Subscriptions auto-renew unless cancelled</li>
+                <li>We offer a 30-day money-back guarantee</li>
+                <li>Prices are subject to change with 30 days notice</li>
+                <li>Failed payments may result in service suspension</li>
+                <li>No refunds for partial months or unused features</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>Service Availability</h2>
+            <p>While we strive for 99.9% uptime, we cannot guarantee uninterrupted service. DocGenius is provided "as is" without warranties of any kind. We are not liable for:</p>
+            <ul>
+                <li>Service downtime or interruptions</li>
+                <li>Data loss (though we take precautions to prevent it)</li>
+                <li>Errors in AI-generated content</li>
+                <li>Compatibility issues with your devices</li>
+                <li>Third-party service failures (OpenAI, Anthropic, etc.)</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>Limitation of Liability</h2>
+            <p>To the maximum extent permitted by law:</p>
+            <ul>
+                <li>DocGenius shall not be liable for any indirect, incidental, special, or consequential damages</li>
+                <li>Our total liability is limited to the amount you paid in the last 12 months</li>
+                <li>We are not responsible for content accuracy or AI errors</li>
+                <li>You use the service at your own risk</li>
+            </ul>
+
+            <div class="warning-box">
+                <p><strong>Important:</strong> Always review AI-generated content before using it. We cannot guarantee 100% accuracy.</p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Indemnification</h2>
+            <p>
+                You agree to indemnify and hold harmless DocGenius from any claims, damages, or expenses arising from your use of the service, your violation of these terms, or your violation of any rights of third parties.
+            </p>
+        </div>
+
+        <div class="content-section">
+            <h2>Termination</h2>
+            <p>We may terminate or suspend your account immediately, without prior notice, for:</p>
+            <ul>
+                <li>Violation of these Terms of Service</li>
+                <li>Fraudulent or illegal activity</li>
+                <li>Abuse of the service</li>
+                <li>Non-payment of fees</li>
+                <li>Any other reason at our sole discretion</li>
+            </ul>
+            <p>You may cancel your account at any time from your dashboard settings.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>Dispute Resolution</h2>
+            <p>In the event of a dispute:</p>
+            <ul>
+                <li>Contact our support team first to resolve informally</li>
+                <li>If unresolved, disputes will be handled through binding arbitration</li>
+                <li>These terms are governed by the laws of [Your Jurisdiction]</li>
+                <li>You waive any right to class action lawsuits</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>Changes to Terms</h2>
+            <p>
+                We reserve the right to modify these terms at any time. We will notify you of significant changes via email or through the service. Your continued use after changes are posted constitutes acceptance of the new terms.
+            </p>
+        </div>
+
+        <div class="content-section">
+            <h2>Severability</h2>
+            <p>
+                If any provision of these terms is found to be unenforceable or invalid, that provision will be limited or eliminated to the minimum extent necessary, and the remaining provisions will remain in full force and effect.
+            </p>
+        </div>
+
+        <div class="content-section">
+            <h2>Contact Us</h2>
+            <p>If you have questions about these Terms of Service:</p>
+            <ul>
+                <li>Email: legal@docgenius.com</li>
+                <li>Support: <a href="/support" style="color: var(--primary);">Visit Support Center</a></li>
+            </ul>
+        </div>
+
+        <p class="last-updated">Last updated: January 2025</p>
+    </div>
+</body>
+</html>

@@ -456,6 +456,13 @@
             box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
         }
 
+        /* Fix dropdown options visibility */
+        .dropdown option {
+            background: var(--dark-lighter);
+            color: white;
+            padding: 0.5rem;
+        }
+
         /* Button Styling */
         .btn {
             padding: 0.875rem 1.5rem;
@@ -777,7 +784,7 @@
                     👤 Account Info
                 </div>
                 <div class="profile-menu-item" onclick="showBilling()">
-                    💳 Billing & Subscription
+                    💳 Billing & Support
                 </div>
                 <div class="profile-menu-item" onclick="showSettings()">
                     ⚙️ Settings
@@ -813,7 +820,7 @@
                     <label class="dropdown-label" for="report-type">Report Type</label>
                     <select id="report-type" class="dropdown">
                         <option value="academique">📚 Report Enhanced</option>
-                        <option value="professional" disabled>💼 Professional (Coming Soon)</option>
+                        <option value="professional">💼 Professional</option>
                     </select>
                 </div>
 
@@ -859,6 +866,10 @@
 
                     <button class="btn btn-accent" id="download-presentation-btn" onclick="downloadPresentation()" style="display: none;">
                         🎞️ Download Presentation
+                    </button>
+
+                    <button class="btn btn-secondary" id="view-docs-btn" onclick="showCommandsDocumentation()">
+                        📚 View Documentation
                     </button>
                 </div>
 
@@ -945,6 +956,11 @@
         // Call auth check immediately
         checkAuth();
 
+        // Save chats to localStorage (simple version for async updates)
+        function saveChatsToStorage() {
+            localStorage.setItem('docgenius_chats', JSON.stringify(chats));
+        }
+
         // Initialize chat history from localStorage
         function initChatHistory() {
             const savedChats = localStorage.getItem('docgenius_chats');
@@ -1022,7 +1038,15 @@
                 document.getElementById('chat-messages').appendChild(messageDiv);
             });
 
-            // Restore UI state
+            // Reset ALL UI sections first
+            document.querySelector('.upload-area').classList.remove('has-file');
+            document.getElementById('pdf-info').style.display = 'none';
+            document.getElementById('config-section').style.display = 'none';
+            document.getElementById('generate-section').style.display = 'none';
+            document.getElementById('actions-section').style.display = 'none';
+            document.getElementById('actions-divider').style.display = 'none';
+
+            // Restore UI state based on chat data
             if (chat.pdfFileName) {
                 document.querySelector('.upload-area').classList.add('has-file');
                 document.getElementById('pdf-info').innerHTML = `<strong>✓ ${chat.pdfFileName}</strong>`;
@@ -1031,9 +1055,33 @@
                 document.getElementById('generate-section').style.display = 'flex';
             }
 
+            // ONLY show actions if report exists
             if (chat.reportHtml) {
                 document.getElementById('actions-section').style.display = 'flex';
                 document.getElementById('actions-divider').style.display = 'block';
+            }
+
+            // 🔄 Check for pending job and resume polling
+            if (chat.jobId && chat.jobType) {
+                console.log(`🔄 Resuming job ${chat.jobId} (${chat.jobType})`);
+                addMessage(`🔄 Resuming ${chat.jobType} report generation...`, 'assistant');
+
+                const generateBtn = document.getElementById('generate-report-btn');
+                generateBtn.textContent = '⏳ Resuming generation...';
+                generateBtn.disabled = true;
+
+                // Resume polling based on job type
+                if (chat.jobType === 'professional') {
+                    pollReportStatus(chat.jobId, generateBtn).catch(err => {
+                        console.error('Resume polling error:', err);
+                        generateBtn.disabled = false;
+                    });
+                } else if (chat.jobType === 'enhanced') {
+                    pollEnhancedReportStatus(chat.jobId, generateBtn).catch(err => {
+                        console.error('Resume polling error:', err);
+                        generateBtn.disabled = false;
+                    });
+                }
             }
 
             localStorage.setItem('docgenius_last_chat', chatId);
@@ -1360,7 +1408,7 @@
             billingContent.style.cssText = 'background:var(--dark-lighter);border:1px solid var(--glass-border);border-radius:20px;padding:2.5rem;max-width:500px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.5);animation:slideUp 0.3s ease;';
 
             billingContent.innerHTML = `
-                <h2 style="margin:0 0 1.5rem 0;font-size:1.75rem;background:linear-gradient(135deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Billing & Subscription</h2>
+                <h2 style="margin:0 0 1.5rem 0;font-size:1.75rem;background:linear-gradient(135deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Billing & Support</h2>
                 <div style="display:flex;flex-direction:column;gap:1rem;">
                     <div style="background:linear-gradient(135deg,rgba(99,102,241,0.1),rgba(236,72,153,0.1));padding:1.5rem;border-radius:12px;border:1px solid var(--primary);">
                         <div style="font-size:0.8rem;color:rgba(255,255,255,0.5);margin-bottom:0.5rem;">Current Plan</div>
@@ -1372,6 +1420,10 @@
                         <div style="font-size:1rem;color:white;">${Object.keys(chats).length} / ∞</div>
                     </div>
                     <button onclick="alert('Upgrade feature coming soon!')" style="margin-top:0.5rem;width:100%;padding:0.875rem;background:linear-gradient(135deg,var(--primary),var(--secondary));color:white;border:none;border-radius:12px;cursor:pointer;font-weight:600;transition:all 0.2s;box-shadow:0 4px 15px rgba(99,102,241,0.4);">Upgrade to Pro</button>
+                    <div style="height:1px;background:var(--glass-border);margin:0.5rem 0;"></div>
+                    <a href="/support" target="_blank" style="width:100%;padding:0.875rem;background:var(--glass-bg);border:1px solid var(--glass-border);color:white;border-radius:12px;cursor:pointer;font-weight:600;transition:all 0.2s;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:0.5rem;">
+                        💬 Need Help? Visit Support Center
+                    </a>
                 </div>
                 <button onclick="this.closest('.modal-container').remove()" style="margin-top:1.5rem;width:100%;padding:0.875rem;background:var(--glass-bg);border:1px solid var(--glass-border);color:white;border-radius:12px;cursor:pointer;font-weight:600;transition:all 0.2s;">Close</button>
             `;
@@ -1854,8 +1906,13 @@
             generateBtn.disabled = true;
             loading.style.display = 'block';
 
+            // Route to different generators based on report type
             if (aiModel === 'lovable') {
                 return await generateLovableReport();
+            }
+
+            if (reportType === 'professional') {
+                return await generateProfessionalReport();
             }
 
             try {
@@ -1863,12 +1920,17 @@
                 addMessage('☕ Go grab a coffee, this will take a few minutes...', 'assistant');
                 addMessage('📧 You can also come back later, we\'ll send you the report by email when it\'s ready!', 'assistant');
 
+                // Get fileName from current chat or from file input
+                const fileInput = document.getElementById('pdf-file');
+                const fileName = (fileInput.files[0]?.name || chats[currentChatId]?.pdfFileName || 'report').replace('.pdf', '');
+
+                // 🚀 Start async report generation
                 const reportResponse = await fetch('/generate-report', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         pdfContent: pdfContent,
-                        fileName: document.getElementById('pdf-file').files[0].name.replace('.pdf', ''),
+                        fileName: fileName,
                         reportType: reportType
                     })
                 });
@@ -1879,22 +1941,17 @@
                     throw new Error(reportData.error || 'Report generation error');
                 }
 
-                reportHtml = reportData.reportHtml;
-                reportFileName = reportData.fileName;
+                // Get jobId from response
+                const jobId = reportData.jobId;
+                console.log(`📡 Job started: ${jobId}`);
 
-                // Save to history
-                saveToHistory(reportHtml, 'Initial report generated');
+                // Save jobId to chat for recovery
+                chats[currentChatId].jobId = jobId;
+                chats[currentChatId].jobType = 'enhanced';
+                saveChatsToStorage();
 
-                // Show action sections
-                document.getElementById('actions-section').style.display = 'flex';
-                document.getElementById('actions-divider').style.display = 'block';
-                document.getElementById('history-controls').style.display = 'block';
-
-                addMessage('✅ Your report is ready! You can preview or download it.', 'assistant');
-                addMessage('✨ Options available: Visual enhancement or conversion to presentation', 'assistant');
-                addMessage('🎯 Optional: Convert to presentation slides', 'assistant');
-
-                generateBtn.textContent = '✅ Report Generated';
+                // 🔄 Poll for completion
+                await pollEnhancedReportStatus(jobId, generateBtn);
 
             } catch (error) {
                 console.error('Error:', error);
@@ -1904,6 +1961,191 @@
                 generateBtn.disabled = false;
                 loading.style.display = 'none';
             }
+        }
+
+        // 🔄 Poll for Enhanced report generation status
+        async function pollEnhancedReportStatus(jobId, generateBtn) {
+            const pollInterval = 3000; // Check every 3 seconds
+            let attempts = 0;
+            const maxAttempts = 200; // 10 minutes max
+
+            while (attempts < maxAttempts) {
+                try {
+                    const response = await fetch(`/report-status/${jobId}`);
+                    const data = await response.json();
+
+                    console.log(`📡 Job ${jobId} status:`, data.status);
+
+                    if (data.status === 'completed') {
+                        // ✅ Report ready!
+                        reportHtml = data.reportHtml;
+                        reportFileName = data.fileName;
+
+                        // Clear jobId from chat
+                        delete chats[currentChatId].jobId;
+                        delete chats[currentChatId].jobType;
+                        saveChatsToStorage();
+
+                        // Save to history
+                        saveToHistory(reportHtml, 'Initial report generated');
+
+                        // Show action sections
+                        document.getElementById('actions-section').style.display = 'flex';
+                        document.getElementById('actions-divider').style.display = 'block';
+                        document.getElementById('history-controls').style.display = 'block';
+
+                        // 📚 Log documentation reminder
+                        console.log('📚 View documentation - Click the "View Documentation" button to see all available editing commands!');
+
+                        addMessage('✅ Your report is ready! You can preview or download it.', 'assistant');
+                        addMessage('✨ Options available: Visual enhancement or conversion to presentation', 'assistant');
+                        addMessage('🎯 Optional: Convert to presentation slides', 'assistant');
+
+                        generateBtn.textContent = '✅ Report Generated';
+                        return; // Done!
+
+                    } else if (data.status === 'error') {
+                        // ❌ Generation failed
+                        delete chats[currentChatId].jobId;
+                        delete chats[currentChatId].jobType;
+                        saveChatsToStorage();
+
+                        throw new Error(data.error || 'Report generation failed');
+
+                    } else if (data.status === 'processing') {
+                        // ⏳ Still processing, update UI
+                        generateBtn.textContent = `⏳ Generating... (${Math.floor(attempts * 3 / 60)}m ${(attempts * 3) % 60}s)`;
+                    }
+
+                } catch (error) {
+                    console.error('Polling error:', error);
+                    // Don't break on network errors, keep trying
+                }
+
+                attempts++;
+                await new Promise(resolve => setTimeout(resolve, pollInterval));
+            }
+
+            // Timeout reached
+            throw new Error('Report generation timeout. Please check back later or contact support.');
+        }
+
+        // 💼 Professional Report Generator (DeepSeek with Academic Style)
+        async function generateProfessionalReport() {
+            const generateBtn = document.getElementById('generate-report-btn');
+            const loading = document.getElementById('loading');
+
+            try {
+                generateBtn.textContent = '🎨 Generating Professional report...';
+                addMessage('🎨 Generating professional report with DeepSeek...', 'assistant');
+                addMessage('☕ Go grab a coffee, this will take a few minutes...', 'assistant');
+                addMessage('📧 You can also come back later, we\'ll send you the report by email when it\'s ready!', 'assistant');
+                addMessage('📊 Academic style with navigation, charts, and metrics', 'assistant');
+
+                // Get fileName from current chat or from file input
+                const fileInput = document.getElementById('pdf-file');
+                const fileName = (fileInput.files[0]?.name || chats[currentChatId]?.pdfFileName || 'report').replace('.pdf', '');
+
+                // 🚀 Start async report generation
+                const response = await fetch('/generate-report', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        pdfContent: pdfContent,
+                        fileName: fileName,
+                        reportType: 'professional'
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Professional report generation error');
+                }
+
+                // Get jobId from response
+                const jobId = data.jobId;
+                console.log(`📡 Job started: ${jobId}`);
+
+                // Save jobId to chat for recovery
+                chats[currentChatId].jobId = jobId;
+                chats[currentChatId].jobType = 'professional';
+                saveChatsToStorage();
+
+                // 🔄 Poll for completion
+                await pollReportStatus(jobId, generateBtn);
+
+            } catch (error) {
+                console.error('Professional report error:', error);
+                showError('❌ ' + error.message);
+                generateBtn.textContent = '📊 Generate Report';
+            } finally {
+                loading.style.display = 'none';
+                generateBtn.disabled = false;
+            }
+        }
+
+        // 🔄 Poll for report generation status
+        async function pollReportStatus(jobId, generateBtn) {
+            const pollInterval = 3000; // Check every 3 seconds
+            let attempts = 0;
+            const maxAttempts = 200; // 10 minutes max (200 * 3s = 600s)
+
+            while (attempts < maxAttempts) {
+                try {
+                    const response = await fetch(`/report-status/${jobId}`);
+                    const data = await response.json();
+
+                    console.log(`📡 Job ${jobId} status:`, data.status);
+
+                    if (data.status === 'completed') {
+                        // ✅ Report ready!
+                        reportHtml = data.reportHtml;
+                        reportFileName = data.fileName;
+
+                        // Clear jobId from chat
+                        delete chats[currentChatId].jobId;
+                        delete chats[currentChatId].jobType;
+                        saveChatsToStorage();
+
+                        // Save to history
+                        saveToHistory(reportHtml, 'Professional report generated');
+
+                        // Show action sections
+                        document.getElementById('actions-section').style.display = 'flex';
+                        document.getElementById('actions-divider').style.display = 'block';
+                        document.getElementById('history-controls').style.display = 'block';
+
+                        addMessage('✅ Professional report generated successfully!', 'assistant');
+                        addMessage('📊 Features: Sticky navigation, reading progress bar, charts, tables, animations', 'assistant');
+
+                        generateBtn.textContent = '✅ Professional Report Ready';
+                        return; // Done!
+
+                    } else if (data.status === 'error') {
+                        // ❌ Generation failed
+                        delete chats[currentChatId].jobId;
+                        delete chats[currentChatId].jobType;
+                        saveChatsToStorage();
+
+                        throw new Error(data.error || 'Report generation failed');
+
+                    } else if (data.status === 'processing') {
+                        // ⏳ Still processing, update UI
+                        generateBtn.textContent = `⏳ Generating... (${Math.floor(attempts * 3 / 60)}m ${(attempts * 3) % 60}s)`;
+                    }
+
+                } catch (error) {
+                    console.error('Polling error:', error);
+                    // Don't break on network errors, keep trying
+                }
+
+                attempts++;
+                await new Promise(resolve => setTimeout(resolve, pollInterval));
+            }
+
+            // Timeout reached
+            throw new Error('Report generation timeout. Please check back later or contact support.');
         }
 
         function previewReport() {
@@ -2163,6 +2405,119 @@
                 generateBtn.disabled = false;
                 generateBtn.textContent = '📊 Generate Report';
             }
+        }
+
+        // 📚 Documentation popup
+        function showCommandsDocumentation() {
+            const docsModal = document.createElement('div');
+            docsModal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);backdrop-filter:blur(10px);z-index:30000;display:flex;align-items:center;justify-content:center;animation:fadeIn 0.3s ease;overflow-y:auto;padding:2rem;';
+
+            const docsContent = document.createElement('div');
+            docsContent.style.cssText = 'background:var(--dark-lighter);border:1px solid var(--glass-border);border-radius:20px;padding:2.5rem;max-width:800px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.5);animation:slideUp 0.3s ease;max-height:90vh;overflow-y:auto;';
+
+            docsContent.innerHTML = `
+                <h2 style="margin:0 0 1.5rem 0;font-size:1.75rem;background:linear-gradient(135deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">📚 Report Editing Commands</h2>
+
+                <div style="background:rgba(99,102,241,0.1);padding:1rem;border-radius:12px;border:1px solid rgba(99,102,241,0.3);margin-bottom:1.5rem;">
+                    <p style="margin:0;color:rgba(255,255,255,0.9);font-size:0.95rem;line-height:1.6;">
+                        You can modify your generated report using natural language commands. Type your request in the chat to make instant or AI-powered changes.
+                    </p>
+                </div>
+
+                <div style="display:flex;flex-direction:column;gap:2rem;">
+                    <!-- Instant Modifications -->
+                    <div>
+                        <h3 style="font-size:1.25rem;color:var(--accent);margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem;">
+                            ⚡ Instant Modifications
+                        </h3>
+                        <div style="display:flex;flex-direction:column;gap:0.75rem;">
+                            <div style="background:var(--glass-bg);padding:1rem;border-radius:12px;border:1px solid var(--glass-border);">
+                                <div style="font-weight:600;color:white;margin-bottom:0.25rem;">Change Colors</div>
+                                <code style="background:rgba(0,0,0,0.3);padding:0.25rem 0.5rem;border-radius:6px;font-size:0.85rem;color:#10b981;">change color to blue</code>
+                                <div style="font-size:0.85rem;color:rgba(255,255,255,0.6);margin-top:0.25rem;">Change the primary color of your report</div>
+                            </div>
+
+                            <div style="background:var(--glass-bg);padding:1rem;border-radius:12px;border:1px solid var(--glass-border);">
+                                <div style="font-weight:600;color:white;margin-bottom:0.25rem;">Delete Cards</div>
+                                <code style="background:rgba(0,0,0,0.3);padding:0.25rem 0.5rem;border-radius:6px;font-size:0.85rem;color:#10b981;">delete card [number]</code>
+                                <div style="font-size:0.85rem;color:rgba(255,255,255,0.6);margin-top:0.25rem;">Remove a specific card from your report</div>
+                            </div>
+
+                            <div style="background:var(--glass-bg);padding:1rem;border-radius:12px;border:1px solid var(--glass-border);">
+                                <div style="font-weight:600;color:white;margin-bottom:0.25rem;">Delete Objects</div>
+                                <code style="background:rgba(0,0,0,0.3);padding:0.25rem 0.5rem;border-radius:6px;font-size:0.85rem;color:#10b981;">delete [section name]</code>
+                                <div style="font-size:0.85rem;color:rgba(255,255,255,0.6);margin-top:0.25rem;">Remove a section by name</div>
+                            </div>
+
+                            <div style="background:var(--glass-bg);padding:1rem;border-radius:12px;border:1px solid var(--glass-border);">
+                                <div style="font-weight:600;color:white;margin-bottom:0.25rem;">Adjust Spacing</div>
+                                <code style="background:rgba(0,0,0,0.3);padding:0.25rem 0.5rem;border-radius:6px;font-size:0.85rem;color:#10b981;">reduce gap / increase espace</code>
+                                <div style="font-size:0.85rem;color:rgba(255,255,255,0.6);margin-top:0.25rem;">Change spacing between elements</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI-Powered Changes -->
+                    <div>
+                        <h3 style="font-size:1.25rem;color:var(--secondary);margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem;">
+                            🤖 AI-Powered Changes
+                        </h3>
+                        <div style="display:flex;flex-direction:column;gap:0.75rem;">
+                            <div style="background:var(--glass-bg);padding:1rem;border-radius:12px;border:1px solid var(--glass-border);">
+                                <div style="font-weight:600;color:white;margin-bottom:0.25rem;">Add Content</div>
+                                <code style="background:rgba(0,0,0,0.3);padding:0.25rem 0.5rem;border-radius:6px;font-size:0.85rem;color:#ec4899;">ajoute une section sur...</code>
+                                <div style="font-size:0.85rem;color:rgba(255,255,255,0.6);margin-top:0.25rem;">Add new sections with AI-generated content</div>
+                            </div>
+
+                            <div style="background:var(--glass-bg);padding:1rem;border-radius:12px;border:1px solid var(--glass-border);">
+                                <div style="font-weight:600;color:white;margin-bottom:0.25rem;">Expand Sections</div>
+                                <code style="background:rgba(0,0,0,0.3);padding:0.25rem 0.5rem;border-radius:6px;font-size:0.85rem;color:#ec4899;">expand the [section] / développe...</code>
+                                <div style="font-size:0.85rem;color:rgba(255,255,255,0.6);margin-top:0.25rem;">Make sections more detailed</div>
+                            </div>
+
+                            <div style="background:var(--glass-bg);padding:1rem;border-radius:12px;border:1px solid var(--glass-border);">
+                                <div style="font-weight:600;color:white;margin-bottom:0.25rem;">Summarize Content</div>
+                                <code style="background:rgba(0,0,0,0.3);padding:0.25rem 0.5rem;border-radius:6px;font-size:0.85rem;color:#ec4899;">résume la section / summarize...</code>
+                                <div style="font-size:0.85rem;color:rgba(255,255,255,0.6);margin-top:0.25rem;">Make sections more concise</div>
+                            </div>
+
+                            <div style="background:var(--glass-bg);padding:1rem;border-radius:12px;border:1px solid var(--glass-border);">
+                                <div style="font-weight:600;color:white;margin-bottom:0.25rem;">Regenerate Sections</div>
+                                <code style="background:rgba(0,0,0,0.3);padding:0.25rem 0.5rem;border-radius:6px;font-size:0.85rem;color:#ec4899;">recreate / regenerate section...</code>
+                                <div style="font-size:0.85rem;color:rgba(255,255,255,0.6);margin-top:0.25rem;">Generate new content for sections</div>
+                            </div>
+
+                            <div style="background:var(--glass-bg);padding:1rem;border-radius:12px;border:1px solid var(--glass-border);">
+                                <div style="font-weight:600;color:white;margin-bottom:0.25rem;">Modify Content</div>
+                                <code style="background:rgba(0,0,0,0.3);padding:0.25rem 0.5rem;border-radius:6px;font-size:0.85rem;color:#ec4899;">modifie / change / remplace...</code>
+                                <div style="font-size:0.85rem;color:rgba(255,255,255,0.6);margin-top:0.25rem;">Make custom modifications to any part</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tips -->
+                    <div style="background:rgba(245,158,11,0.1);padding:1rem;border-radius:12px;border:1px solid rgba(245,158,11,0.3);">
+                        <h4 style="color:#fbbf24;margin-bottom:0.5rem;font-size:1rem;">💡 Tips</h4>
+                        <ul style="margin:0;padding-left:1.5rem;color:rgba(255,255,255,0.8);font-size:0.9rem;line-height:1.8;">
+                            <li>Commands work in both French and English</li>
+                            <li>Use natural language - be specific about what you want</li>
+                            <li>Preview changes instantly with the Preview button</li>
+                            <li>Use Undo/Redo (Ctrl+Z / Ctrl+Y) to navigate changes</li>
+                            <li>Instant changes are faster, AI changes are more creative</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <button onclick="this.closest('.modal-container').remove()" style="margin-top:1.5rem;width:100%;padding:0.875rem;background:linear-gradient(135deg,var(--primary),var(--secondary));color:white;border:none;border-radius:12px;cursor:pointer;font-weight:600;transition:all 0.2s;box-shadow:0 4px 15px rgba(99,102,241,0.4);">Got it!</button>
+            `;
+
+            docsModal.className = 'modal-container';
+            docsModal.appendChild(docsContent);
+            document.body.appendChild(docsModal);
+
+            docsModal.onclick = (e) => {
+                if (e.target === docsModal) docsModal.remove();
+            };
         }
     </script>
 </body>

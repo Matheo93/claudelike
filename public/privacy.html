@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - DocGenius</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --secondary: #ec4899;
+            --accent: #14b8a6;
+            --dark: #0f172a;
+            --dark-light: #1e293b;
+            --dark-lighter: #334155;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--dark);
+            color: white;
+            min-height: 100vh;
+        }
+
+        /* Animated Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(-45deg, #0f172a, #1e293b, #312e81, #1e293b);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            z-index: -1;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.5rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .content-section {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 1.5rem;
+            padding: 3rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .content-section h2 {
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .content-section h3 {
+            font-size: 1.3rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .content-section p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .content-section ul {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-section li {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.8;
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-box {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .highlight-box p {
+            color: rgba(255, 255, 255, 0.9);
+            margin: 0;
+        }
+
+        .last-updated {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">DocGenius</div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/app">App</a>
+            <a href="/pricing">Pricing</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="hero">
+            <h1>Privacy Policy</h1>
+            <p>Your privacy is important to us</p>
+        </div>
+
+        <div class="content-section">
+            <h2>Introduction</h2>
+            <p>
+                At DocGenius, we take your privacy seriously. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our service. Please read this privacy policy carefully.
+            </p>
+
+            <div class="highlight-box">
+                <p><strong>TL;DR:</strong> We don't permanently store your PDFs. Your documents are processed in memory and automatically deleted. We only collect essential data to provide our service and never sell your information.</p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Information We Collect</h2>
+
+            <h3>Personal Information</h3>
+            <p>When you create an account, we collect:</p>
+            <ul>
+                <li>Email address</li>
+                <li>Name (optional)</li>
+                <li>Password (encrypted)</li>
+            </ul>
+
+            <h3>Usage Data</h3>
+            <p>We automatically collect certain information when you use DocGenius:</p>
+            <ul>
+                <li>Device information (browser type, operating system)</li>
+                <li>IP address</li>
+                <li>Usage statistics (number of reports generated, features used)</li>
+                <li>Performance data</li>
+            </ul>
+
+            <h3>Document Data</h3>
+            <p>When you upload a PDF:</p>
+            <ul>
+                <li>PDFs are processed in memory only</li>
+                <li>Documents are NOT permanently stored on our servers</li>
+                <li>Generated reports are temporarily cached for 24 hours (if you choose to save them)</li>
+                <li>You can delete any saved reports at any time from your dashboard</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>How We Use Your Information</h2>
+            <p>We use the collected information to:</p>
+            <ul>
+                <li>Provide and maintain our service</li>
+                <li>Process your PDF documents and generate reports</li>
+                <li>Authenticate your account and prevent fraud</li>
+                <li>Send you important service updates and notifications</li>
+                <li>Improve our AI models and service quality</li>
+                <li>Respond to your customer support requests</li>
+                <li>Analyze usage patterns to enhance user experience</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>Data Security</h2>
+            <p>We implement industry-standard security measures to protect your data:</p>
+            <ul>
+                <li><strong>Encryption:</strong> All data is encrypted in transit (TLS/SSL) and at rest</li>
+                <li><strong>Authentication:</strong> Secure authentication via Supabase</li>
+                <li><strong>Access Control:</strong> Strict access controls to your personal data</li>
+                <li><strong>No Permanent Storage:</strong> PDFs are processed in memory and not saved</li>
+                <li><strong>Regular Audits:</strong> We regularly review our security practices</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>Data Sharing and Disclosure</h2>
+            <p>We do NOT sell, trade, or rent your personal information to third parties. We may share your information only in the following circumstances:</p>
+            <ul>
+                <li><strong>Service Providers:</strong> Third-party AI providers (OpenAI, Anthropic) to process your documents - they are bound by strict confidentiality agreements</li>
+                <li><strong>Legal Requirements:</strong> If required by law or to protect our rights</li>
+                <li><strong>Business Transfers:</strong> In case of merger, acquisition, or sale of assets (you will be notified)</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>Your Rights</h2>
+            <p>You have the following rights regarding your data:</p>
+            <ul>
+                <li><strong>Access:</strong> Request a copy of your personal data</li>
+                <li><strong>Correction:</strong> Update or correct your information</li>
+                <li><strong>Deletion:</strong> Request deletion of your account and all associated data</li>
+                <li><strong>Export:</strong> Download all your generated reports</li>
+                <li><strong>Opt-out:</strong> Unsubscribe from marketing communications</li>
+            </ul>
+            <p>To exercise these rights, contact us at: <strong>privacy@docgenius.com</strong></p>
+        </div>
+
+        <div class="content-section">
+            <h2>Cookies and Tracking</h2>
+            <p>We use essential cookies to:</p>
+            <ul>
+                <li>Keep you signed in</li>
+                <li>Remember your preferences</li>
+                <li>Analyze website performance</li>
+            </ul>
+            <p>You can disable cookies in your browser settings, but this may affect functionality.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>Third-Party Services</h2>
+            <p>We use the following third-party services:</p>
+            <ul>
+                <li><strong>Supabase:</strong> Authentication and database hosting</li>
+                <li><strong>OpenAI & Anthropic:</strong> AI processing for document analysis</li>
+                <li><strong>Railway/Vercel:</strong> Hosting and infrastructure</li>
+            </ul>
+            <p>Each service has its own privacy policy, which we encourage you to review.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>Data Retention</h2>
+            <ul>
+                <li><strong>PDFs:</strong> Not stored permanently - processed in memory only</li>
+                <li><strong>Generated Reports:</strong> Stored for 24 hours unless you save them</li>
+                <li><strong>Account Data:</strong> Retained until you delete your account</li>
+                <li><strong>Usage Logs:</strong> Retained for 90 days for analytics</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>Children's Privacy</h2>
+            <p>
+                DocGenius is not intended for users under 13 years of age. We do not knowingly collect personal information from children. If you believe we have collected information from a child, please contact us immediately.
+            </p>
+        </div>
+
+        <div class="content-section">
+            <h2>Changes to This Policy</h2>
+            <p>
+                We may update this Privacy Policy from time to time. We will notify you of any significant changes by email or through a notice on our website. Your continued use of DocGenius after changes are posted constitutes acceptance of the updated policy.
+            </p>
+        </div>
+
+        <div class="content-section">
+            <h2>Contact Us</h2>
+            <p>If you have questions about this Privacy Policy, please contact us:</p>
+            <ul>
+                <li>Email: privacy@docgenius.com</li>
+                <li>Support: <a href="/support" style="color: var(--primary);">Visit Support Center</a></li>
+            </ul>
+        </div>
+
+        <p class="last-updated">Last updated: January 2025</p>
+    </div>
+</body>
+</html>

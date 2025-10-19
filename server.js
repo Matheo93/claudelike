@@ -32,6 +32,26 @@ const openai = new OpenAI({
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
+// 📦 Report Generation Cache - Store ongoing/completed reports
+const reportCache = new Map();
+// Structure: { jobId: { status: 'pending'|'processing'|'completed'|'error', reportHtml: string, fileName: string, error: string, timestamp: Date } }
+
+// Generate unique job ID
+function generateJobId() {
+  return Date.now().toString(36) + Math.random().toString(36).substr(2);
+}
+
+// Clean old cache entries (older than 1 hour)
+setInterval(() => {
+  const oneHourAgo = Date.now() - (60 * 60 * 1000);
+  for (const [jobId, job] of reportCache.entries()) {
+    if (job.timestamp < oneHourAgo) {
+      reportCache.delete(jobId);
+      console.log(`🧹 Cleaned old cache entry: ${jobId}`);
+    }
+  }
+}, 15 * 60 * 1000); // Run every 15 minutes
+
 // ✅ FIX #2: MathJax Detection - Detect if document needs math rendering
 function needsMathJax(content) {
   const mathPatterns = [
@@ -69,6 +89,18 @@ app.get('/auth', (req, res) => {
 
 app.get('/dashboard', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
+});
+
+app.get('/support', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'support.html'));
+});
+
+app.get('/privacy', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'privacy.html'));
+});
+
+app.get('/terms', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'terms.html'));
 });
 
 // 🔥 NEW 2025: DeepSeek Function Calling Tools
@@ -1466,6 +1498,252 @@ app.post('/api/upload-pdf', upload.single('pdf'), async (req, res) => {
   }
 });
 
+// 💼 Generate Professional Academic Report with DeepSeek
+async function generateProfessionalAcademicReport(req, res, pdfContent, fileName) {
+  try {
+    console.log('💼 Generating Professional Academic Report with DeepSeek...');
+
+    const academicPrompt = `You are an expert in creating high-quality professional academic reports. Analyze this PDF content and create a PROFESSIONAL and ACADEMIC HTML report in traditional university style with enhanced visuals.
+
+PDF CONTENT:
+${pdfContent.substring(0, 15000)}
+
+CRITICAL INSTRUCTIONS - PROFESSIONAL ACADEMIC REPORT:
+
+1. MANDATORY STRUCTURE (traditional academic report style):
+   - Reading progress bar at top (fixed, z-index 9999)
+   - Sticky navigation header containing:
+     * Report logo/title
+     * Navigation with short links (max 6-8 chars): Intro, Def, Anal, Results, Disc, Concl
+     * flex, nowrap, overflow-x:auto to avoid wraps
+   - Main container with traditional SECTIONS (NOT cards everywhere!)
+   - Footer with information
+
+2. ULTRA-OPTIMIZED NAVIGATION HEADER (CRITICAL):
+   <nav><ul style="display:flex; white-space:nowrap; overflow-x:auto; flex-wrap:nowrap; list-style:none; margin:0; padding:0; gap:12px; scrollbar-width:thin;">
+     <li><a href="#intro">Intro</a></li>
+     <li><a href="#def">Def</a></li>
+     <li><a href="#eval">Eval</a></li>
+   </ul></nav>
+
+3. PROFESSIONAL ACADEMIC CSS STYLES:
+   - CSS Variables: --primary: #007bff; --success: #28a745; --danger: #dc3545; --warning: #ffc107; --info: #17a2b8;
+   - Smooth scroll: html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+   - Sections with header box: border-left: 4px solid #007bff; padding-left: 20px;
+   - Background sections: background: #f8f9fa; padding: 40px; border-radius: 8px;
+
+4. 🎨 ACADEMIC SECTION STRUCTURE WITH HEADER BOX (MANDATORY):
+
+   ✅ CORRECT STRUCTURE (visual header box + content):
+   <section id="intro" style="margin:50px 0;">
+     <!-- HEADER BOX (colored visual box) -->
+     <div style="background:linear-gradient(135deg, #007bff 0%, #0056b3 100%); padding:25px 30px; border-radius:12px 12px 0 0; box-shadow:0 4px 15px rgba(0,123,255,0.2); margin-bottom:0;">
+       <h2 style="color:white; font-size:2rem; margin:0 0 8px 0; font-weight:600;">1. Introduction</h2>
+       <p style="color:rgba(255,255,255,0.9); font-size:1rem; margin:0;">Document overview</p>
+     </div>
+
+     <!-- SECTION CONTENT (light background, connected to header box) -->
+     <div style="background:#f8f9fa; padding:40px; border-radius:0 0 12px 12px; border:1px solid #dee2e6; border-top:none;">
+       <p style="line-height:1.8; color:#333;">Introductory text...</p>
+
+       <!-- For concept lists, use icon grid instead of simple list -->
+       <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:20px; margin:24px 0;">
+         <div style="text-align:center;">
+           <div style="background:rgba(0,123,255,0.1); width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 8px; font-size:28px;">📊</div>
+           <h4 style="margin:4px 0; font-size:0.95rem; color:#333;">Concept</h4>
+         </div>
+       </div>
+
+       <!-- Traditional HTML tables -->
+       <table style="width:100%; border-collapse:collapse; margin:20px 0;">
+         <thead>
+           <tr style="background:#e9ecef;">
+             <th style="padding:12px; border:1px solid #dee2e6; text-align:left;">Column 1</th>
+           </tr>
+         </thead>
+       </table>
+     </div>
+   </section>
+
+   🎨 COLOR VARIATIONS FOR HEADER BOXES (alternate):
+   - Section 1 (Intro): linear-gradient(135deg, #007bff 0%, #0056b3 100%) - Blue
+   - Section 2 (Def): linear-gradient(135deg, #28a745 0%, #1e7e34 100%) - Green
+   - Section 3 (Anal): linear-gradient(135deg, #17a2b8 0%, #117a8b 100%) - Cyan
+   - Section 4 (Results): linear-gradient(135deg, #ffc107 0%, #e0a800 100%) - Yellow/Orange
+   - Section 5 (Disc): linear-gradient(135deg, #6f42c1 0%, #5a32a3 100%) - Purple
+   - Section 6 (Concl): linear-gradient(135deg, #dc3545 0%, #bd2130 100%) - Red
+
+5. VISUAL ELEMENTS TO USE (WITHIN sections, not as replacement):
+
+   A. **ICON GRIDS** (to illustrate concept lists):
+   <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:16px; margin:20px 0;">
+     <div style="text-align:center;">
+       <div style="background:rgba(0,123,255,0.1); width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 8px; font-size:28px;">📊</div>
+       <h4 style="margin:4px 0; font-size:0.95rem;">Concept</h4>
+     </div>
+   </div>
+
+   B. **FLOW DIAGRAMS** (for processes/steps):
+   <div style="display:flex; align-items:center; justify-content:space-around; margin:30px 0; padding:20px; background:rgba(0,123,255,0.05); border-radius:8px;">
+     <div style="text-align:center;">
+       <div style="background:#007bff; color:white; width:50px; height:50px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 8px; font-weight:bold;">1</div>
+       <p style="margin:0; font-size:0.9rem;">Step 1</p>
+     </div>
+     <div style="font-size:24px; color:#007bff;">→</div>
+     <div style="text-align:center;">
+       <div style="background:#28a745; color:white; width:50px; height:50px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 8px; font-weight:bold;">2</div>
+       <p style="margin:0; font-size:0.9rem;">Step 2</p>
+     </div>
+   </div>
+
+   C. **METRIC HIGHLIGHT** (for important numbers):
+   <div style="text-align:center; padding:30px; margin:20px 0; background:rgba(0,123,255,0.05); border-radius:8px; border:1px solid rgba(0,123,255,0.2);">
+     <div style="font-size:3rem; font-weight:bold; color:#007bff; margin-bottom:8px;">85%</div>
+     <p style="margin:0; color:#6c757d;">Metric description</p>
+   </div>
+
+   D. **PERCENTAGE CIRCLES** (for KPIs):
+   <div style="display:flex; gap:20px; justify-content:center; margin:30px 0;">
+     <div style="text-align:center;">
+       <div style="width:70px; height:70px; border-radius:50%; background:rgba(0,123,255,0.1); display:flex; align-items:center; justify-content:center; border:3px solid #007bff; margin:0 auto;">
+         <span style="font-size:1.2rem; font-weight:bold; color:#007bff;">95%</span>
+       </div>
+       <p style="margin-top:8px; font-size:0.85rem; color:#333;">Quality</p>
+     </div>
+   </div>
+
+   E. **PROGRESS BARS** (for progress/advancement):
+   <div style="margin:16px 0;">
+     <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+       <span style="font-size:0.9rem; color:#333;">Criteria</span>
+       <span style="font-size:0.9rem; color:#6c757d;">75%</span>
+     </div>
+     <div style="background:#e9ecef; height:10px; border-radius:5px; overflow:hidden;">
+       <div style="background:#007bff; height:100%; width:75%; transition:width 0.5s;"></div>
+     </div>
+   </div>
+
+   F. **STYLIZED LISTS** (instead of standard bullets):
+   <ul style="list-style:none; padding:0; margin:16px 0;">
+     <li style="display:flex; align-items:start; gap:10px; margin:10px 0;">
+       <div style="width:5px; height:5px; border-radius:50%; background:#007bff; margin-top:8px; flex-shrink:0;"></div>
+       <span style="color:#333;">List item</span>
+     </li>
+   </ul>
+
+6. TRADITIONAL ACADEMIC ELEMENTS (MANDATORY):
+   - HTML tables with borders and hover effects
+   - Quotations with border-left: 4px solid #007bff; padding-left: 16px; font-style: italic;
+   - Numbered footnotes
+   - Bibliographic references
+   - Section numbering (1., 2., 3.)
+   - Paragraphs with line-height: 1.8
+
+7. IMPORTANT RULES:
+   - DO NOT put everything in colored cards
+   - KEEP traditional academic section structure
+   - USE visuals (icon grids, circles, etc.) WITHIN sections to illustrate content
+   - ALTERNATE between paragraph text and visuals for rhythm
+   - Background sections: #f8f9fa or #ffffff alternating
+
+8. MANDATORY JAVASCRIPT ANIMATIONS:
+   \`\`\`javascript
+   // Reading progress bar
+   window.addEventListener('scroll', () => {
+     const winHeight = window.innerHeight;
+     const docHeight = document.documentElement.scrollHeight;
+     const scrollTop = window.pageYOffset;
+     const scrollPercent = (scrollTop / (docHeight - winHeight)) * 100;
+     document.getElementById('reading-progress').style.width = scrollPercent + '%';
+   });
+
+   // Active navigation
+   window.addEventListener('scroll', function() {
+     const sections = document.querySelectorAll('section');
+     const navLinks = document.querySelectorAll('nav a');
+     let current = '';
+     sections.forEach(section => {
+       const sectionTop = section.offsetTop;
+       if (scrollY >= (sectionTop - 100)) {
+         current = section.getAttribute('id');
+       }
+     });
+     navLinks.forEach(link => {
+       link.classList.remove('active');
+       if (link.getAttribute('href') === '#' + current) {
+         link.classList.add('active');
+       }
+     });
+   });
+
+   // Intersection Observer for fadeIn
+   const observer = new IntersectionObserver((entries) => {
+     entries.forEach(entry => {
+       if (entry.isIntersecting) {
+         entry.target.classList.add('visible');
+       }
+     });
+   }, { threshold: 0.1 });
+   document.querySelectorAll('section').forEach(el => observer.observe(el));
+   \`\`\`
+
+GENERATE a COMPLETE, PROFESSIONAL ACADEMIC HTML report with traditional structure and enhanced visuals! Start with <!DOCTYPE html> and end with </html>!`;
+
+    const response = await retryAPICall(async () => {
+      const deepSeekResponse = await axios.post('https://api.deepseek.com/v1/chat/completions', {
+        model: 'deepseek-reasoner',
+        messages: [{ role: 'user', content: academicPrompt }],
+        max_tokens: 64000,
+        temperature: 1.3
+      }, {
+        headers: {
+          'Authorization': `Bearer ${DEEPSEEK_API_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        timeout: 300000
+      });
+      return { content: [{ text: deepSeekResponse.data.choices[0].message.content }] };
+    });
+
+    let reportContent = response.content[0].text;
+    reportContent = cleanHtmlOutput(reportContent);
+
+    console.log('✅ Professional Academic report generated, size:', reportContent.length);
+
+    return res.json({
+      reportHtml: reportContent,
+      fileName: `${fileName}-professional.html`,
+      message: 'Professional academic report generated successfully',
+      size: reportContent.length,
+      timestamp: new Date().toISOString()
+    });
+
+  } catch (error) {
+    console.error('❌ Error generating professional academic report:', error);
+    return res.status(500).json({
+      error: 'Failed to generate professional academic report',
+      details: error.message
+    });
+  }
+}
+
+// 📡 Check report generation status
+app.get('/report-status/:jobId', (req, res) => {
+  const { jobId } = req.params;
+  const job = reportCache.get(jobId);
+
+  if (!job) {
+    return res.status(404).json({ error: 'Job not found' });
+  }
+
+  res.json({
+    status: job.status,
+    reportHtml: job.status === 'completed' ? job.reportHtml : undefined,
+    fileName: job.status === 'completed' ? job.fileName : undefined,
+    error: job.error
+  });
+});
+
 app.post('/generate-report', async (req, res) => {
   try {
     const { pdfContent, fileName, reportType = 'professional' } = req.body;
@@ -1474,14 +1752,299 @@ app.post('/generate-report', async (req, res) => {
       return res.status(400).json({ error: 'Aucun contenu PDF fourni' });
     }
 
+    // 🆔 Generate unique job ID for async processing
+    const jobId = generateJobId();
+
+    // 📦 Initialize job in cache with pending status
+    reportCache.set(jobId, {
+      status: 'processing',
+      reportHtml: null,
+      fileName: null,
+      error: null,
+      timestamp: Date.now()
+    });
+
+    console.log(`🚀 Job ${jobId} created - Starting ${reportType} report generation`);
+
+    // ✅ Immediately return jobId to client (non-blocking)
+    res.json({
+      jobId,
+      status: 'processing',
+      message: 'Report generation started. Use /report-status/:jobId to check progress.'
+    });
+
+    // 🔄 Run generation in background without blocking
+    generateReportAsync(jobId, pdfContent, fileName, reportType).catch(err => {
+      console.error(`❌ Job ${jobId} failed:`, err.message);
+      reportCache.set(jobId, {
+        ...reportCache.get(jobId),
+        status: 'error',
+        error: err.message,
+        timestamp: Date.now()
+      });
+    });
+
+  } catch (error) {
+    console.error('Report generation error:', error);
+    res.status(500).json({ error: 'Error during report generation' });
+  }
+});
+
+// 🔧 Async report generation function (runs in background)
+async function generateReportAsync(jobId, pdfContent, fileName, reportType) {
+  try {
+    console.log(`⚙️ Job ${jobId} - Processing ${reportType} report...`);
+
     // ✅ FIX #3: Analyze document type for context-aware generation
     const documentProfile = analyzeDocumentType(pdfContent);
     const profileInstructions = getProfileInstructions(documentProfile);
 
+    let reportContent;
 
+    // Check if professional academic style is requested
+    if (reportType === 'professional') {
+      reportContent = await generateProfessionalAcademicReportContent(pdfContent, fileName);
+    } else {
+      // Enhanced report generation
+      reportContent = await generateEnhancedReportContent(pdfContent, fileName, profileInstructions);
+    }
 
-    // ENGLISH PROMPT FOR DEEPSEEK - PROFESSIONAL HTML/CSS REPORT
-    const adaptivePrompt = `You are an expert in creating professional HTML reports. Create a comprehensive report with clean HTML/CSS and styled divs.
+    // ✅ Update cache with completed report
+    reportCache.set(jobId, {
+      status: 'completed',
+      reportHtml: reportContent,
+      fileName: fileName ? `${fileName.replace('.pdf', '')}-report.html` : `${reportType}-report.html`,
+      error: null,
+      timestamp: Date.now()
+    });
+
+    console.log(`✅ Job ${jobId} completed successfully`);
+
+  } catch (error) {
+    console.error(`❌ Job ${jobId} error:`, error);
+    throw error;
+  }
+}
+
+// Extract professional report generation logic to separate function
+async function generateProfessionalAcademicReportContent(pdfContent, fileName) {
+  console.log('💼 Generating Professional Academic Report content with DeepSeek...');
+
+  const academicPrompt = `You are an expert in creating high-quality professional academic reports. Analyze this PDF content and create a PROFESSIONAL and ACADEMIC HTML report in traditional university style with enhanced visuals.
+
+PDF CONTENT:
+${pdfContent.substring(0, 15000)}
+
+CRITICAL INSTRUCTIONS - PROFESSIONAL ACADEMIC REPORT:
+
+1. MANDATORY STRUCTURE (traditional academic report style):
+   - Reading progress bar at top (fixed, z-index 9999)
+   - Sticky navigation header containing:
+     * Report logo/title
+     * Navigation with short links (max 6-8 chars): Intro, Def, Anal, Results, Disc, Concl
+     * flex, nowrap, overflow-x:auto to avoid wraps
+   - Main container with traditional SECTIONS (NOT cards everywhere!)
+   - Footer with information
+
+2. ULTRA-OPTIMIZED NAVIGATION HEADER (CRITICAL):
+   <nav><ul style="display:flex; white-space:nowrap; overflow-x:auto; flex-wrap:nowrap; list-style:none; margin:0; padding:0; gap:12px; scrollbar-width:thin;">
+     <li><a href="#intro">Intro</a></li>
+     <li><a href="#def">Def</a></li>
+     <li><a href="#eval">Eval</a></li>
+   </ul></nav>
+
+3. PROFESSIONAL ACADEMIC CSS STYLES:
+   - CSS Variables: --primary: #007bff; --success: #28a745; --danger: #dc3545; --warning: #ffc107; --info: #17a2b8;
+   - Smooth scroll: html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+   - Sections with header box: border-left: 4px solid #007bff; padding-left: 20px;
+   - Background sections: background: #f8f9fa; padding: 40px; border-radius: 8px;
+
+4. 🎨 ACADEMIC SECTION STRUCTURE WITH HEADER BOX (MANDATORY):
+
+   ✅ CORRECT STRUCTURE (visual header box + content):
+   <section id="intro" style="margin:50px 0;">
+     <!-- HEADER BOX (colored visual box) -->
+     <div style="background:linear-gradient(135deg, #007bff 0%, #0056b3 100%); padding:25px 30px; border-radius:12px 12px 0 0; box-shadow:0 4px 15px rgba(0,123,255,0.2); margin-bottom:0;">
+       <h2 style="color:white; font-size:2rem; margin:0 0 8px 0; font-weight:600;">1. Introduction</h2>
+       <p style="color:rgba(255,255,255,0.9); font-size:1rem; margin:0;">Document overview</p>
+     </div>
+
+     <!-- SECTION CONTENT (light background, connected to header box) -->
+     <div style="background:#f8f9fa; padding:40px; border-radius:0 0 12px 12px; border:1px solid #dee2e6; border-top:none;">
+       <p style="line-height:1.8; color:#333;">Introductory text...</p>
+
+       <!-- For concept lists, use icon grid instead of simple list -->
+       <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:20px; margin:24px 0;">
+         <div style="text-align:center;">
+           <div style="background:rgba(0,123,255,0.1); width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 8px; font-size:28px;">📊</div>
+           <h4 style="margin:4px 0; font-size:0.95rem; color:#333;">Concept</h4>
+         </div>
+       </div>
+
+       <!-- Traditional HTML tables -->
+       <table style="width:100%; border-collapse:collapse; margin:20px 0;">
+         <thead>
+           <tr style="background:#e9ecef;">
+             <th style="padding:12px; border:1px solid #dee2e6; text-align:left;">Column 1</th>
+           </tr>
+         </thead>
+       </table>
+     </div>
+   </section>
+
+   🎨 COLOR VARIATIONS FOR HEADER BOXES (alternate):
+   - Section 1 (Intro): linear-gradient(135deg, #007bff 0%, #0056b3 100%) - Blue
+   - Section 2 (Def): linear-gradient(135deg, #28a745 0%, #1e7e34 100%) - Green
+   - Section 3 (Anal): linear-gradient(135deg, #17a2b8 0%, #117a8b 100%) - Cyan
+   - Section 4 (Results): linear-gradient(135deg, #ffc107 0%, #e0a800 100%) - Yellow/Orange
+   - Section 5 (Disc): linear-gradient(135deg, #6f42c1 0%, #5a32a3 100%) - Purple
+   - Section 6 (Concl): linear-gradient(135deg, #dc3545 0%, #bd2130 100%) - Red
+
+5. VISUAL ELEMENTS TO USE (WITHIN sections, not as replacement):
+
+   A. **ICON GRIDS** (to illustrate concept lists):
+   <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:16px; margin:20px 0;">
+     <div style="text-align:center;">
+       <div style="background:rgba(0,123,255,0.1); width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 8px; font-size:28px;">📊</div>
+       <h4 style="margin:4px 0; font-size:0.95rem;">Concept</h4>
+     </div>
+   </div>
+
+   B. **FLOW DIAGRAMS** (for processes/steps):
+   <div style="display:flex; align-items:center; justify-content:space-around; margin:30px 0; padding:20px; background:rgba(0,123,255,0.05); border-radius:8px;">
+     <div style="text-align:center;">
+       <div style="background:#007bff; color:white; width:50px; height:50px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 8px; font-weight:bold;">1</div>
+       <p style="margin:0; font-size:0.9rem;">Step 1</p>
+     </div>
+     <div style="font-size:24px; color:#007bff;">→</div>
+     <div style="text-align:center;">
+       <div style="background:#28a745; color:white; width:50px; height:50px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 8px; font-weight:bold;">2</div>
+       <p style="margin:0; font-size:0.9rem;">Step 2</p>
+     </div>
+   </div>
+
+   C. **METRIC HIGHLIGHT** (for important numbers):
+   <div style="text-align:center; padding:30px; margin:20px 0; background:rgba(0,123,255,0.05); border-radius:8px; border:1px solid rgba(0,123,255,0.2);">
+     <div style="font-size:3rem; font-weight:bold; color:#007bff; margin-bottom:8px;">85%</div>
+     <p style="margin:0; color:#6c757d;">Metric description</p>
+   </div>
+
+   D. **PERCENTAGE CIRCLES** (for KPIs):
+   <div style="display:flex; gap:20px; justify-content:center; margin:30px 0;">
+     <div style="text-align:center;">
+       <div style="width:70px; height:70px; border-radius:50%; background:rgba(0,123,255,0.1); display:flex; align-items:center; justify-content:center; border:3px solid #007bff; margin:0 auto;">
+         <span style="font-size:1.2rem; font-weight:bold; color:#007bff;">95%</span>
+       </div>
+       <p style="margin-top:8px; font-size:0.85rem; color:#333;">Quality</p>
+     </div>
+   </div>
+
+   E. **PROGRESS BARS** (for progress/advancement):
+   <div style="margin:16px 0;">
+     <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+       <span style="font-size:0.9rem; color:#333;">Criteria</span>
+       <span style="font-size:0.9rem; color:#6c757d;">75%</span>
+     </div>
+     <div style="background:#e9ecef; height:10px; border-radius:5px; overflow:hidden;">
+       <div style="background:#007bff; height:100%; width:75%; transition:width 0.5s;"></div>
+     </div>
+   </div>
+
+   F. **STYLIZED LISTS** (instead of standard bullets):
+   <ul style="list-style:none; padding:0; margin:16px 0;">
+     <li style="display:flex; align-items:start; gap:10px; margin:10px 0;">
+       <div style="width:5px; height:5px; border-radius:50%; background:#007bff; margin-top:8px; flex-shrink:0;"></div>
+       <span style="color:#333;">List item</span>
+     </li>
+   </ul>
+
+6. TRADITIONAL ACADEMIC ELEMENTS (MANDATORY):
+   - HTML tables with borders and hover effects
+   - Quotations with border-left: 4px solid #007bff; padding-left: 16px; font-style: italic;
+   - Numbered footnotes
+   - Bibliographic references
+   - Section numbering (1., 2., 3.)
+   - Paragraphs with line-height: 1.8
+
+7. IMPORTANT RULES:
+   - DO NOT put everything in colored cards
+   - KEEP traditional academic section structure
+   - USE visuals (icon grids, circles, etc.) WITHIN sections to illustrate content
+   - ALTERNATE between paragraph text and visuals for rhythm
+   - Background sections: #f8f9fa or #ffffff alternating
+
+8. MANDATORY JAVASCRIPT ANIMATIONS:
+   \`\`\`javascript
+   // Reading progress bar
+   window.addEventListener('scroll', () => {
+     const winHeight = window.innerHeight;
+     const docHeight = document.documentElement.scrollHeight;
+     const scrollTop = window.pageYOffset;
+     const scrollPercent = (scrollTop / (docHeight - winHeight)) * 100;
+     document.getElementById('reading-progress').style.width = scrollPercent + '%';
+   });
+
+   // Active navigation
+   window.addEventListener('scroll', function() {
+     const sections = document.querySelectorAll('section');
+     const navLinks = document.querySelectorAll('nav a');
+     let current = '';
+     sections.forEach(section => {
+       const sectionTop = section.offsetTop;
+       if (scrollY >= (sectionTop - 100)) {
+         current = section.getAttribute('id');
+       }
+     });
+     navLinks.forEach(link => {
+       link.classList.remove('active');
+       if (link.getAttribute('href') === '#' + current) {
+         link.classList.add('active');
+       }
+     });
+   });
+
+   // Intersection Observer for fadeIn
+   const observer = new IntersectionObserver((entries) => {
+     entries.forEach(entry => {
+       if (entry.isIntersecting) {
+         entry.target.classList.add('visible');
+       }
+     });
+   }, { threshold: 0.1 });
+   document.querySelectorAll('section').forEach(el => observer.observe(el));
+   \`\`\`
+
+GENERATE a COMPLETE, PROFESSIONAL ACADEMIC HTML report with traditional structure and enhanced visuals! Start with <!DOCTYPE html> and end with </html>!`;
+
+  const response = await retryAPICall(async () => {
+    const deepSeekResponse = await axios.post('https://api.deepseek.com/v1/chat/completions', {
+      model: 'deepseek-reasoner',
+      messages: [{ role: 'user', content: academicPrompt }],
+      max_tokens: 64000,
+      temperature: 1.3
+    }, {
+      headers: {
+        'Authorization': `Bearer ${DEEPSEEK_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      timeout: 300000
+    });
+    return { content: [{ text: deepSeekResponse.data.choices[0].message.content }] };
+  });
+
+  let reportContent = response.content[0].text;
+  reportContent = cleanHtmlOutput(reportContent);
+
+  console.log('✅ Professional Academic report generated, size:', reportContent.length);
+
+  return reportContent;
+}
+
+// Generate Enhanced report content
+async function generateEnhancedReportContent(pdfContent, fileName, profileInstructions) {
+  console.log('🎨 Generating Enhanced Report content with DeepSeek...');
+
+  const adaptivePrompt = `You are an expert in creating professional HTML reports. Create a comprehensive report with clean HTML/CSS and styled divs.
 
 ${profileInstructions}
 
@@ -1905,55 +2468,43 @@ ${pdfContent}
 
 Start with <!DOCTYPE html> and NOW DEPLOY ALL YOUR POWER on every element of your plan! NO LIMITS, NO COMPROMISES - this is YOUR COMPETITION to win!`;
 
-    const response = await retryAPICall(async () => {
-      const deepSeekResponse = await axios.post('https://api.deepseek.com/v1/chat/completions', {
-        model: 'deepseek-reasoner',
-        messages: [{ role: 'user', content: adaptivePrompt }],
-        max_tokens: 64000,
-        temperature: 1.5
-      }, {
-        headers: {
-          'Authorization': `Bearer ${DEEPSEEK_API_KEY}`,
-          'Content-Type': 'application/json'
-        },
-        timeout: 300000, // 5 minutes timeout for DeepSeek
-        maxContentLength: Infinity,
-        maxBodyLength: Infinity
-      });
-      return { content: [{ text: deepSeekResponse.data.choices[0].message.content }] };
+  const response = await retryAPICall(async () => {
+    const deepSeekResponse = await axios.post('https://api.deepseek.com/v1/chat/completions', {
+      model: 'deepseek-reasoner',
+      messages: [{ role: 'user', content: adaptivePrompt }],
+      max_tokens: 64000,
+      temperature: 1.5
+    }, {
+      headers: {
+        'Authorization': `Bearer ${DEEPSEEK_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      timeout: 300000, // 5 minutes timeout for DeepSeek
+      maxContentLength: Infinity,
+      maxBodyLength: Infinity
     });
+    return { content: [{ text: deepSeekResponse.data.choices[0].message.content }] };
+  });
 
-    let reportContent = response.content[0].text;
+  let reportContent = response.content[0].text;
 
-    // DEBUG: Verify raw DeepSeek content
-    console.log('=== DEBUG DEEPSEEK ===');
-    console.log('Raw length:', reportContent ? reportContent.length : 0);
-    console.log('First 500 chars:', reportContent ? reportContent.substring(0, 500) : 'EMPTY');
-    console.log('======================');
+  // DEBUG: Verify raw DeepSeek content
+  console.log('=== DEBUG DEEPSEEK (Enhanced) ===');
+  console.log('Raw length:', reportContent ? reportContent.length : 0);
+  console.log('First 500 chars:', reportContent ? reportContent.substring(0, 500) : 'EMPTY');
+  console.log('==================================');
 
-    if (!reportContent || reportContent.trim().length === 0) {
-      console.error('DeepSeek returned empty content!');
-      return res.status(500).json({
-        error: 'DeepSeek generated no content. Please try again.'
-      });
-    }
-
-    // Clean HTML content
-    reportContent = cleanHtmlOutput(reportContent);
-
-    console.log('=== AFTER CLEANING ===');
-    console.log('Cleaned length:', reportContent.length);
-    console.log('=======================');
-
-    res.json({
-      reportHtml: reportContent,
-      fileName: fileName ? `${fileName.replace('.pdf', '')}-report.html` : 'professional-report.html'
-    });
-  } catch (error) {
-    console.error('Report generation error:', error);
-    res.status(500).json({ error: 'Error during report generation' });
+  if (!reportContent || reportContent.trim().length === 0) {
+    throw new Error('DeepSeek returned empty content');
   }
-});
+
+  // Clean HTML content
+  reportContent = cleanHtmlOutput(reportContent);
+
+  console.log('✅ Enhanced report generated, size:', reportContent.length);
+
+  return reportContent;
+}
 
 
 
