@@ -15,4 +15,4 @@ test-report.html
 
 # Ignore all PDF reports
 *.pdf
-public/*report*.html
+# Allow report HTML files - they are example demos
