@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#ec4899;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#14b8a6;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="240" fill="url(#grad1)"/>
+
+  <!-- Document icon -->
+  <g transform="translate(140, 100)">
+    <!-- Main document shape -->
+    <path d="M 40 0 L 160 0 L 200 40 L 200 300 L 40 300 Z" fill="white" opacity="0.95"/>
+
+    <!-- Folded corner -->
+    <path d="M 160 0 L 160 40 L 200 40 Z" fill="white" opacity="0.7"/>
+
+    <!-- AI brain icon inside document -->
+    <g transform="translate(70, 100)">
+      <circle cx="50" cy="50" r="45" fill="none" stroke="url(#grad1)" stroke-width="6"/>
+
+      <!-- Neural network nodes -->
+      <circle cx="50" cy="30" r="6" fill="url(#grad1)"/>
+      <circle cx="30" cy="50" r="6" fill="url(#grad1)"/>
+      <circle cx="70" cy="50" r="6" fill="url(#grad1)"/>
+      <circle cx="40" cy="70" r="6" fill="url(#grad1)"/>
+      <circle cx="60" cy="70" r="6" fill="url(#grad1)"/>
+      <circle cx="50" cy="85" r="6" fill="url(#grad1)"/>
+
+      <!-- Neural connections -->
+      <line x1="50" y1="30" x2="30" y2="50" stroke="url(#grad1)" stroke-width="2" opacity="0.6"/>
+      <line x1="50" y1="30" x2="70" y2="50" stroke="url(#grad1)" stroke-width="2" opacity="0.6"/>
+      <line x1="30" y1="50" x2="40" y2="70" stroke="url(#grad1)" stroke-width="2" opacity="0.6"/>
+      <line x1="70" y1="50" x2="60" y2="70" stroke="url(#grad1)" stroke-width="2" opacity="0.6"/>
+      <line x1="40" y1="70" x2="50" y2="85" stroke="url(#grad1)" stroke-width="2" opacity="0.6"/>
+      <line x1="60" y1="70" x2="50" y2="85" stroke="url(#grad1)" stroke-width="2" opacity="0.6"/>
+    </g>
+
+    <!-- Document lines -->
+    <rect x="60" y="40" width="120" height="4" rx="2" fill="#6366f1" opacity="0.3"/>
+    <rect x="60" y="55" width="120" height="4" rx="2" fill="#ec4899" opacity="0.3"/>
+    <rect x="60" y="70" width="90" height="4" rx="2" fill="#14b8a6" opacity="0.3"/>
+    <rect x="60" y="240" width="120" height="4" rx="2" fill="#6366f1" opacity="0.3"/>
+    <rect x="60" y="255" width="100" height="4" rx="2" fill="#ec4899" opacity="0.3"/>
+  </g>
+</svg>
