@@ -2871,6 +2871,11 @@ function cleanHtmlOutput(content) {
 
 // 🪝 Removed Stripe endpoints - payments will be configured separately
 
+// 404 handler - Must be last route
+app.use((req, res) => {
+  res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
+});
+
 app.listen(port, () => {
   console.log(`\n🚀 DocGenius - Commercial Beta`);
   console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
