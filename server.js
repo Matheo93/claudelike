@@ -41,16 +41,16 @@ function generateJobId() {
   return Date.now().toString(36) + Math.random().toString(36).substr(2);
 }
 
-// Clean old cache entries (older than 1 hour)
+// Clean old cache entries (older than 24 hours)
 setInterval(() => {
-  const oneHourAgo = Date.now() - (60 * 60 * 1000);
+  const oneDayAgo = Date.now() - (24 * 60 * 60 * 1000);
   for (const [jobId, job] of reportCache.entries()) {
-    if (job.timestamp < oneHourAgo) {
+    if (job.timestamp < oneDayAgo) {
       reportCache.delete(jobId);
-      console.log(`🧹 Cleaned old cache entry: ${jobId}`);
+      console.log(`🧹 Cleaned old cache entry: ${jobId} (older than 24h)`);
     }
   }
-}, 15 * 60 * 1000); // Run every 15 minutes
+}, 60 * 60 * 1000); // Run every hour
 
 // ✅ FIX #2: MathJax Detection - Detect if document needs math rendering
 function needsMathJax(content) {
@@ -1740,7 +1740,33 @@ app.get('/report-status/:jobId', (req, res) => {
     status: job.status,
     reportHtml: job.status === 'completed' ? job.reportHtml : undefined,
     fileName: job.status === 'completed' ? job.fileName : undefined,
-    error: job.error
+    error: job.error,
+    // Return chat context for recovery
+    pdfContent: job.pdfContent,
+    originalFileName: job.originalFileName,
+    reportType: job.reportType
+  });
+});
+
+// 🔄 Recover chat from jobId (for when localStorage is cleared)
+app.get('/recover-chat/:jobId', (req, res) => {
+  const { jobId } = req.params;
+  const job = reportCache.get(jobId);
+
+  if (!job) {
+    return res.status(404).json({ error: 'Job not found or expired (older than 24h)' });
+  }
+
+  // Return all chat data needed to recreate the chat
+  res.json({
+    jobId: jobId,
+    pdfContent: job.pdfContent,
+    pdfFileName: job.originalFileName + '.pdf',
+    reportHtml: job.reportHtml,
+    reportFileName: job.fileName,
+    reportType: job.reportType,
+    status: job.status,
+    timestamp: job.timestamp
   });
 });
 
@@ -1755,13 +1781,17 @@ app.post('/generate-report', async (req, res) => {
     // 🆔 Generate unique job ID for async processing
     const jobId = generateJobId();
 
-    // 📦 Initialize job in cache with pending status
+    // 📦 Initialize job in cache with pending status and chat context
     reportCache.set(jobId, {
       status: 'processing',
       reportHtml: null,
       fileName: null,
       error: null,
-      timestamp: Date.now()
+      timestamp: Date.now(),
+      // Store chat context for recovery
+      pdfContent: pdfContent.substring(0, 50000), // Store first 50KB for reference
+      originalFileName: fileName,
+      reportType: reportType
     });
 
     console.log(`🚀 Job ${jobId} created - Starting ${reportType} report generation`);

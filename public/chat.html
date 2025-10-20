@@ -780,6 +780,10 @@
                 👤 <span id="user-email">Profile</span> ▾
             </button>
             <div class="profile-menu-dropdown" id="profile-menu-dropdown">
+                <div class="profile-menu-item" onclick="showRecoverReportDialog()">
+                    🔄 Recover Report
+                </div>
+                <div class="profile-menu-divider"></div>
                 <div class="profile-menu-item" onclick="showAccountInfo()">
                     👤 Account Info
                 </div>
@@ -1438,6 +1442,55 @@
         }
 
         // Show settings
+        // 🔄 Recover report from jobId
+        async function showRecoverReportDialog() {
+            closeProfileMenu();
+
+            const jobId = prompt('🔄 Enter your Report Job ID to recover your report:\n\n(The Job ID was provided when you started generating the report)');
+
+            if (!jobId || jobId.trim() === '') return;
+
+            try {
+                const response = await fetch(`/recover-chat/${jobId.trim()}`);
+                const data = await response.json();
+
+                if (!response.ok) {
+                    alert(`❌ ${data.error}\n\nThe report may have expired (older than 24h) or the Job ID is incorrect.`);
+                    return;
+                }
+
+                // Create new chat with recovered data
+                const newChatId = Date.now().toString();
+                chats[newChatId] = {
+                    id: newChatId,
+                    name: `Recovered: ${data.pdfFileName.replace('.pdf', '')}`,
+                    date: new Date().toISOString(),
+                    messages: [
+                        { text: `🔄 Report recovered from Job ID: ${jobId}`, sender: 'assistant' },
+                        { text: `📄 File: ${data.pdfFileName}`, sender: 'assistant' }
+                    ],
+                    pdfContent: data.pdfContent,
+                    pdfFileName: data.pdfFileName,
+                    reportHtml: data.reportHtml,
+                    reportFileName: data.reportFileName,
+                    jobId: data.status === 'processing' ? jobId : null,
+                    jobType: data.reportType
+                };
+
+                // Load the recovered chat
+                currentChatId = newChatId;
+                loadChat(newChatId);
+                saveChatsToStorage();
+                updateChatMenu();
+
+                alert(`✅ Report recovered successfully!\n\nStatus: ${data.status}\nFile: ${data.pdfFileName}`);
+
+            } catch (error) {
+                console.error('Recovery error:', error);
+                alert(`❌ Failed to recover report: ${error.message}`);
+            }
+        }
+
         function showSettings() {
             closeProfileMenu();
 
@@ -1945,6 +1998,10 @@
                 const jobId = reportData.jobId;
                 console.log(`📡 Job started: ${jobId}`);
 
+                // Show jobId to user for recovery
+                addMessage(`🆔 Job ID: ${jobId}`, 'assistant');
+                addMessage(`💾 Save this ID to recover your report later (Profile menu > Recover Report)`, 'assistant');
+
                 // Save jobId to chat for recovery
                 chats[currentChatId].jobId = jobId;
                 chats[currentChatId].jobType = 'enhanced';
@@ -1972,6 +2029,16 @@
             while (attempts < maxAttempts) {
                 try {
                     const response = await fetch(`/report-status/${jobId}`);
+
+                    // Handle 404 - job not found (expired after 24h)
+                    if (response.status === 404) {
+                        delete chats[currentChatId].jobId;
+                        delete chats[currentChatId].jobType;
+                        saveChatsToStorage();
+
+                        throw new Error('Report generation expired (older than 24h). Please generate a new report.');
+                    }
+
                     const data = await response.json();
 
                     console.log(`📡 Job ${jobId} status:`, data.status);
@@ -2094,6 +2161,16 @@
             while (attempts < maxAttempts) {
                 try {
                     const response = await fetch(`/report-status/${jobId}`);
+
+                    // Handle 404 - job not found (expired after 24h)
+                    if (response.status === 404) {
+                        delete chats[currentChatId].jobId;
+                        delete chats[currentChatId].jobType;
+                        saveChatsToStorage();
+
+                        throw new Error('Report generation expired (older than 24h). Please generate a new report.');
+                    }
+
                     const data = await response.json();
 
                     console.log(`📡 Job ${jobId} status:`, data.status);
