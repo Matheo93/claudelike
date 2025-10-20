@@ -46,6 +46,7 @@
             100% { background-position: 0% 50%; }
         }
 
+        /* Navigation */
         nav {
             position: fixed;
             top: 0;
@@ -54,60 +55,109 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(10, 10, 15, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             z-index: 1000;
+            animation: slideDown 0.8s ease;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            background-size: 200% 200%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            animation: gradientFlow 3s ease infinite;
+            letter-spacing: -0.5px;
             text-decoration: none;
+        }
+
+        @keyframes gradientFlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
         .nav-links {
             display: flex;
-            gap: 2rem;
+            gap: 2.5rem;
             align-items: center;
         }
 
         .nav-links a {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.7);
             text-decoration: none;
             font-weight: 500;
-            transition: color 0.3s;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
         }
 
         .nav-links a:hover {
             color: white;
+            transform: translateY(-2px);
         }
 
         .btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
+            padding: 0.85rem 1.8rem;
+            border-radius: 12px;
             font-weight: 600;
             text-decoration: none;
-            transition: all 0.3s;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
             border: none;
-            font-size: 1rem;
+            font-size: 0.95rem;
+            position: relative;
+            overflow: hidden;
             display: inline-block;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
         }
 
         .btn-primary {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 30px rgba(99, 102, 241, 0.6);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.6);
         }
 
         .pricing-hero {
@@ -311,12 +361,14 @@
 <body>
     <div class="gradient-bg"></div>
 
+    <!-- Navigation -->
     <nav>
         <a href="/" class="logo">DocGenius</a>
         <div class="nav-links">
-            <a href="/">Home</a>
+            <a href="#showcase">Examples</a>
+            <a href="#features">Features</a>
             <a href="/pricing">Pricing</a>
-            <a href="/auth">Login</a>
+            <a href="/support">Support</a>
             <a href="/auth" class="btn btn-primary">Get Started</a>
         </div>
     </nav>
