@@ -59,7 +59,8 @@
       "Bash(git remote set-url:*)",
       "WebFetch(domain:docs.railway.app)",
       "WebFetch(domain:docs.railway.com)",
-      "WebFetch(domain:station.railway.com)"
+      "WebFetch(domain:station.railway.com)",
+      "Bash(railway variables:*)"
     ],
     "deny": [],
     "ask": []

@@ -870,10 +870,6 @@
                         </button>
                     </div>
 
-                    <button class="btn btn-warning" id="enhance-report-btn" onclick="enhanceReport()">
-                        ✨ Enhance Visuals (OpenAI)
-                    </button>
-
                     <button class="btn btn-accent" id="convert-presentation-btn" onclick="convertToPresentation()">
                         🎯 Convert to Presentation
                     </button>
@@ -2300,64 +2296,6 @@
             document.body.removeChild(a);
 
             addMessage('💾 Report downloaded successfully!', 'assistant');
-        }
-
-        async function enhanceReport() {
-            if (!reportHtml) {
-                showError('No report to enhance');
-                return;
-            }
-
-            const enhanceBtn = document.getElementById('enhance-report-btn');
-            const loading = document.getElementById('loading');
-            const reportType = document.getElementById('report-type').value;
-
-            enhanceBtn.disabled = true;
-            loading.style.display = 'block';
-
-            try {
-                enhanceBtn.textContent = '✨ Enhancing...';
-                addMessage('✨ Visual enhancement with OpenAI - Creating spectacular SVGs...', 'assistant');
-                addMessage('🎨 Generating graphics, diagrams and animations...', 'assistant');
-
-                const enhanceResponse = await fetch('/api/enhance-report', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        reportHtml: reportHtml,
-                        fileName: reportFileName,
-                        reportType: reportType
-                    })
-                });
-
-                const enhanceData = await enhanceResponse.json();
-
-                if (!enhanceResponse.ok) {
-                    throw new Error(enhanceData.error || 'Visual enhancement error');
-                }
-
-                enhancedHtml = enhanceData.reportHtml;
-                enhancedFileName = enhanceData.fileName;
-                reportHtml = enhancedHtml;
-                reportFileName = enhancedFileName;
-
-                addMessage('✅ Enhancement complete! Report visually transformed', 'assistant');
-                addMessage('🎨 Advanced SVG, animations and modern design added', 'assistant');
-                addMessage(`📊 Enhanced report (${(enhanceData.reportHtml.length / 1000).toFixed(1)}kb)`, 'assistant');
-
-                enhanceBtn.textContent = '✅ Enhancement Complete';
-                enhanceBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
-
-                addMessage('💡 You can now download or convert to presentation', 'assistant');
-
-            } catch (error) {
-                console.error('Enhancement error:', error);
-                showError('❌ ' + error.message);
-                enhanceBtn.textContent = '✨ Enhance Visuals (OpenAI)';
-            } finally {
-                enhanceBtn.disabled = false;
-                loading.style.display = 'none';
-            }
         }
 
         async function convertToPresentation() {
