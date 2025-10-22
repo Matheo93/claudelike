@@ -60,7 +60,8 @@
       "WebFetch(domain:docs.railway.app)",
       "WebFetch(domain:docs.railway.com)",
       "WebFetch(domain:station.railway.com)",
-      "Bash(railway variables:*)"
+      "Bash(railway variables:*)",
+      "Bash(docker build:*)"
     ],
     "deny": [],
     "ask": []
