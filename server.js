@@ -3138,6 +3138,19 @@ function cleanHtmlOutput(content) {
     }
   }
 
+  // 🔒 Security: Replace compromised polyfill.io with safe alternative
+  // polyfill.io was compromised in 2024 and should not be used
+  content = content.replace(
+    /https?:\/\/polyfill\.io\/v3\/polyfill\.min\.js[^"']*/gi,
+    'https://cdnjs.cloudflare.com/polyfills/polyfill.min.js?features=es6'
+  );
+
+  // Also replace any other polyfill.io references
+  content = content.replace(
+    /https?:\/\/cdn\.polyfill\.io\/[^"']*/gi,
+    'https://cdnjs.cloudflare.com/polyfills/polyfill.min.js?features=es6'
+  );
+
   return content;
 }
 
