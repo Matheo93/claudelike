@@ -7,7 +7,7 @@ const fs = require('fs');
 const axios = require('axios');
 const OpenAI = require('openai');
 const cheerio = require('cheerio');
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 require('dotenv').config();
 
 // ✅ FIX #3: Import document profiles for context-aware generation
@@ -30,23 +30,15 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || 'missing-openai-key',
 });
 
-// 📧 Configure Nodemailer (using Gmail SMTP)
-const emailTransporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER || 'noreply.docgenius@gmail.com',
-    pass: process.env.EMAIL_PASS || 'your-app-password-here'
-  }
-});
+// 📧 Configure Resend for email notifications
+const resend = new Resend(process.env.RESEND_API_KEY || 'your-resend-api-key-here');
 
-// Verify email configuration on startup
-emailTransporter.verify((error, success) => {
-  if (error) {
-    console.log('⚠️  Email service not configured:', error.message);
-  } else {
-    console.log('✅ Email service ready');
-  }
-});
+// Verify Resend configuration on startup
+if (process.env.RESEND_API_KEY) {
+  console.log('✅ Resend email service configured');
+} else {
+  console.log('⚠️  RESEND_API_KEY not configured - emails will not be sent');
+}
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
@@ -1875,11 +1867,7 @@ async function sendReportReadyEmail(userEmail, fileName, jobId, reportType) {
   try {
     const reportUrl = `https://docgenius.tech/app?job=${jobId}`;
 
-    const mailOptions = {
-      from: '"DocGenius" <noreply.docgenius@gmail.com>',
-      to: userEmail,
-      subject: `✅ Your ${reportType === 'professional' ? 'Professional' : 'Enhanced'} Report is Ready!`,
-      html: `
+    const emailHtml = `
         <!DOCTYPE html>
         <html>
         <head>
@@ -1941,11 +1929,21 @@ async function sendReportReadyEmail(userEmail, fileName, jobId, reportType) {
           </div>
         </body>
         </html>
-      `
-    };
+      `;
 
-    await emailTransporter.sendMail(mailOptions);
-    console.log(`✅ Email sent to ${userEmail} for job ${jobId}`);
+    // Send email with Resend
+    const { data, error } = await resend.emails.send({
+      from: 'DocGenius <noreply@docgenius.tech>',
+      to: userEmail,
+      subject: `✅ Your ${reportType === 'professional' ? 'Professional' : 'Enhanced'} Report is Ready!`,
+      html: emailHtml
+    });
+
+    if (error) {
+      throw error;
+    }
+
+    console.log(`✅ Email sent to ${userEmail} for job ${jobId} (ID: ${data.id})`);
   } catch (error) {
     console.error(`❌ Failed to send email to ${userEmail}:`, error.message);
   }

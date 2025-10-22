@@ -21,6 +21,7 @@
     "pdf-parse": "^1.1.1",
     "puppeteer": "^24.25.0",
     "railway": "^2.0.17",
+    "resend": "^6.2.2",
     "stripe": "^19.1.0"
   },
   "devDependencies": {
