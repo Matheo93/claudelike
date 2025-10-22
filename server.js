@@ -1866,65 +1866,164 @@ async function sendReportReadyEmail(userEmail, fileName, jobId, reportType) {
 
   try {
     const reportUrl = `https://docgenius.tech/app?job=${jobId}`;
+    const chatUrl = `https://docgenius.tech/app`;
 
     const emailHtml = `
         <!DOCTYPE html>
         <html>
         <head>
           <style>
-            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; margin: 0; padding: 20px; }
-            .container { max-width: 600px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
-            .header { background: linear-gradient(135deg, #6366f1, #ec4899); padding: 40px 20px; text-align: center; }
-            .header h1 { color: white; margin: 0; font-size: 28px; }
-            .content { padding: 40px 30px; }
-            .content h2 { color: #1e293b; margin-top: 0; }
-            .content p { color: #64748b; line-height: 1.6; }
-            .button { display: inline-block; background: linear-gradient(135deg, #6366f1, #ec4899); color: white; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; margin: 20px 0; }
-            .footer { background: #f8fafc; padding: 20px; text-align: center; color: #94a3b8; font-size: 14px; }
-            .features { background: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0; }
-            .features ul { margin: 10px 0; padding-left: 20px; }
-            .features li { color: #475569; margin: 8px 0; }
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0; padding: 40px 20px; }
+            .container { max-width: 650px; margin: 0 auto; background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+
+            .header { background: linear-gradient(135deg, #6366f1 0%, #ec4899 50%, #14b8a6 100%); background-size: 200% 200%; padding: 50px 30px; text-align: center; position: relative; overflow: hidden; }
+            .header::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.1) 0%, transparent 50%); }
+            .header h1 { color: white; font-size: 36px; font-weight: 800; margin-bottom: 10px; position: relative; z-index: 1; }
+            .header p { color: rgba(255,255,255,0.9); font-size: 18px; position: relative; z-index: 1; }
+
+            .content { padding: 50px 40px; }
+            .status-badge { display: inline-block; background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 8px 20px; border-radius: 20px; font-size: 14px; font-weight: 600; margin-bottom: 20px; }
+            .content h2 { color: #1e293b; font-size: 28px; margin-bottom: 15px; }
+            .content p { color: #64748b; line-height: 1.8; font-size: 16px; margin-bottom: 15px; }
+
+            .preview-box { background: linear-gradient(135deg, #f8fafc, #f1f5f9); border: 2px solid #e2e8f0; border-radius: 12px; padding: 30px; margin: 30px 0; text-align: center; }
+            .preview-box h3 { color: #334155; font-size: 18px; margin-bottom: 15px; }
+            .preview-icon { font-size: 64px; margin: 20px 0; }
+            .file-info { background: white; border-radius: 8px; padding: 15px; margin-top: 15px; }
+            .file-info strong { color: #1e293b; display: block; margin-bottom: 5px; }
+            .file-info span { color: #64748b; font-size: 14px; }
+
+            .button-group { text-align: center; margin: 30px 0; }
+            .button { display: inline-block; background: linear-gradient(135deg, #6366f1, #ec4899); color: white; text-decoration: none; padding: 16px 40px; border-radius: 12px; font-weight: 700; font-size: 16px; margin: 10px; box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4); transition: all 0.3s; }
+            .button:hover { transform: translateY(-2px); box-shadow: 0 15px 40px rgba(99, 102, 241, 0.6); }
+            .button-secondary { background: linear-gradient(135deg, #64748b, #475569); box-shadow: 0 10px 30px rgba(71, 85, 105, 0.3); }
+            .button-secondary:hover { box-shadow: 0 15px 40px rgba(71, 85, 105, 0.5); }
+
+            .commands-section { background: #f8fafc; border-left: 4px solid #6366f1; padding: 25px; margin: 25px 0; border-radius: 8px; }
+            .commands-section h4 { color: #1e293b; font-size: 18px; margin-bottom: 15px; display: flex; align-items: center; }
+            .commands-section h4::before { content: '💬'; margin-right: 10px; font-size: 24px; }
+            .command { background: white; padding: 12px 16px; margin: 10px 0; border-radius: 6px; border: 1px solid #e2e8f0; font-family: 'Courier New', monospace; color: #6366f1; font-size: 14px; }
+            .command strong { color: #1e293b; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: block; margin-bottom: 5px; font-size: 13px; }
+
+            .features-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 25px 0; }
+            .feature-card { background: white; border: 2px solid #f1f5f9; padding: 20px; border-radius: 10px; text-align: center; }
+            .feature-card .icon { font-size: 32px; margin-bottom: 10px; }
+            .feature-card h5 { color: #334155; font-size: 14px; margin-bottom: 5px; }
+            .feature-card p { color: #94a3b8; font-size: 12px; line-height: 1.4; }
+
+            .footer { background: #0f172a; padding: 30px; text-align: center; color: #94a3b8; }
+            .footer a { color: #6366f1; text-decoration: none; font-weight: 600; }
+            .footer a:hover { color: #ec4899; }
+            .social-links { margin-top: 20px; }
+            .social-links a { display: inline-block; margin: 0 10px; color: #64748b; text-decoration: none; }
+
+            @media only screen and (max-width: 600px) {
+              .features-grid { grid-template-columns: 1fr; }
+              .button { display: block; margin: 10px 0; }
+              .content { padding: 30px 20px; }
+            }
           </style>
         </head>
         <body>
           <div class="container">
             <div class="header">
               <h1>📄 DocGenius</h1>
+              <p>AI-Powered Report Generation</p>
             </div>
+
             <div class="content">
-              <h2>Your Report is Ready! 🎉</h2>
-              <p>Great news! Your <strong>${reportType === 'professional' ? 'Professional Academic' : 'Enhanced'} Report</strong> has been generated successfully.</p>
+              <span class="status-badge">✅ Generation Complete</span>
+              <h2>Your ${reportType === 'professional' ? 'Professional' : 'Enhanced'} Report is Ready!</h2>
+              <p>Great news! We've successfully transformed your document into a stunning, AI-powered report with advanced features and beautiful design.</p>
 
-              <p><strong>File:</strong> ${fileName}</p>
-
-              <div class="features">
-                <strong>What's included:</strong>
-                <ul>
-                  ${reportType === 'professional' ? `
-                    <li>📊 Professional academic layout</li>
-                    <li>📈 Interactive charts and visualizations</li>
-                    <li>🎯 Sticky navigation and progress bar</li>
-                    <li>🎨 Beautiful tables and formatting</li>
-                  ` : `
-                    <li>✨ Enhanced visual design</li>
-                    <li>🤖 AI-powered analysis</li>
-                    <li>📊 Data insights and charts</li>
-                    <li>🎯 Context-aware content</li>
-                  `}
-                </ul>
+              <div class="preview-box">
+                <h3>📊 Report Preview</h3>
+                <div class="preview-icon">📈</div>
+                <div class="file-info">
+                  <strong>File Name</strong>
+                  <span>${fileName}</span>
+                </div>
               </div>
 
-              <center>
-                <a href="${reportUrl}" class="button">View Your Report →</a>
-              </center>
+              <div class="features-grid">
+                <div class="feature-card">
+                  <div class="icon">📊</div>
+                  <h5>Professional Layout</h5>
+                  <p>Academic-grade formatting with sticky navigation</p>
+                </div>
+                <div class="feature-card">
+                  <div class="icon">📈</div>
+                  <h5>Interactive Charts</h5>
+                  <p>Dynamic visualizations and data insights</p>
+                </div>
+                <div class="feature-card">
+                  <div class="icon">🎨</div>
+                  <h5>Beautiful Design</h5>
+                  <p>Modern tables, animations, and styling</p>
+                </div>
+                <div class="feature-card">
+                  <div class="icon">🤖</div>
+                  <h5>AI-Powered</h5>
+                  <p>Generated with DeepSeek AI technology</p>
+                </div>
+              </div>
 
-              <p style="color: #94a3b8; font-size: 14px; margin-top: 30px;">
-                This link will expire in 24 hours. Make sure to download your report before then.
+              <div class="button-group">
+                <a href="${reportUrl}" class="button">📥 View & Download Report</a>
+                <a href="${chatUrl}" class="button button-secondary">💬 Open Chat to Modify</a>
+              </div>
+
+              <div class="commands-section">
+                <h4>Need to modify your report?</h4>
+                <p style="color: #64748b; margin-bottom: 15px;">Use these commands in the chat to customize your report:</p>
+
+                <div class="command">
+                  <strong>Change Title</strong>
+                  "Change le titre en: [Nouveau Titre]"
+                </div>
+
+                <div class="command">
+                  <strong>Add Section</strong>
+                  "Ajoute une section sur [Sujet] avec plus de détails"
+                </div>
+
+                <div class="command">
+                  <strong>Modify Content</strong>
+                  "Modifie la section [Nom] pour inclure [Information]"
+                </div>
+
+                <div class="command">
+                  <strong>Add Charts</strong>
+                  "Ajoute un graphique pour visualiser [Données]"
+                </div>
+
+                <div class="command">
+                  <strong>Convert Format</strong>
+                  "Convertis ce rapport en présentation interactive"
+                </div>
+
+                <p style="color: #94a3b8; margin-top: 15px; font-size: 14px;">
+                  💡 <strong>Tip:</strong> Just type naturally what you want to change, and the AI will understand!
+                </p>
+              </div>
+
+              <p style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; border-radius: 8px; color: #92400e; margin-top: 25px;">
+                ⏰ <strong>Important:</strong> This report will be available for 24 hours. Make sure to download it before expiration.
               </p>
             </div>
+
             <div class="footer">
-              <p>Generated by DocGenius - Transform PDFs into AI-Powered Reports</p>
-              <p><a href="https://docgenius.tech" style="color: #6366f1; text-decoration: none;">docgenius.tech</a></p>
+              <p style="font-size: 16px; margin-bottom: 15px;">Generated by <strong style="color: #ec4899;">DocGenius</strong></p>
+              <p style="margin-bottom: 20px;">Transform PDFs into AI-Powered Reports & Presentations</p>
+              <div class="social-links">
+                <a href="https://docgenius.tech">🌐 Website</a>
+                <a href="https://docgenius.tech/pricing">💰 Pricing</a>
+                <a href="https://docgenius.tech/support">💬 Support</a>
+              </div>
+              <p style="margin-top: 20px; font-size: 12px; color: #64748b;">
+                © 2025 DocGenius. All rights reserved.
+              </p>
             </div>
           </div>
         </body>
@@ -1935,7 +2034,7 @@ async function sendReportReadyEmail(userEmail, fileName, jobId, reportType) {
     const { data, error } = await resend.emails.send({
       from: 'DocGenius <noreply@docgenius.tech>',
       to: userEmail,
-      subject: `✅ Your ${reportType === 'professional' ? 'Professional' : 'Enhanced'} Report is Ready!`,
+      subject: `🎉 Your AI-Powered Report is Ready! | ${fileName}`,
       html: emailHtml
     });
 
