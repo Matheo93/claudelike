@@ -7,6 +7,7 @@ const fs = require('fs');
 const axios = require('axios');
 const OpenAI = require('openai');
 const cheerio = require('cheerio');
+const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 // ✅ FIX #3: Import document profiles for context-aware generation
@@ -27,6 +28,24 @@ const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY || 'sk-c9bb25c84d524f368e7
 // Initialisation OpenAI
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || 'missing-openai-key',
+});
+
+// 📧 Configure Nodemailer (using Gmail SMTP)
+const emailTransporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER || 'noreply.docgenius@gmail.com',
+    pass: process.env.EMAIL_PASS || 'your-app-password-here'
+  }
+});
+
+// Verify email configuration on startup
+emailTransporter.verify((error, success) => {
+  if (error) {
+    console.log('⚠️  Email service not configured:', error.message);
+  } else {
+    console.log('✅ Email service ready');
+  }
 });
 
 const storage = multer.memoryStorage();
@@ -1700,7 +1719,7 @@ GENERATE a COMPLETE, PROFESSIONAL ACADEMIC HTML report with traditional structur
           'Authorization': `Bearer ${DEEPSEEK_API_KEY}`,
           'Content-Type': 'application/json'
         },
-        timeout: 300000
+        timeout: 900000
       });
       return { content: [{ text: deepSeekResponse.data.choices[0].message.content }] };
     });
@@ -1772,7 +1791,7 @@ app.get('/recover-chat/:jobId', (req, res) => {
 
 app.post('/generate-report', async (req, res) => {
   try {
-    const { pdfContent, fileName, reportType = 'professional' } = req.body;
+    const { pdfContent, fileName, reportType = 'professional', userEmail = null } = req.body;
 
     if (!pdfContent) {
       return res.status(400).json({ error: 'Aucun contenu PDF fourni' });
@@ -1791,7 +1810,15 @@ app.post('/generate-report', async (req, res) => {
       // Store chat context for recovery
       pdfContent: pdfContent.substring(0, 50000), // Store first 50KB for reference
       originalFileName: fileName,
-      reportType: reportType
+      reportType: reportType,
+      userEmail: userEmail, // Store user email for notification
+      // Progress tracking
+      progress: {
+        percentage: 0,
+        currentStep: 'Initialisation...',
+        totalSteps: 0,
+        completedSteps: 0
+      }
     });
 
     console.log(`🚀 Job ${jobId} created - Starting ${reportType} report generation`);
@@ -1820,35 +1847,165 @@ app.post('/generate-report', async (req, res) => {
   }
 });
 
+// 📊 Helper function to update job progress
+function updateJobProgress(jobId, stepName, completedSteps, totalSteps) {
+  const job = reportCache.get(jobId);
+  if (job) {
+    const percentage = Math.round((completedSteps / totalSteps) * 100);
+    reportCache.set(jobId, {
+      ...job,
+      progress: {
+        percentage,
+        currentStep: stepName,
+        totalSteps,
+        completedSteps
+      }
+    });
+    console.log(`📊 Job ${jobId} - ${percentage}% - ${stepName} (${completedSteps}/${totalSteps})`);
+  }
+}
+
+// 📧 Send email notification when report is ready
+async function sendReportReadyEmail(userEmail, fileName, jobId, reportType) {
+  if (!userEmail) {
+    console.log('ℹ️  No email provided, skipping notification');
+    return;
+  }
+
+  try {
+    const reportUrl = `https://docgenius.tech/app?job=${jobId}`;
+
+    const mailOptions = {
+      from: '"DocGenius" <noreply.docgenius@gmail.com>',
+      to: userEmail,
+      subject: `✅ Your ${reportType === 'professional' ? 'Professional' : 'Enhanced'} Report is Ready!`,
+      html: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <style>
+            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; margin: 0; padding: 20px; }
+            .container { max-width: 600px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+            .header { background: linear-gradient(135deg, #6366f1, #ec4899); padding: 40px 20px; text-align: center; }
+            .header h1 { color: white; margin: 0; font-size: 28px; }
+            .content { padding: 40px 30px; }
+            .content h2 { color: #1e293b; margin-top: 0; }
+            .content p { color: #64748b; line-height: 1.6; }
+            .button { display: inline-block; background: linear-gradient(135deg, #6366f1, #ec4899); color: white; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; margin: 20px 0; }
+            .footer { background: #f8fafc; padding: 20px; text-align: center; color: #94a3b8; font-size: 14px; }
+            .features { background: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0; }
+            .features ul { margin: 10px 0; padding-left: 20px; }
+            .features li { color: #475569; margin: 8px 0; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1>📄 DocGenius</h1>
+            </div>
+            <div class="content">
+              <h2>Your Report is Ready! 🎉</h2>
+              <p>Great news! Your <strong>${reportType === 'professional' ? 'Professional Academic' : 'Enhanced'} Report</strong> has been generated successfully.</p>
+
+              <p><strong>File:</strong> ${fileName}</p>
+
+              <div class="features">
+                <strong>What's included:</strong>
+                <ul>
+                  ${reportType === 'professional' ? `
+                    <li>📊 Professional academic layout</li>
+                    <li>📈 Interactive charts and visualizations</li>
+                    <li>🎯 Sticky navigation and progress bar</li>
+                    <li>🎨 Beautiful tables and formatting</li>
+                  ` : `
+                    <li>✨ Enhanced visual design</li>
+                    <li>🤖 AI-powered analysis</li>
+                    <li>📊 Data insights and charts</li>
+                    <li>🎯 Context-aware content</li>
+                  `}
+                </ul>
+              </div>
+
+              <center>
+                <a href="${reportUrl}" class="button">View Your Report →</a>
+              </center>
+
+              <p style="color: #94a3b8; font-size: 14px; margin-top: 30px;">
+                This link will expire in 24 hours. Make sure to download your report before then.
+              </p>
+            </div>
+            <div class="footer">
+              <p>Generated by DocGenius - Transform PDFs into AI-Powered Reports</p>
+              <p><a href="https://docgenius.tech" style="color: #6366f1; text-decoration: none;">docgenius.tech</a></p>
+            </div>
+          </div>
+        </body>
+        </html>
+      `
+    };
+
+    await emailTransporter.sendMail(mailOptions);
+    console.log(`✅ Email sent to ${userEmail} for job ${jobId}`);
+  } catch (error) {
+    console.error(`❌ Failed to send email to ${userEmail}:`, error.message);
+  }
+}
+
 // 🔧 Async report generation function (runs in background)
 async function generateReportAsync(jobId, pdfContent, fileName, reportType) {
   try {
     console.log(`⚙️ Job ${jobId} - Processing ${reportType} report...`);
 
-    // ✅ FIX #3: Analyze document type for context-aware generation
+    // Step 1: Analyze document
+    updateJobProgress(jobId, 'Analyse du document...', 1, 4);
     const documentProfile = analyzeDocumentType(pdfContent);
     const profileInstructions = getProfileInstructions(documentProfile);
 
     let reportContent;
 
+    // Step 2: Generate report
+    updateJobProgress(jobId, 'Génération du rapport avec IA...', 2, 4);
+
     // Check if professional academic style is requested
     if (reportType === 'professional') {
-      reportContent = await generateProfessionalAcademicReportContent(pdfContent, fileName);
+      reportContent = await generateProfessionalAcademicReportContent(pdfContent, fileName, jobId);
     } else {
       // Enhanced report generation
-      reportContent = await generateEnhancedReportContent(pdfContent, fileName, profileInstructions);
+      reportContent = await generateEnhancedReportContent(pdfContent, fileName, profileInstructions, jobId);
     }
+
+    // Step 3: Finalize
+    updateJobProgress(jobId, 'Finalisation...', 3, 4);
+
+    // Step 4: Complete
+    updateJobProgress(jobId, 'Terminé !', 4, 4);
+
+    // Get job data to retrieve userEmail
+    const job = reportCache.get(jobId);
+    const finalFileName = fileName ? `${fileName.replace('.pdf', '')}-report.html` : `${reportType}-report.html`;
 
     // ✅ Update cache with completed report
     reportCache.set(jobId, {
       status: 'completed',
       reportHtml: reportContent,
-      fileName: fileName ? `${fileName.replace('.pdf', '')}-report.html` : `${reportType}-report.html`,
+      fileName: finalFileName,
       error: null,
-      timestamp: Date.now()
+      timestamp: Date.now(),
+      userEmail: job?.userEmail || null,
+      progress: {
+        percentage: 100,
+        currentStep: 'Terminé !',
+        totalSteps: 4,
+        completedSteps: 4
+      }
     });
 
     console.log(`✅ Job ${jobId} completed successfully`);
+
+    // 📧 Send email notification if user email is available
+    if (job?.userEmail) {
+      await sendReportReadyEmail(job.userEmail, finalFileName, jobId, reportType);
+    }
 
   } catch (error) {
     console.error(`❌ Job ${jobId} error:`, error);
@@ -1857,8 +2014,12 @@ async function generateReportAsync(jobId, pdfContent, fileName, reportType) {
 }
 
 // Extract professional report generation logic to separate function
-async function generateProfessionalAcademicReportContent(pdfContent, fileName) {
+async function generateProfessionalAcademicReportContent(pdfContent, fileName, jobId = null) {
   console.log('💼 Generating Professional Academic Report content with DeepSeek...');
+
+  if (jobId) {
+    updateJobProgress(jobId, 'Appel à DeepSeek AI...', 2, 4);
+  }
 
   const academicPrompt = `You are an expert in creating high-quality professional academic reports. Analyze this PDF content and create a PROFESSIONAL and ACADEMIC HTML report in traditional university style with enhanced visuals.
 
@@ -2071,7 +2232,10 @@ GENERATE a COMPLETE, PROFESSIONAL ACADEMIC HTML report with traditional structur
 }
 
 // Generate Enhanced report content
-async function generateEnhancedReportContent(pdfContent, fileName, profileInstructions) {
+async function generateEnhancedReportContent(pdfContent, fileName, profileInstructions, jobId = null) {
+  if (jobId) {
+    updateJobProgress(jobId, 'Appel à DeepSeek AI...', 2, 4);
+  }
   console.log('🎨 Generating Enhanced Report content with DeepSeek...');
 
   const adaptivePrompt = `You are an expert in creating professional HTML reports. Create a comprehensive report with clean HTML/CSS and styled divs.
@@ -2509,7 +2673,7 @@ Start with <!DOCTYPE html> and NOW DEPLOY ALL YOUR POWER on every element of you
         'Authorization': `Bearer ${DEEPSEEK_API_KEY}`,
         'Content-Type': 'application/json'
       },
-      timeout: 300000, // 5 minutes timeout for DeepSeek
+      timeout: 900000, // 15 minutes timeout for DeepSeek
       maxContentLength: Infinity,
       maxBodyLength: Infinity
     });

@@ -53,7 +53,13 @@
       "Bash(do echo \"=== Copie ($dir) ===\")",
       "Bash(xargs -I {} bash -c 'echo \"\"\"\"=== {} ===\"\"\"\" && grep -c \"\"\"\"professional\\|intervention\\|executif\"\"\"\" {} 2>/dev/null')",
       "Bash(dig:*)",
-      "Bash(nslookup:*)"
+      "Bash(nslookup:*)",
+      "WebFetch(domain:docgenius.tech)",
+      "Bash(rm:*)",
+      "Bash(git remote set-url:*)",
+      "WebFetch(domain:docs.railway.app)",
+      "WebFetch(domain:docs.railway.com)",
+      "WebFetch(domain:station.railway.com)"
     ],
     "deny": [],
     "ask": []

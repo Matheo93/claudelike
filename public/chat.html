@@ -1994,7 +1994,8 @@
                     body: JSON.stringify({
                         pdfContent: pdfContent,
                         fileName: fileName,
-                        reportType: reportType
+                        reportType: reportType,
+                        userEmail: currentUser?.email || null
                     })
                 });
 
@@ -2090,8 +2091,13 @@
                         throw new Error(data.error || 'Report generation failed');
 
                     } else if (data.status === 'processing') {
-                        // ⏳ Still processing, update UI
-                        generateBtn.textContent = `⏳ Generating... (${Math.floor(attempts * 3 / 60)}m ${(attempts * 3) % 60}s)`;
+                        // ⏳ Still processing, update UI with progress
+                        const progress = data.progress || {};
+                        const percentage = progress.percentage || 0;
+                        const currentStep = progress.currentStep || 'Processing...';
+                        const timeElapsed = `${Math.floor(attempts * 3 / 60)}m ${(attempts * 3) % 60}s`;
+
+                        generateBtn.textContent = `⏳ ${currentStep} (${percentage}% - ${timeElapsed})`;
                     }
 
                 } catch (error) {
@@ -2130,7 +2136,8 @@
                     body: JSON.stringify({
                         pdfContent: pdfContent,
                         fileName: fileName,
-                        reportType: 'professional'
+                        reportType: 'professional',
+                        userEmail: currentUser?.email || null
                     })
                 });
 
@@ -2166,7 +2173,7 @@
         async function pollReportStatus(jobId, generateBtn) {
             const pollInterval = 3000; // Check every 3 seconds
             let attempts = 0;
-            const maxAttempts = 200; // 10 minutes max (200 * 3s = 600s)
+            const maxAttempts = 400; // 20 minutes max (400 * 3s = 1200s) - allows for 15min DeepSeek timeout + buffer
 
             while (attempts < maxAttempts) {
                 try {
@@ -2218,8 +2225,13 @@
                         throw new Error(data.error || 'Report generation failed');
 
                     } else if (data.status === 'processing') {
-                        // ⏳ Still processing, update UI
-                        generateBtn.textContent = `⏳ Generating... (${Math.floor(attempts * 3 / 60)}m ${(attempts * 3) % 60}s)`;
+                        // ⏳ Still processing, update UI with progress
+                        const progress = data.progress || {};
+                        const percentage = progress.percentage || 0;
+                        const currentStep = progress.currentStep || 'Processing...';
+                        const timeElapsed = `${Math.floor(attempts * 3 / 60)}m ${(attempts * 3) % 60}s`;
+
+                        generateBtn.textContent = `⏳ ${currentStep} (${percentage}% - ${timeElapsed})`;
                     }
 
                 } catch (error) {
