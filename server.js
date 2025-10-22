@@ -52,13 +52,13 @@ function generateJobId() {
   return Date.now().toString(36) + Math.random().toString(36).substr(2);
 }
 
-// Clean old cache entries (older than 24 hours)
+// Clean old cache entries (older than 7 days)
 setInterval(() => {
-  const oneDayAgo = Date.now() - (24 * 60 * 60 * 1000);
+  const sevenDaysAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
   for (const [jobId, job] of reportCache.entries()) {
-    if (job.timestamp < oneDayAgo) {
+    if (job.timestamp < sevenDaysAgo) {
       reportCache.delete(jobId);
-      console.log(`🧹 Cleaned old cache entry: ${jobId} (older than 24h)`);
+      console.log(`🧹 Cleaned old cache entry: ${jobId} (older than 7 days)`);
     }
   }
 }, 60 * 60 * 1000); // Run every hour
@@ -1765,7 +1765,7 @@ app.get('/recover-chat/:jobId', (req, res) => {
   const job = reportCache.get(jobId);
 
   if (!job) {
-    return res.status(404).json({ error: 'Job not found or expired (older than 24h)' });
+    return res.status(404).json({ error: 'Job not found or expired (older than 7 days)' });
   }
 
   // Return all chat data needed to recreate the chat
@@ -2009,7 +2009,7 @@ async function sendReportReadyEmail(userEmail, fileName, jobId, reportType) {
               </div>
 
               <p style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; border-radius: 8px; color: #92400e; margin-top: 25px;">
-                ⏰ <strong>Important:</strong> This report will be available for 24 hours. Make sure to download it before expiration.
+                ⏰ <strong>Important:</strong> This report will be available for 7 days. Make sure to download it before expiration.
               </p>
             </div>
 

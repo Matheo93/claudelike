@@ -1461,7 +1461,7 @@
                 const data = await response.json();
 
                 if (!response.ok) {
-                    alert(`❌ ${data.error}\n\nThe report may have expired (older than 24h) or the Job ID is incorrect.`);
+                    alert(`❌ ${data.error}\n\nThe report may have expired (older than 7 days) or the Job ID is incorrect.`);
                     return;
                 }
 
@@ -2043,7 +2043,7 @@
                         delete chats[currentChatId].jobType;
                         saveChatsToStorage();
 
-                        throw new Error('Report generation expired (older than 24h). Please generate a new report.');
+                        throw new Error('Report generation expired (older than 7 days). Please generate a new report.');
                     }
 
                     const data = await response.json();
@@ -2181,7 +2181,7 @@
                         delete chats[currentChatId].jobType;
                         saveChatsToStorage();
 
-                        throw new Error('Report generation expired (older than 24h). Please generate a new report.');
+                        throw new Error('Report generation expired (older than 7 days). Please generate a new report.');
                     }
 
                     const data = await response.json();
