@@ -2279,6 +2279,11 @@
                         addMessage('✅ Professional report generated successfully!', 'assistant');
                         addMessage('📊 Features: Sticky navigation, reading progress bar, charts, tables, animations', 'assistant');
 
+                        // Update URL with job ID for easy sharing/recovery
+                        const newUrl = `/app?job=${jobId}`;
+                        window.history.pushState({}, '', newUrl);
+                        console.log(`🔗 URL updated to: ${newUrl}`);
+
                         generateBtn.textContent = '✅ Professional Report Ready';
                         return; // Done!
 

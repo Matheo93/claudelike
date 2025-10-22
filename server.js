@@ -34,10 +34,12 @@ const openai = new OpenAI({
 const resend = new Resend(process.env.RESEND_API_KEY || 'your-resend-api-key-here');
 
 // Verify Resend configuration on startup
-if (process.env.RESEND_API_KEY) {
-  console.log('✅ Resend email service configured');
+const resendKey = process.env.RESEND_API_KEY;
+if (resendKey && resendKey.length > 0 && resendKey !== 'your-resend-api-key-here') {
+  console.log('✅ Resend email service configured (key length:', resendKey.length, 'chars)');
 } else {
   console.log('⚠️  RESEND_API_KEY not configured - emails will not be sent');
+  console.log('   Debug: key exists?', !!resendKey, '| key value:', resendKey ? `${resendKey.substring(0, 5)}...` : 'undefined');
 }
 
 const storage = multer.memoryStorage();
