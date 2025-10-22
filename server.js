@@ -1762,6 +1762,7 @@ app.get('/report-status/:jobId', (req, res) => {
     reportHtml: job.status === 'completed' ? job.reportHtml : undefined,
     fileName: job.status === 'completed' ? job.fileName : undefined,
     error: job.error,
+    progress: job.progress || { percentage: 0, currentStep: 'Initialisation...', totalSteps: 4, completedSteps: 0 },
     // Return chat context for recovery
     pdfContent: job.pdfContent,
     originalFileName: job.originalFileName,
