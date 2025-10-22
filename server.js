@@ -82,6 +82,16 @@ function needsMathJax(content) {
 }
 
 // 🌐 ROUTING: Multi-page commercial site
+// Health check endpoint for Docker/Railway monitoring
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'healthy',
+    uptime: process.uptime(),
+    timestamp: Date.now(),
+    environment: process.env.NODE_ENV || 'development'
+  });
+});
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'landing.html'));
 });
