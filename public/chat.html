@@ -961,6 +961,76 @@
                     : currentUser.email;
                 userEmailEl.textContent = emailShort;
             }
+
+            // Check for ?job=ID in URL and auto-recover chat
+            const urlParams = new URLSearchParams(window.location.search);
+            const jobId = urlParams.get('job');
+            if (jobId) {
+                console.log(`🔗 Job ID detected in URL: ${jobId}`);
+                await recoverChatFromJob(jobId);
+                // Clean URL after recovery
+                window.history.replaceState({}, '', '/app');
+            }
+        }
+
+        // Recover chat from job ID (called from email link)
+        async function recoverChatFromJob(jobId) {
+            try {
+                addMessage('🔄 Recovering your report from email link...', 'assistant');
+
+                const response = await fetch(`/recover-chat/${jobId}`);
+
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        throw new Error('Report expired (older than 7 days) or not found');
+                    }
+                    throw new Error('Failed to recover report');
+                }
+
+                const data = await response.json();
+
+                // Create or update chat with recovered data
+                currentChatId = jobId;
+                chats[currentChatId] = {
+                    id: currentChatId,
+                    name: data.fileName ? data.fileName.replace('.pdf', '') : 'Recovered Chat',
+                    date: new Date(data.timestamp).toISOString(),
+                    messages: [],
+                    pdfContent: data.pdfContent,
+                    pdfFileName: data.originalFileName,
+                    reportHtml: data.reportHtml,
+                    reportFileName: data.fileName,
+                    jobId: jobId,
+                    jobType: 'report'
+                };
+
+                // Set current state
+                pdfContent = data.pdfContent;
+                reportHtml = data.reportHtml;
+                reportFileName = data.fileName;
+
+                // Update UI
+                document.getElementById('actions-section').style.display = 'flex';
+                document.getElementById('actions-divider').style.display = 'block';
+                document.getElementById('history-controls').style.display = 'block';
+
+                addMessage('✅ Report recovered successfully from email!', 'assistant');
+                addMessage('📊 You can now view, download, or convert your report.', 'assistant');
+
+                // Show success with report name
+                if (data.fileName) {
+                    addMessage(`📄 Report: ${data.fileName}`, 'assistant');
+                }
+
+                // Save to localStorage
+                saveChatsToStorage();
+                updateChatMenu();
+
+            } catch (error) {
+                console.error('Recovery error:', error);
+                addMessage(`❌ ${error.message}`, 'assistant');
+                addMessage('💡 Tip: Reports expire after 7 days. Please generate a new one.', 'assistant');
+            }
         }
 
         // Call auth check immediately
